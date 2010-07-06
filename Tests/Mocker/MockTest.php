@@ -1,84 +1,84 @@
 <?php
-require_once 'Mocker.php';
+require_once 'Mocker/Mock.php';
 
-class MockerTest extends PHPUnit_Framework_TestCase
+class MockTest extends PHPUnit_Framework_TestCase
 {
-    public function testCallingMethodsShouldReturnMocker()
+    public function testCallingMethodsShouldReturnMocker_Mock()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $ret = $mocker->method();
-        $this->assertTrue($ret instanceof Mocker);
+        $this->assertTrue($ret instanceof Mocker_Mock);
     }
     
-    public function testAccessingPropertiesShouldReturnMocker()
+    public function testAccessingPropertiesShouldReturnMocker_Mock()
     {
-        $mocker = new Mocker();
-        $this->assertTrue($mocker->property instanceof Mocker);
+        $mocker = new Mocker_Mock();
+        $this->assertTrue($mocker->property instanceof Mocker_Mock);
     }
 
     public function testShouldReturnSetPropertyValue()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $mocker->key = "key value";
         $this->assertEquals("key value", $mocker->key);
     }
 
-    public function testShouldCreateNewMockersWhenAccessed()
+    public function testShouldCreateNewMocker_MocksWhenAccessed()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $mocker->foo->bar = 'irrelevant';
-        $this->assertTrue($mocker->foo instanceof Mocker);
+        $this->assertTrue($mocker->foo instanceof Mocker_Mock);
         $this->assertTrue($mocker->foo !== $mocker);
     }
 
-    public function testShouldReturnFromChildMocker()
+    public function testShouldReturnFromChildMocker_Mock()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $mocker->method->setReturn("return value");
         $this->assertEquals("return value", $mocker->method());
     }
 
     public function testShouldAllowFalsyReturnValues()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $mocker->someMethod->setReturn(false);
         $this->assertEquals(false, $mocker->someMethod());
     }
 
     public function testShouldBeAbleToGetArrayElements()
     {
-        $mocker = new Mocker();
-        $this->assertTrue($mocker['irrelevant'] instanceof Mocker);
+        $mocker = new Mocker_Mock();
+        $this->assertTrue($mocker['irrelevant'] instanceof Mocker_Mock);
     }
 
     public function testShouldReturnTrueForIsset()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $this->assertTrue(isset($mocker['irrelevant']));
     }
 
-    public function testCanInvokeMocker()
+    public function testCanInvokeMocker_Mock()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $mocker();
     }
 
-    public function testShouldReturnThisMockerIfNoReturnValueSet()
+    public function testShouldReturnThisMocker_MockIfNoReturnValueSet()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $this->assertSame($mocker, $mocker());
     }
 
     public function testShouldUseReturnValueWhenInvoked()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $mocker->setReturn('return value');
         $this->assertSame('return value', $mocker());
     }
 
     public function testShouldRecordCalls()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $mocker->method0();
         $mocker->method1();
         $this->assertEquals(2, count($mocker->calls));
@@ -86,8 +86,8 @@ class MockerTest extends PHPUnit_Framework_TestCase
 
     public function testShouldRecordReturnValue()
     {
-        $mocker = new Mocker();
+        $mocker = new Mocker_Mock();
         $mocker->method();
-        $this->assertTrue($mocker->calls->calls[0][2] instanceof Mocker);
+        $this->assertTrue($mocker->calls->calls[0][2] instanceof Mocker_Mock);
     }
 }

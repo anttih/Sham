@@ -1,4 +1,5 @@
 <?php
+require_once 'Mocker.php';
 class Mocker_CallList implements Countable
 {
     public $calls = array();
