@@ -4,6 +4,8 @@ class Mocker_Mock implements ArrayAccess
 {
     const NO_RETURN_VALUE = 0xFABFAB;
 
+    public $calls;
+
     private $_data = array();
 
     /**

@@ -15,12 +15,27 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertHasOwnMethod($obj, 'override');
     }
 
+    public function testShouldRecordOverridenMethodCalls()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('TestBuilder');
+        $obj->override();
+        $this->assertTrue($obj->calls->calls('override')->once());
+    }
+
+    public function testShouldRecordCallParams()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('TestBuilder');
+        $obj->override('param 1');
+        $this->assertTrue($obj->calls->calls('override', 'param 1')->once());
+    }
+
     public function assertHasOwnMethod($obj, $method)
     {
         $method = new ReflectionMethod($obj, $method);
         $message = 'Object does not declare method '
-                 . $method->getName()
-                 . '.';
+                 . $method->getName() . '.';
 
         return $this->assertEquals(
             get_class($obj),

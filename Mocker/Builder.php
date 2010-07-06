@@ -50,8 +50,10 @@ class Mocker_Builder
         $methods = array();
         $mocked = new ReflectionClass($this->_class);
         foreach ($mocked->getMethods() as $method) {
-            $tpl = '    public function ' . $method->getName() . '() {}';
-            $methods[] = $tpl;
+            $name = $method->getName();
+            $call = "\$this->__call('$name', func_get_args());";
+            $func = "    public function $name() {\n        $call\n    }";
+            $methods[] = $func;
         }
 
         $code = str_replace(
