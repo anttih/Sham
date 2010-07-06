@@ -76,5 +76,7 @@ class Mocker_Mock implements ArrayAccess
     public function offsetGet($offset) {
         return $this;
     }
-    
+
+    // METHODS
+
 }
