@@ -70,10 +70,30 @@ class Mocker_Builder
     {
         $params = array();
         foreach ($method->getParameters() as $param) {
-            $params[] = '$' . $param->getName();
+            $params[] = $this->_buildParameter($param);
+        }
+        return implode(', ', $params);
+    }
+
+    private function _buildParameter($param)
+    {
+        $default = '';
+        if ($param->isOptional()) {
+            $value = $param->getDefaultValue();
+            if (is_string($value)) {
+                $value = "'$value'";
+            } else if (is_null($value)) {
+                $value = 'null';
+            }
+            $default = " = $value";
         }
 
-        return implode(', ', $params);
+        $class = '';
+        if ($param->getClass()) {
+            $class = $param->getClass()->getName() . ' ';
+        }
+
+        return $class . '$' . $param->getName() . $default;
     }
 
     private function _generateMockClassName()

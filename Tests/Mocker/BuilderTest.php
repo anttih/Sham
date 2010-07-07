@@ -8,14 +8,14 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($builder->build('TestBuilder') instanceof TestBuilder);
     }
 
-    public function testShouldOverrideParentMethods()
+    public function testOverrideParentMethods()
     {
         $builder = new Mocker_Builder();
         $obj = $builder->build('TestBuilder');
         $this->assertHasOwnMethod($obj, 'override');
     }
 
-    public function testShouldRecordOverridenMethodCalls()
+    public function testRecordOverridenMethodCalls()
     {
         $builder = new Mocker_Builder();
         $obj = $builder->build('TestBuilder');
@@ -23,7 +23,7 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($obj->calls->calls('override')->once());
     }
 
-    public function testShouldRecordCallParams()
+    public function testRecordCallParams()
     {
         $builder = new Mocker_Builder();
         $obj = $builder->build('TestBuilder');
@@ -31,18 +31,63 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($obj->calls->calls('override', 'param 1')->once());
     }
 
-    public function testShouldAddOneNonOptionalParam()
+    public function testBuildMethodWithOneNonOptionalParam()
     {
         $builder = new Mocker_Builder();
         $obj = $builder->build('ClassWithParams');
         $this->assertNumberOfParameters(1, $obj, 'method');
     }
 
-    public function testShouldAddTwoNonOptionalParams()
+    public function testBuildMethodWithTwoNonOptionalParams()
     {
         $builder = new Mocker_Builder();
         $obj = $builder->build('ClassWithTwoParams');
         $this->assertNumberOfParameters(2, $obj, 'method');
+    }
+
+    public function testBuildMethodWithOneOptionalParam()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('ClassWithOptionalParam');
+        $method = new ReflectionMethod($obj, 'method');
+        $params = $method->getParameters();
+        $this->assertTrue($params[0]->isOptional());
+    }
+
+    public function testBuildMethodWithNullParam()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('ClassWithOptionalParam');
+        $method = new ReflectionMethod($obj, 'method');
+        $params = $method->getParameters();
+        $this->assertEquals(null, $params[0]->getDefaultValue());
+    }
+
+    public function testBuildMethodWithStringParam()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('ClassWithStringParam');
+        $method = new ReflectionMethod($obj, 'method');
+        $params = $method->getParameters();
+        $this->assertEquals('default', $params[0]->getDefaultValue());
+    }
+
+    public function testBuildMethodWithIntegerParam()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('ClassWithIntegerParam');
+        $method = new ReflectionMethod($obj, 'method');
+        $params = $method->getParameters();
+        $this->assertTrue($params[0]->getDefaultValue() === 0);
+    }
+
+    public function testBuildMethodWithClassTypeHint()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('ClassWithClassTypeHint');
+        $method = new ReflectionMethod($obj, 'method');
+        $params = $method->getParameters();
+        $this->assertEquals('ClassWithParams', $params[0]->getClass()->getName());
     }
 
     public function assertNumberOfParameters($num, $obj, $method)
@@ -75,4 +120,20 @@ class ClassWithParams {
 
 class ClassWithTwoParams {
     public function method($param1, $param2) {}
+}
+
+class ClassWithOptionalParam {
+    public function method($param1 = null) {}
+}
+
+class ClassWithIntegerParam {
+    public function method($param1 = 0) {}
+}
+
+class ClassWithStringParam {
+    public function method($param1 = 'default') {}
+}
+
+class ClassWithClassTypeHint {
+    public function method(ClassWithParams $param1) {}
 }
