@@ -47,47 +47,40 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testBuildMethodWithOneOptionalParam()
     {
-        $builder = new Mocker_Builder();
-        $obj = $builder->build('ClassWithOptionalParam');
-        $method = new ReflectionMethod($obj, 'method');
-        $params = $method->getParameters();
+        $params = $this->_getBuiltParams('ClassWithOptionalParam');
         $this->assertTrue($params[0]->isOptional());
     }
 
     public function testBuildMethodWithNullParam()
     {
-        $builder = new Mocker_Builder();
-        $obj = $builder->build('ClassWithOptionalParam');
-        $method = new ReflectionMethod($obj, 'method');
-        $params = $method->getParameters();
+        $params = $this->_getBuiltParams('ClassWithOptionalParam');
         $this->assertEquals(null, $params[0]->getDefaultValue());
     }
 
     public function testBuildMethodWithStringParam()
     {
-        $builder = new Mocker_Builder();
-        $obj = $builder->build('ClassWithStringParam');
-        $method = new ReflectionMethod($obj, 'method');
-        $params = $method->getParameters();
+        $params = $this->_getBuiltParams('ClassWithStringParam');
         $this->assertEquals('default', $params[0]->getDefaultValue());
     }
 
     public function testBuildMethodWithIntegerParam()
     {
-        $builder = new Mocker_Builder();
-        $obj = $builder->build('ClassWithIntegerParam');
-        $method = new ReflectionMethod($obj, 'method');
-        $params = $method->getParameters();
+        $params = $this->_getBuiltParams('ClassWithIntegerParam');
         $this->assertTrue($params[0]->getDefaultValue() === 0);
     }
 
     public function testBuildMethodWithClassTypeHint()
     {
-        $builder = new Mocker_Builder();
-        $obj = $builder->build('ClassWithClassTypeHint');
-        $method = new ReflectionMethod($obj, 'method');
-        $params = $method->getParameters();
+        $params = $this->_getBuiltParams('ClassWithClassTypeHint');
         $this->assertEquals('ClassWithParams', $params[0]->getClass()->getName());
+    }
+
+    private function _getBuiltParams($class)
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build($class);
+        $method = new ReflectionMethod($obj, 'method');
+        return $method->getParameters();
     }
 
     public function assertNumberOfParameters($num, $obj, $method)
