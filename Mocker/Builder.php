@@ -52,7 +52,8 @@ class Mocker_Builder
         foreach ($mocked->getMethods() as $method) {
             $name = $method->getName();
             $call = "\$this->__call('$name', func_get_args());";
-            $func = "    public function $name() {\n        $call\n    }";
+            $parameters = $this->_buildParameters($method);
+            $func = "    public function $name($parameters) {\n        $call\n    }";
             $methods[] = $func;
         }
 
@@ -63,6 +64,16 @@ class Mocker_Builder
         );
 
         return $code;
+    }
+
+    private function _buildParameters($method)
+    {
+        $params = array();
+        foreach ($method->getParameters() as $param) {
+            $params[] = '$' . $param->getName();
+        }
+
+        return implode(', ', $params);
     }
 
     private function _generateMockClassName()
