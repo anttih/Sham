@@ -84,7 +84,10 @@ class Mocker_Builder
                 $value = "'$value'";
             } else if (is_null($value)) {
                 $value = 'null';
+            } else if (is_array($value)) {
+                $value = 'array()';
             }
+
             $default = " = $value";
         }
 

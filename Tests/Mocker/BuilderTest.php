@@ -69,6 +69,12 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($params[0]->getDefaultValue() === 0);
     }
 
+    public function testBuildMethodWithArrayParam()
+    {
+        $params = $this->_getBuiltParams('ClassWithArrayParam');
+        $this->assertEquals(array(), $params[0]->getDefaultValue());
+    }
+    
     public function testBuildMethodWithClassTypeHint()
     {
         $params = $this->_getBuiltParams('ClassWithClassTypeHint');
@@ -125,6 +131,10 @@ class ClassWithIntegerParam {
 
 class ClassWithStringParam {
     public function method($param1 = 'default') {}
+}
+
+class ClassWithArrayParam {
+    public function method($param1 = array()) {}
 }
 
 class ClassWithClassTypeHint {
