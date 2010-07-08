@@ -59,6 +59,10 @@ class Mocker_Mock implements ArrayAccess
         return $value;
     }
 
+    public function __isset($name) {}
+    public function __unset($name) {}
+    public static function __callStatic($method, $params) {}
+
     public function setReturn($value)
     {
         $this->_return_value = $value;

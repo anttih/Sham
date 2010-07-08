@@ -81,6 +81,15 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('ClassWithParams', $params[0]->getClass()->getName());
     }
 
+    /**
+     * This test will just die unless everything is ok
+     */
+    public function testDontAdd__call()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('ClassWithMethodsDeclaredInMock');
+    }
+
     private function _getBuiltParams($class)
     {
         $builder = new Mocker_Builder();
@@ -139,4 +148,15 @@ class ClassWithArrayParam {
 
 class ClassWithClassTypeHint {
     public function method(ClassWithParams $param1) {}
+}
+
+class ClassWithMethodsDeclaredInMock {
+    public function __construct($param) {}
+    public function __isset($name) {}
+    public function __unset($name) {}
+    public function __call($method, $params) {}
+    public function __get($name) {}
+    public function __set($name, $value) {}
+    public static function __callStatic($method, $params) {}
+    public function __invoke() {}
 }

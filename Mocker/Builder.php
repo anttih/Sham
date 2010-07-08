@@ -49,8 +49,15 @@ class Mocker_Builder
     {
         $methods = array();
         $mocked = new ReflectionClass($this->_class);
+
         foreach ($mocked->getMethods() as $method) {
             $name = $method->getName();
+
+            // ignore declared methods
+            if ($this->_declared($name)) {
+                continue;
+            }
+
             $call = "\$this->__call('$name', func_get_args());";
             $parameters = $this->_buildParameters($method);
             $func = "    public function $name($parameters) {\n        $call\n    }";
@@ -97,6 +104,19 @@ class Mocker_Builder
         }
 
         return $class . '$' . $param->getName() . $default;
+    }
+
+    private function _declared($name)
+    {
+        static $methods = array();
+        if (empty($methods)) {
+            $class = new ReflectionClass('Mocker_Mock');
+            $methods = array();
+            foreach ($class->getMethods() as $method) {
+                $methods[] = $method->getName();
+            }
+        }
+        return in_array($name, $methods);
     }
 
     private function _generateMockClassName()
