@@ -65,7 +65,7 @@ class Mocker_Builder
         }
 
         $code = str_replace(
-            '// METHODS',
+            '// :METHODS:',
             implode("\n", $methods),
             $code
         );

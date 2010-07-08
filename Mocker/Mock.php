@@ -83,6 +83,5 @@ class Mocker_Mock implements ArrayAccess
         return $this;
     }
 
-    // METHODS
-
+    // :METHODS:
 }
