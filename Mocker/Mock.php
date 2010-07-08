@@ -2,7 +2,7 @@
 require_once 'Mocker/CallList.php';
 class Mocker_Mock implements ArrayAccess
 {
-    const NO_RETURN_VALUE = 0xFABFAB;
+    const NO_RETURN_VALUE = '30f5d20d150152d4413984f71fabd7d0';
 
     public $calls;
 
