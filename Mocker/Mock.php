@@ -40,11 +40,12 @@ class Mocker_Mock implements ArrayAccess
 
     public function __invoke()
     {
+        $return = $this;
         if ($this->_return_value !== self::NO_RETURN_VALUE) {
             $return = $this->_return_value;
-        } else {
-            $return = $this;
         }
+
+        $this->_call_list->add('__invoke', func_get_args(), $return);
         return $return;
     }
 

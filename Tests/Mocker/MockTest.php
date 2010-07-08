@@ -57,10 +57,11 @@ class MockTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($mocker['irrelevant']));
     }
 
-    public function testCanInvokeMocker_Mock()
+    public function testShouldRecordInvoke()
     {
         $mocker = new Mocker_Mock();
         $mocker();
+        $this->assertTrue($mocker->calls('__invoke')->once());
     }
 
     public function testShouldReturnThisMockIfNoReturnValueSet()
