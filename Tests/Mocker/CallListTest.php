@@ -2,13 +2,21 @@
 require_once 'Mocker/CallList.php';
 class Mocker_CallListTest extends PHPUnit_Framework_TestCase
 {
+    public function testCanAddCallObjects()
+    {
+        $list = new Mocker_CallList();
+        $list->add(new Mocker_Call('method'));
+        $this->assertEquals(1, count($list->calls));
+    }
+
     public function testShouldAddCallWithNameParamsAndReturnValue()
     {
         $list = new Mocker_CallList();
         $list->add('call name', array('value'), 'return value');
-        $this->assertEquals('call name', $list->calls[0][0]);
-        $this->assertEquals(array('value'), $list->calls[0][1]);
-        $this->assertEquals('return value', $list->calls[0][2]);
+        $call = $list->calls[0];
+        $this->assertEquals('call name', $call->name);
+        $this->assertEquals(array('value'), $call->params);
+        $this->assertEquals('return value', $call->return_value);
     }
 
     public function testEmptyCallListHasZeroCalls()
@@ -57,6 +65,6 @@ class Mocker_CallListTest extends PHPUnit_Framework_TestCase
     {
         $list = new Mocker_CallList();
         $list->add('call name', array('param', Mocker::NO_VALUE_PASSED), 'return value');
-        $this->assertTrue(count($list->calls[0][1]) === 1);
+        $this->assertTrue(count($list->calls[0]->params) === 1);
     }
 }

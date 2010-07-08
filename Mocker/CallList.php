@@ -9,14 +9,17 @@ class Mocker_CallList implements Countable
         $this->calls = (array) $calls;
     }
 
-    public function add($method, $params, $return)
+    public function add($spec, $params = array(), $return = null)
     {
-        // ignore optional arguments that were not passed in
-        $params = array_filter($params, function ($value) {
-            return $value !== Mocker::NO_VALUE_PASSED;
-        });
+        if (is_string($spec)) {
+            // ignore optional arguments that were not passed in
+            $params = array_filter($params, function ($value) {
+                return $value !== Mocker::NO_VALUE_PASSED;
+            });
+            $spec = new Mocker_Call($spec, $params, $return);
+        }
 
-        $this->calls[] = array($method, $params, $return);
+        $this->calls[] = $spec;
     }
 
     public function calls($name = null)
@@ -29,7 +32,7 @@ class Mocker_CallList implements Countable
         $calls = array();
         foreach ($this->calls as $call) {
             $args = func_get_args();
-            if ($call[0] === $name && $this->_emptyOrEqualArgs($args, $call[1])) {
+            if ($call->name === $name && $this->_emptyOrEqualArgs($args, $call->params)) {
                 $calls[] = $call;
             }
         }

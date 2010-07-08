@@ -24,20 +24,15 @@ class Mocker_Mock implements ArrayAccess
 
     public function __call($method, $params)
     {
-        // if $method has been accessed as a property
-        // it is most likely a Mocker, so we'll invoke it
-        // to use it's return value
-        if (array_key_exists($method, $this->_data)
-        && $this->_data[$method] instanceof Mocker_Mock) {
-            return $this->$method->__invoke($params);
+        if (array_key_exists($method, $this->_calls)) {
+            $call = $this->_calls[$method];
+            $call->params = $params;
+        } else {
+            $call = new Mocker_Call($method, $params, new Mocker_Mock());
         }
 
-        // first access, return a new Mocker
-        $return = new Mocker_Mock();
-
-        $this->_call_list->add($method, $params, $return);
-
-        return $return;
+        $this->_call_list->add($call);
+        return $call();
     }
 
     public function __invoke()
