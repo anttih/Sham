@@ -52,4 +52,11 @@ class Mocker_CallListTest extends PHPUnit_Framework_TestCase
         $list->add('call name', array(), 'return value');
         $this->assertTrue($list->calls('call name')->once());
     }
+
+    public function testIgnoreOptionalParamsThatWereNotPassedInWhenAdding()
+    {
+        $list = new Mocker_CallList();
+        $list->add('call name', array('param', Mocker::NO_VALUE_PASSED), 'return value');
+        $this->assertTrue(count($list->calls[0][1]) === 1);
+    }
 }

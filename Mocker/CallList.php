@@ -11,6 +11,11 @@ class Mocker_CallList implements Countable
 
     public function add($method, $params, $return)
     {
+        // ignore optional arguments that were not passed in
+        $params = array_filter($params, function ($value) {
+            return $value !== Mocker::NO_VALUE_PASSED;
+        });
+
         $this->calls[] = array($method, $params, $return);
     }
 
