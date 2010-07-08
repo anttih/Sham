@@ -16,6 +16,11 @@ class Mocker_CallList implements Countable
 
     public function calls($name = null)
     {
+        // don't filter at all?
+        if (empty($name)) {
+            return $this;
+        }
+
         $calls = array();
         foreach ($this->calls as $call) {
             $args = func_get_args();

@@ -22,6 +22,14 @@ class Mocker_CallListTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($list->calls() instanceof Mocker_CallList);
     }
 
+    public function testShouldReturnAllCallsWhenNoMethodGiven()
+    {
+        $list = new Mocker_CallList();
+        $list->add('method 1', array(), 'return value');
+        $list->add('method 2', array(), 'return value');
+        $this->assertEquals(2, count($list->calls()));
+    }
+
     public function testShouldFilterOnName()
     {
         $list = new Mocker_CallList();
