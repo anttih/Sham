@@ -53,7 +53,6 @@ class Mocker_Builder
         foreach ($mocked->getMethods() as $method) {
             $name = $method->getName();
 
-            // ignore declared methods
             if ($this->_isDeclared($name)) {
                 continue;
             }
