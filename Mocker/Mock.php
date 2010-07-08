@@ -1,10 +1,13 @@
 <?php
 require_once 'Mocker/CallList.php';
+require_once 'Mocker/Call.php';
 class Mocker_Mock implements ArrayAccess
 {
     const NO_RETURN_VALUE = '30f5d20d150152d4413984f71fabd7d0';
 
     private $_call_list;
+    
+    private $_calls = array();
 
     private $_data = array();
 
@@ -49,25 +52,21 @@ class Mocker_Mock implements ArrayAccess
     public function __get($name)
     {
         if (array_key_exists($name, $this->_data)) {
+            $this->_call_list->add('__get', array($name), $this->_data[$name]);
             return $this->_data[$name];
         }
 
-        $value = new Mocker_Mock();
-        $this->_data[$name] = $value;
-        return $value;
+        $call = new Mocker_Call($name, array(), self::NO_RETURN_VALUE);
+        $this->_calls[$name] = $call;
+        return $call;
     }
 
-    public function __isset($name) {}
-    public function __unset($name) {}
-    public static function __callStatic($method, $params) {}
+    public function __set($key, $value)
+    {
+        $this->_data[$key] = $value;
+        $this->_call_list->add('__set', array($value), self::NO_RETURN_VALUE);
+    }
 
-    public function __sleep() {}
-    public function __wakeup() {}
-
-    public function __toString() {}
-
-    public static function __setState($properties = array()) {}
-    public function __clone() {}
 
     public function calls()
     {
@@ -97,5 +96,20 @@ class Mocker_Mock implements ArrayAccess
         return $this;
     }
 
+    public function __isset($name) {}
+
+    public function __unset($name) {}
+
+    public static function __callStatic($method, $params) {}
+
+    public function __sleep() {}
+
+    public function __wakeup() {}
+
+    public function __toString() {}
+
+    public static function __setState($properties = array()) {}
+
+    public function __clone() {}
     // :METHODS:
 }

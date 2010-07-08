@@ -1,7 +1,7 @@
 <?php
 require_once 'Mocker/Mock.php';
 
-class MockTest extends PHPUnit_Framework_TestCase
+class Mocker_MockTest extends PHPUnit_Framework_TestCase
 {
     public function testCallingMethodsShouldReturnMocker_Mock()
     {
@@ -10,10 +10,29 @@ class MockTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ret instanceof Mocker_Mock);
     }
     
-    public function testAccessingPropertiesShouldReturnMocker_Mock()
+    public function testGettingAPropertyWithoutSettingShouldReturnCallObject()
     {
         $mocker = new Mocker_Mock();
-        $this->assertTrue($mocker->property instanceof Mocker_Mock);
+        $this->assertTrue($mocker->property instanceof Mocker_Call);
+    }
+
+    public function testGettingAPropertyWithoutSettingShouldNotRecord()
+    {
+        $mocker = new Mocker_Mock();
+        $value = $mocker->key;
+        $this->assertFalse($mocker->calls('__get', 'key')->once());
+    }
+
+    public function testShouldRecordPropertyGetWhenSet()
+    {
+        $mocker = new Mocker_Mock();
+        $mocker->key = 'value';
+        $value = $mocker->key;
+
+        $this->assertTrue($mocker->calls('__get', 'key')->once());
+
+        $call = $mocker->calls('__get', 'key')->calls[0];
+        $this->assertEquals('value', $call->return_value);
     }
 
     public function testShouldReturnSetPropertyValue()
@@ -23,12 +42,11 @@ class MockTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("key value", $mocker->key);
     }
 
-    public function testShouldCreateNewMocker_MocksWhenAccessed()
+    public function testShouldRecordPropertySet()
     {
         $mocker = new Mocker_Mock();
-        $mocker->foo->bar = 'irrelevant';
-        $this->assertTrue($mocker->foo instanceof Mocker_Mock);
-        $this->assertTrue($mocker->foo !== $mocker);
+        $mocker->key = 'value';
+        $this->assertTrue($mocker->calls('__set', 'value')->once());
     }
 
     public function testShouldReturnFromChildMocker_Mock()
@@ -89,7 +107,7 @@ class MockTest extends PHPUnit_Framework_TestCase
     {
         $mocker = new Mocker_Mock();
         $mocker->method();
-        $this->assertTrue($mocker->calls->calls[0][2] instanceof Mocker_Mock);
+        $this->assertTrue($mocker->calls()->calls[0]->return_value instanceof Mocker_Mock);
     }
 
     public function testShouldProxyCallsToCallList()
@@ -98,3 +116,4 @@ class MockTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($mocker->calls() instanceof Mocker_CallList);
     }
 }
+
