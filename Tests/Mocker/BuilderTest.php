@@ -20,7 +20,7 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $builder = new Mocker_Builder();
         $obj = $builder->build('TestBuilder');
         $obj->override();
-        $this->assertTrue($obj->calls->calls('override')->once());
+        $this->assertTrue($obj->calls('override')->once());
     }
 
     public function testRecordCallParams()
@@ -28,7 +28,7 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $builder = new Mocker_Builder();
         $obj = $builder->build('TestBuilder');
         $obj->override('param 1');
-        $this->assertTrue($obj->calls->calls('override', 'param 1')->once());
+        $this->assertTrue($obj->calls('override', 'param 1')->once());
     }
 
     public function testBuildMethodWithOneNonOptionalParam()
@@ -51,30 +51,12 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($params[0]->isOptional());
     }
 
-    public function testBuildMethodWithNullParam()
+    public function testShouldUseUniqueDefaultParamValue()
     {
         $params = $this->_getBuiltParams('ClassWithOptionalParam');
-        $this->assertEquals(null, $params[0]->getDefaultValue());
+        $this->assertEquals(Mocker::NO_VALUE_PASSED, $params[0]->getDefaultValue());
     }
 
-    public function testBuildMethodWithStringParam()
-    {
-        $params = $this->_getBuiltParams('ClassWithStringParam');
-        $this->assertEquals('default', $params[0]->getDefaultValue());
-    }
-
-    public function testBuildMethodWithIntegerParam()
-    {
-        $params = $this->_getBuiltParams('ClassWithIntegerParam');
-        $this->assertTrue($params[0]->getDefaultValue() === 0);
-    }
-
-    public function testBuildMethodWithArrayParam()
-    {
-        $params = $this->_getBuiltParams('ClassWithArrayParam');
-        $this->assertEquals(array(), $params[0]->getDefaultValue());
-    }
-    
     public function testBuildMethodWithClassTypeHint()
     {
         $params = $this->_getBuiltParams('ClassWithClassTypeHint');
@@ -134,18 +116,6 @@ class ClassWithOptionalParam {
     public function method($param1 = null) {}
 }
 
-class ClassWithIntegerParam {
-    public function method($param1 = 0) {}
-}
-
-class ClassWithStringParam {
-    public function method($param1 = 'default') {}
-}
-
-class ClassWithArrayParam {
-    public function method($param1 = array()) {}
-}
-
 class ClassWithClassTypeHint {
     public function method(ClassWithParams $param1) {}
 }
@@ -160,3 +130,4 @@ class ClassWithMethodsDeclaredInMock {
     public static function __callStatic($method, $params) {}
     public function __invoke() {}
 }
+

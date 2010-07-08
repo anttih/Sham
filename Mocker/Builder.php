@@ -85,16 +85,7 @@ class Mocker_Builder
     {
         $default = '';
         if ($param->isOptional()) {
-            $value = $param->getDefaultValue();
-            if (is_string($value)) {
-                $value = "'$value'";
-            } else if (is_null($value)) {
-                $value = 'null';
-            } else if (is_array($value)) {
-                $value = 'array()';
-            }
-
-            $default = " = $value";
+            $default = ' = Mocker::NO_VALUE_PASSED';
         }
 
         $class = '';
