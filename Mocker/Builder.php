@@ -54,7 +54,7 @@ class Mocker_Builder
             $name = $method->getName();
 
             // ignore declared methods
-            if ($this->_declared($name)) {
+            if ($this->_isDeclared($name)) {
                 continue;
             }
 
@@ -106,7 +106,7 @@ class Mocker_Builder
         return $class . '$' . $param->getName() . $default;
     }
 
-    private function _declared($name)
+    private function _isDeclared($name)
     {
         static $methods = array();
         if (empty($methods)) {
