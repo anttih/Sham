@@ -122,6 +122,7 @@ class ClassWithClassTypeHint {
 
 class ClassWithMethodsDeclaredInMock {
     public function __construct($param) {}
+    public function __destruct() {}
     public function __isset($name) {}
     public function __unset($name) {}
     public function __call($method, $params) {}
@@ -129,5 +130,10 @@ class ClassWithMethodsDeclaredInMock {
     public function __set($name, $value) {}
     public static function __callStatic($method, $params) {}
     public function __invoke() {}
+    public function __sleep() {}
+    public function __wakeup() {}
+    public function __toString() {}
+    public static function __setState($props = array()) {}
+    public function __clone() {}
 }
 

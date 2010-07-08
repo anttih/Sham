@@ -20,6 +20,8 @@ class Mocker_Mock implements ArrayAccess
         $this->_call_list = new Mocker_CallList();
     }
 
+    public function __destruct() {}
+
     public function __call($method, $params)
     {
         // if $method has been accessed as a property
@@ -63,6 +65,14 @@ class Mocker_Mock implements ArrayAccess
     public function __isset($name) {}
     public function __unset($name) {}
     public static function __callStatic($method, $params) {}
+
+    public function __sleep() {}
+    public function __wakeup() {}
+
+    public function __toString() {}
+
+    public static function __setState($properties = array()) {}
+    public function __clone() {}
 
     public function calls()
     {
