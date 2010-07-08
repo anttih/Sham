@@ -63,7 +63,7 @@ class MockTest extends PHPUnit_Framework_TestCase
         $mocker();
     }
 
-    public function testShouldReturnThisMocker_MockIfNoReturnValueSet()
+    public function testShouldReturnThisMockIfNoReturnValueSet()
     {
         $mocker = new Mocker_Mock();
         $this->assertSame($mocker, $mocker());
@@ -81,7 +81,7 @@ class MockTest extends PHPUnit_Framework_TestCase
         $mocker = new Mocker_Mock();
         $mocker->method0();
         $mocker->method1();
-        $this->assertEquals(2, count($mocker->calls));
+        $this->assertEquals(2, count($mocker->calls()));
     }
 
     public function testShouldRecordReturnValue()
@@ -89,5 +89,11 @@ class MockTest extends PHPUnit_Framework_TestCase
         $mocker = new Mocker_Mock();
         $mocker->method();
         $this->assertTrue($mocker->calls->calls[0][2] instanceof Mocker_Mock);
+    }
+
+    public function testShouldProxyCallsToCallList()
+    {
+        $mocker = new Mocker_Mock();
+        $this->assertTrue($mocker->calls() instanceof Mocker_CallList);
     }
 }

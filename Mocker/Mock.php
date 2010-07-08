@@ -4,7 +4,7 @@ class Mocker_Mock implements ArrayAccess
 {
     const NO_RETURN_VALUE = '30f5d20d150152d4413984f71fabd7d0';
 
-    public $calls;
+    private $_call_list;
 
     private $_data = array();
 
@@ -17,7 +17,7 @@ class Mocker_Mock implements ArrayAccess
 
     public function __construct()
     {
-        $this->calls = new Mocker_CallList();
+        $this->_call_list = new Mocker_CallList();
     }
 
     public function __call($method, $params)
@@ -33,7 +33,7 @@ class Mocker_Mock implements ArrayAccess
         // first access, return a new Mocker
         $return = new Mocker_Mock();
 
-        $this->calls->add($method, $params, $return);
+        $this->_call_list->add($method, $params, $return);
 
         return $return;
     }
@@ -62,6 +62,14 @@ class Mocker_Mock implements ArrayAccess
     public function __isset($name) {}
     public function __unset($name) {}
     public static function __callStatic($method, $params) {}
+
+    public function calls()
+    {
+        return call_user_func_array(
+            array($this->_call_list, 'calls'),
+            func_get_args()
+        );
+    }
 
     public function setReturn($value)
     {
