@@ -75,7 +75,7 @@ class Mocker_Mock implements ArrayAccess
         );
     }
 
-    public function setReturn($value)
+    public function returns($value)
     {
         $this->_return_value = $value;
     }

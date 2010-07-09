@@ -50,13 +50,13 @@ class Mocker_MockTest extends PHPUnit_Framework_TestCase
 
     public function testShouldReturnFromChildMocker_Mock()
     {
-        $this->mock->method->setReturn("return value");
+        $this->mock->method->returns("return value");
         $this->assertEquals("return value", $this->mock->method());
     }
 
     public function testShouldAllowFalsyReturnValues()
     {
-        $this->mock->someMethod->setReturn(false);
+        $this->mock->someMethod->returns(false);
         $this->assertEquals(false, $this->mock->someMethod());
     }
 
@@ -76,7 +76,7 @@ class Mocker_MockTest extends PHPUnit_Framework_TestCase
     public function testShouldUseReturnValueWhenInvoked()
     {
         $mock = new Mocker_Mock();
-        $mock->setReturn('return value');
+        $mock->returns('return value');
         $this->assertSame('return value', $mock());
     }
 
