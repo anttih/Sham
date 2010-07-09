@@ -16,4 +16,13 @@ class Mocker_CallTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('return value', $call());
     }
 
+    /**
+     * @expectedException Exception
+     */
+    public function testShouldThrowIfSet()
+    {
+        $call = new Mocker_Call('call name', array(), 'return value');
+        $call->throws('Exception');
+        $call();
+    }
 }
