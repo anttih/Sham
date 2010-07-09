@@ -1,18 +1,54 @@
 <?php
+
 require_once 'Mocker/CallList.php';
 require_once 'Mocker/Call.php';
+
+/**
+ * Mock/stub object that records everything you do on it
+ *
+ * This class is also a template for mocking existing classes.
+ * 
+ * @author Antti Holvikari <anttih@gmail.com>
+ * @package Mocker
+ */
 class Mocker_Mock implements ArrayAccess
 {
+    /**
+     * Internal value to distinguish falsy return
+     * values from "no return value at all"
+     * 
+     * @param string
+     */
     const NO_RETURN_VALUE = '30f5d20d150152d4413984f71fabd7d0';
 
+    /**
+     * Calls that have been recorded
+     * 
+     * @param Mocker_CallList
+     */
     private $_call_list;
     
+    /**
+     * Calls that have not been recorded yet
+     *
+     * When you set a return value for a call,
+     * that call will be stored here until it is
+     * actually called.
+     * 
+     * @param array
+     */
     private $_calls = array();
 
+    /**
+     * The data this object will use for ArrayAccess and "struct"
+     * behaviour (data object)
+     * 
+     * @param array
+     */
     private $_data = array();
 
     /**
-     * Value that should be returned
+     * Return value of __invoke
      *
      * No return value set by default
      */
@@ -125,5 +161,6 @@ class Mocker_Mock implements ArrayAccess
     public static function __setState($properties = array()) {}
 
     public function __clone() {}
+
     // :METHODS:
 }
