@@ -53,13 +53,14 @@ class Mocker_Builder
         foreach ($mocked->getMethods() as $method) {
             $name = $method->getName();
 
-            if ($this->_isDeclared($name)) {
+            if ($this->_isDeclared($name) || $this->_isNotAbstractNonPublic($method)) {
                 continue;
             }
 
+            $visibility = $this->_getVisibility($method);
             $call = "\$this->__call('$name', func_get_args());";
             $parameters = $this->_buildParameters($method);
-            $func = "    public function $name($parameters) {\n        $call\n    }";
+            $func = "    $visibility function $name($parameters) {\n        $call\n    }";
             $methods[] = $func;
         }
 
@@ -94,6 +95,24 @@ class Mocker_Builder
         }
 
         return $class . '$' . $param->getName() . $default;
+    }
+
+    private function _getVisibility($method)
+    {
+        if ($method->isPublic()) {
+            return 'public';
+        } else if ($method->isProtected()) {
+            return 'protected';
+        } else if ($method->isPrivate()) {
+            return 'private';
+        }
+    }
+
+    private function _isNotAbstractNonPublic($method)
+    {
+        $visibility = $this->_getVisibility($method);
+        $non_public = array('protected', 'private');
+        return (! $method->isAbstract()) && (in_array($visibility, $non_public));
     }
 
     private function _isDeclared($name)

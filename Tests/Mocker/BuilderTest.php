@@ -79,6 +79,21 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertHasOwnMethod($obj, 'method');
     }
 
+    public function testShouldNotBuildProtectedAndPrivate()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('ClassWithNonPublicMethods');
+        $this->assertDoesNotHaveOwnMethod($obj, 'privateMethod');
+        $this->assertDoesNotHaveOwnMethod($obj, 'protectedMethod');
+    }
+
+    public function testShouldBuildAbstractProtected()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('ClassWithAbstractProtected');
+        $this->assertHasOwnMethod($obj, 'protectedMethod');
+    }
+
     private function _getBuiltParams($class)
     {
         $builder = new Mocker_Builder();
@@ -104,6 +119,14 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
             $method->getDeclaringClass()->getName(),
             $message
         );
+    }
+
+    public function assertDoesNotHaveOwnMethod($obj, $method)
+    {
+        $method = new ReflectionMethod($obj, $method);
+        $message = 'Object has declared method '
+                 . $method->getName() . '.';
+        $this->assertTrue($method->getDeclaringClass()->getName() !== get_class($obj));
     }
 }
 
@@ -147,3 +170,13 @@ class ClassWithMethodsDeclaredInMock {
 abstract class ClassWithAbstractMethod {
     abstract public function method($param1);
 }
+
+class ClassWithNonPublicMethods {
+    protected function protectedMethod($param1) {}
+    private   function privateMethod($param1) {}
+}
+
+abstract class ClassWithAbstractProtected {
+    abstract protected function protectedMethod($param1);
+}
+
