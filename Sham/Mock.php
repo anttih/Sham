@@ -1,7 +1,7 @@
 <?php
 
-require_once 'Mocker/CallList.php';
-require_once 'Mocker/Call.php';
+require_once 'Sham/CallList.php';
+require_once 'Sham/Call.php';
 
 /**
  * Mock/stub object that records everything you do on it
@@ -9,9 +9,9 @@ require_once 'Mocker/Call.php';
  * This class is also a template for mocking existing classes.
  * 
  * @author Antti Holvikari <anttih@gmail.com>
- * @package Mocker
+ * @package Sham
  */
-class Mocker_Mock implements ArrayAccess
+class Sham_Mock implements ArrayAccess
 {
     /**
      * Internal value to distinguish falsy return
@@ -24,7 +24,7 @@ class Mocker_Mock implements ArrayAccess
     /**
      * Calls that have been recorded
      * 
-     * @param Mocker_CallList
+     * @param Sham_CallList
      */
     private $_call_list;
     
@@ -56,7 +56,7 @@ class Mocker_Mock implements ArrayAccess
 
     public function __construct()
     {
-        $this->_call_list = new Mocker_CallList();
+        $this->_call_list = new Sham_CallList();
     }
 
     public function __destruct() {}
@@ -67,7 +67,7 @@ class Mocker_Mock implements ArrayAccess
             $call = $this->_calls[$method];
             $call->params = $params;
         } else {
-            $call = new Mocker_Call($method, $params, new Mocker_Mock());
+            $call = new Sham_Call($method, $params, new Sham_Mock());
         }
 
         $this->_call_list->add($call);
@@ -92,7 +92,7 @@ class Mocker_Mock implements ArrayAccess
             return $this->_data[$name];
         }
 
-        $call = new Mocker_Call($name, array(), self::NO_RETURN_VALUE);
+        $call = new Sham_Call($name, array(), self::NO_RETURN_VALUE);
         $this->_calls[$name] = $call;
         return $call;
     }

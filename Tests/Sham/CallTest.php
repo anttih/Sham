@@ -1,17 +1,17 @@
 <?php
-require_once 'Mocker/Call.php';
-class Mocker_CallTest extends PHPUnit_Framework_TestCase
+require_once 'Sham/Call.php';
+class Sham_CallTest extends PHPUnit_Framework_TestCase
 {
 
     public function testShouldReturnReturnValue()
     {
-        $call = new Mocker_Call('call name', array(), 'return value');
+        $call = new Sham_Call('call name', array(), 'return value');
         $this->assertEquals('return value', $call());
     }
 
     public function testShouldBeAbleToSetReturnValue()
     {
-        $call = new Mocker_Call('call name', array());
+        $call = new Sham_Call('call name', array());
         $call->returns('return value');
         $this->assertEquals('return value', $call());
     }
@@ -21,7 +21,7 @@ class Mocker_CallTest extends PHPUnit_Framework_TestCase
      */
     public function testShouldThrowIfSet()
     {
-        $call = new Mocker_Call('call name', array(), 'return value');
+        $call = new Sham_Call('call name', array(), 'return value');
         $call->throws('Exception');
         $call();
     }

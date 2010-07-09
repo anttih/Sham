@@ -1,5 +1,5 @@
 <?php
-class Mocker_Call
+class Sham_Call
 {
     public $name;
     public $params;

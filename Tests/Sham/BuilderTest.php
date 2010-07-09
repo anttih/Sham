@@ -1,23 +1,23 @@
 <?php
-require_once 'Mocker/Builder.php';
-class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
+require_once 'Sham/Builder.php';
+class Sham_BuilderTest extends PHPUnit_Framework_TestCase
 {
     public function testMockingAClassShouldReturnInstanceOfSameClass()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $this->assertTrue($builder->build('TestBuilder') instanceof TestBuilder);
     }
 
     public function testOverrideParentMethods()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build('TestBuilder');
         $this->assertHasOwnMethod($obj, 'override');
     }
 
     public function testRecordOverridenMethodCalls()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build('TestBuilder');
         $obj->override();
         $this->assertTrue($obj->calls('override')->once());
@@ -25,7 +25,7 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testRecordCallParams()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build('TestBuilder');
         $obj->override('param 1');
         $this->assertTrue($obj->calls('override', 'param 1')->once());
@@ -33,14 +33,14 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testBuildMethodWithOneNonOptionalParam()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build('ClassWithParams');
         $this->assertNumberOfParameters(1, $obj, 'method');
     }
 
     public function testBuildMethodWithTwoNonOptionalParams()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build('ClassWithTwoParams');
         $this->assertNumberOfParameters(2, $obj, 'method');
     }
@@ -54,7 +54,7 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
     public function testShouldUseUniqueDefaultParamValue()
     {
         $params = $this->_getBuiltParams('ClassWithOptionalParam');
-        $this->assertEquals(Mocker::NO_VALUE_PASSED, $params[0]->getDefaultValue());
+        $this->assertEquals(Sham::NO_VALUE_PASSED, $params[0]->getDefaultValue());
     }
 
     public function testBuildMethodWithClassTypeHint()
@@ -68,20 +68,20 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
      */
     public function testDontAdd__call()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build('ClassWithMethodsDeclaredInMock');
     }
 
     public function testBuildAbstractClass()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build('ClassWithAbstractMethod');
         $this->assertHasOwnMethod($obj, 'method');
     }
 
     public function testShouldNotBuildProtectedAndPrivate()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build('ClassWithNonPublicMethods');
         $this->assertDoesNotHaveOwnMethod($obj, 'privateMethod');
         $this->assertDoesNotHaveOwnMethod($obj, 'protectedMethod');
@@ -89,14 +89,14 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testShouldBuildAbstractProtected()
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build('ClassWithAbstractProtected');
         $this->assertHasOwnMethod($obj, 'protectedMethod');
     }
 
     private function _getBuiltParams($class)
     {
-        $builder = new Mocker_Builder();
+        $builder = new Sham_Builder();
         $obj = $builder->build($class);
         $method = new ReflectionMethod($obj, 'method');
         return $method->getParameters();

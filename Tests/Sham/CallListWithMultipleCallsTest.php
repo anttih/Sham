@@ -1,10 +1,10 @@
 <?php
-require_once 'Mocker/CallList.php';
-class Mocker_CallListWithMultipleCallsTest extends PHPUnit_Framework_TestCase
+require_once 'Sham/CallList.php';
+class Sham_CallListWithMultipleCallsTest extends PHPUnit_Framework_TestCase
 {
     public function setup()
     {
-        $list = new Mocker_CallList();
+        $list = new Sham_CallList();
         $list->add('call name', array('param1'), 'return value');
         $list->add('call name', array('param1', 'param2'), 'return value');
         $this->list = $list;
@@ -28,13 +28,13 @@ class Mocker_CallListWithMultipleCallsTest extends PHPUnit_Framework_TestCase
 
     public function testShouldIgnoreFirstArg()
     {
-        $calls = $this->list->calls('call name', Mocker::DONTCARE);
+        $calls = $this->list->calls('call name', Sham::DONTCARE);
         $this->assertEquals(1, count($calls));
     }
 
     public function testShouldIgnoreSecondArg()
     {
-        $calls = $this->list->calls('call name', 'param1', Mocker::DONTCARE);
+        $calls = $this->list->calls('call name', 'param1', Sham::DONTCARE);
         $this->assertEquals(1, count($calls));
     }
 

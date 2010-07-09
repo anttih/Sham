@@ -1,22 +1,22 @@
 <?php
-require_once 'Mocker/Mock.php';
+require_once 'Sham/Mock.php';
 
-class Mocker_MockTest extends PHPUnit_Framework_TestCase
+class Sham_MockTest extends PHPUnit_Framework_TestCase
 {
     public function setup()
     {
-        $this->mock = new Mocker_Mock();
+        $this->mock = new Sham_Mock();
     }
 
-    public function testCallingMethodsShouldReturnMocker_Mock()
+    public function testCallingMethodsShouldReturnSham_Mock()
     {
         $ret = $this->mock->method();
-        $this->assertTrue($ret instanceof Mocker_Mock);
+        $this->assertTrue($ret instanceof Sham_Mock);
     }
     
     public function testGettingAPropertyWithoutSettingShouldReturnCallObject()
     {
-        $this->assertTrue($this->mock->property instanceof Mocker_Call);
+        $this->assertTrue($this->mock->property instanceof Sham_Call);
     }
 
     public function testGettingAPropertyWithoutSettingShouldNotRecord()
@@ -48,7 +48,7 @@ class Mocker_MockTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->mock->calls('__set', 'value')->once());
     }
 
-    public function testShouldReturnFromChildMocker_Mock()
+    public function testShouldReturnFromChildSham_Mock()
     {
         $this->mock->method->returns("return value");
         $this->assertEquals("return value", $this->mock->method());
@@ -62,20 +62,20 @@ class Mocker_MockTest extends PHPUnit_Framework_TestCase
 
     public function testShouldRecordInvoke()
     {
-        $mock = new Mocker_Mock();
+        $mock = new Sham_Mock();
         $mock();
         $this->assertTrue($mock->calls('__invoke')->once());
     }
 
     public function testInvokeShouldReturnThisMockIfNoReturnValueSet()
     {
-        $mock = new Mocker_Mock();
+        $mock = new Sham_Mock();
         $this->assertSame($mock, $mock());
     }
 
     public function testShouldUseReturnValueWhenInvoked()
     {
-        $mock = new Mocker_Mock();
+        $mock = new Sham_Mock();
         $mock->returns('return value');
         $this->assertSame('return value', $mock());
     }
@@ -90,12 +90,12 @@ class Mocker_MockTest extends PHPUnit_Framework_TestCase
     public function testShouldRecordReturnValue()
     {
         $this->mock->method();
-        $this->assertTrue($this->mock->calls()->calls[0]->return_value instanceof Mocker_Mock);
+        $this->assertTrue($this->mock->calls()->calls[0]->return_value instanceof Sham_Mock);
     }
 
     public function testShouldProxyCallsToCallList()
     {
-        $this->assertTrue($this->mock->calls() instanceof Mocker_CallList);
+        $this->assertTrue($this->mock->calls() instanceof Sham_CallList);
     }
 
     public function testOffsetSetShouldSetValue()

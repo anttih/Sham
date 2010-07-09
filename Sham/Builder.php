@@ -1,7 +1,7 @@
 <?php
-class Mocker_Builder
+class Sham_Builder
 {
-    protected $_mock_class_name = 'Mocker_Mock_';
+    protected $_mock_class_name = 'Sham_Mock_';
 
     private $_class;
 
@@ -29,7 +29,7 @@ class Mocker_Builder
 
     private function _buildClassDefinition($lines)
     {
-        $reflection = new ReflectionClass('Mocker_Mock');
+        $reflection = new ReflectionClass('Sham_Mock');
         $lines = array_slice(
             $lines,
             $reflection->getStartLine() - 1,
@@ -37,7 +37,7 @@ class Mocker_Builder
         );
 
         $lines[0] = str_replace(
-            'class Mocker_Mock',
+            'class Sham_Mock',
             "class {$this->_mock_class_name} extends $this->_class",
             $lines[0]
         );
@@ -86,7 +86,7 @@ class Mocker_Builder
     {
         $default = '';
         if ($param->isOptional()) {
-            $default = ' = Mocker::NO_VALUE_PASSED';
+            $default = ' = Sham::NO_VALUE_PASSED';
         }
 
         $class = '';
@@ -119,7 +119,7 @@ class Mocker_Builder
     {
         static $methods = array();
         if (empty($methods)) {
-            $class = new ReflectionClass('Mocker_Mock');
+            $class = new ReflectionClass('Sham_Mock');
             $methods = array();
             foreach ($class->getMethods() as $method) {
                 $methods[] = $method->getName();
@@ -130,6 +130,6 @@ class Mocker_Builder
 
     private function _generateMockClassName()
     {
-        return 'Mocker_Mock_' . rand(1000, 9999);
+        return 'Sham_Mock_' . rand(1000, 9999);
     }
 }

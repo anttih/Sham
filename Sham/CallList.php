@@ -1,6 +1,6 @@
 <?php
-require_once 'Mocker.php';
-class Mocker_CallList implements Countable
+require_once 'Sham.php';
+class Sham_CallList implements Countable
 {
     public $calls = array();
 
@@ -14,9 +14,9 @@ class Mocker_CallList implements Countable
         if (is_string($spec)) {
             // ignore optional arguments that were not passed in
             $params = array_filter($params, function ($value) {
-                return $value !== Mocker::NO_VALUE_PASSED;
+                return $value !== Sham::NO_VALUE_PASSED;
             });
-            $spec = new Mocker_Call($spec, $params, $return);
+            $spec = new Sham_Call($spec, $params, $return);
         }
 
         $this->calls[] = $spec;
@@ -36,7 +36,7 @@ class Mocker_CallList implements Countable
                 $calls[] = $call;
             }
         }
-        return new Mocker_CallList($calls);
+        return new Sham_CallList($calls);
     }
 
     public function once()
@@ -61,7 +61,7 @@ class Mocker_CallList implements Countable
     private function _equalArgs($args, $call_args)
     {
         for ($i = 0; $i < count($args); $i++) {
-            $allowed = array($call_args[$i], Mocker::DONTCARE);
+            $allowed = array($call_args[$i], Sham::DONTCARE);
             if (! in_array($args[$i], $allowed)) {
                 return false;
             }
