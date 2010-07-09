@@ -72,6 +72,13 @@ class Mocker_BuilderTest extends PHPUnit_Framework_TestCase
         $obj = $builder->build('ClassWithMethodsDeclaredInMock');
     }
 
+    public function testBuildAbstractClass()
+    {
+        $builder = new Mocker_Builder();
+        $obj = $builder->build('ClassWithAbstractMethod');
+        $this->assertHasOwnMethod($obj, 'method');
+    }
+
     private function _getBuiltParams($class)
     {
         $builder = new Mocker_Builder();
@@ -137,3 +144,6 @@ class ClassWithMethodsDeclaredInMock {
     public function __clone() {}
 }
 
+abstract class ClassWithAbstractMethod {
+    abstract public function method($param1);
+}
