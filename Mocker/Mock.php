@@ -64,9 +64,8 @@ class Mocker_Mock implements ArrayAccess
     public function __set($key, $value)
     {
         $this->_data[$key] = $value;
-        $this->_call_list->add('__set', array($value), self::NO_RETURN_VALUE);
+        $this->_call_list->add('__set', array($value));
     }
-
 
     public function calls()
     {
@@ -81,19 +80,34 @@ class Mocker_Mock implements ArrayAccess
         $this->_return_value = $value;
     }
 
+    public function mockerGetData()
+    {
+        return $this->_data;
+    }
+
+    public function mockerSetData($data)
+    {
+        $this->_data = $data;
+    }
+
     public function offsetSet($offset, $value) {
-        return true;
+        $this->_data[$offset] = $value;
+        $this->_call_list->add('offsetSet', array($offset, $value));
     }
 
     public function offsetExists($offset) {
-        return true;
+        $isset = isset($this->_data[$offset]);
+        $this->_call_list->add('offsetExists', array($offset), $isset);
+        return $isset;
     }
 
     public function offsetUnset($offset) {
+        $this->_call_list->add('offsetUnset', array($offset));
     }
 
     public function offsetGet($offset) {
-        return $this;
+        $this->_call_list->add('offsetGet', array($offset), $this->_data[$offset]);
+        return $this->_data[$offset];
     }
 
     public function __isset($name) {}

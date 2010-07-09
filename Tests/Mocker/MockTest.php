@@ -63,18 +63,6 @@ class Mocker_MockTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $mocker->someMethod());
     }
 
-    public function testShouldBeAbleToGetArrayElements()
-    {
-        $mocker = new Mocker_Mock();
-        $this->assertTrue($mocker['irrelevant'] instanceof Mocker_Mock);
-    }
-
-    public function testShouldReturnTrueForIsset()
-    {
-        $mocker = new Mocker_Mock();
-        $this->assertTrue(isset($mocker['irrelevant']));
-    }
-
     public function testShouldRecordInvoke()
     {
         $mocker = new Mocker_Mock();
@@ -114,6 +102,68 @@ class Mocker_MockTest extends PHPUnit_Framework_TestCase
     {
         $mocker = new Mocker_Mock();
         $this->assertTrue($mocker->calls() instanceof Mocker_CallList);
+    }
+
+    public function testOffsetSetShouldSetValue()
+    {
+        $mock = new Mocker_Mock();
+        $mock[0] = 1;
+        $data = $mock->mockerGetData();
+        $this->assertEquals(1, $data[0]);
+    }
+
+    public function testShouldRecordOffsetSet()
+    {
+        $mock = new Mocker_Mock();
+        $mock[0] = 1;
+        $this->assertTrue($mock->calls('offsetSet', 0, 1)->once());
+    }
+
+    public function testOffsetGetShouldGetValue()
+    {
+        $mock = new Mocker_Mock();
+        $mock->mockerSetData(array(1));
+        $this->assertEquals(1, $mock[0]);
+    }
+
+    public function testShouldRecordOffsetGet()
+    {
+        $mock = new Mocker_Mock();
+        $mock->mockerSetData(array(1));
+
+        // action
+        $mock[0];
+
+        $list = $mock->calls('offsetGet', 0);
+        $this->assertTrue($list->once());
+
+        // records return value
+        $this->assertEquals(1, $list->calls[0]->return_value);
+    }
+
+    public function testShouldRecordIsset()
+    {
+        $mock = new Mocker_Mock();
+        $mock->mockerSetData(array(1, 2));
+        isset($mock[0]);
+        $this->assertTrue($mock->calls('offsetExists', 0)->once());
+    }
+
+    public function testShouldIssetReturnValueAsCallReturnValue()
+    {
+        $mock = new Mocker_Mock();
+        $mock->mockerSetData(array(1, 2));
+        $isset = isset($mock[0]);
+        $this->assertTrue($isset);
+        $this->assertTrue($mock->calls('offsetExists', 0)->calls[0]->return_value);
+    }
+
+    public function testShouldRecordUnset()
+    {
+        $mock = new Mocker_Mock();
+        $mock->mockerSetData(array(1, 2));
+        unset($mock[0]);
+        $this->assertTrue($mock->calls('offsetUnset', 0)->once());
     }
 }
 
