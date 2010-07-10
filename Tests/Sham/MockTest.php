@@ -54,12 +54,6 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("return value", $this->mock->method());
     }
 
-    public function testShouldAllowFalsyReturnValues()
-    {
-        $this->mock->someMethod->returns(false);
-        $this->assertEquals(false, $this->mock->someMethod());
-    }
-
     public function testShouldRecordInvoke()
     {
         $mock = new Sham_Mock();
