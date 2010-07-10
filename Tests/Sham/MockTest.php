@@ -101,7 +101,7 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
     public function testOffsetSetShouldSetValue()
     {
         $this->mock[0] = 1;
-        $data = $this->mock->mockerGetData();
+        $data = $this->mock->shamGetData();
         $this->assertEquals(1, $data[0]);
     }
 
@@ -113,13 +113,13 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
 
     public function testOffsetGetShouldGetValue()
     {
-        $this->mock->mockerSetData(array(1));
+        $this->mock->shamSetData(array(1));
         $this->assertEquals(1, $this->mock[0]);
     }
 
     public function testShouldRecordOffsetGet()
     {
-        $this->mock->mockerSetData(array(1));
+        $this->mock->shamSetData(array(1));
 
         // action
         $this->mock[0];
@@ -133,14 +133,14 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
 
     public function testShouldRecordIsset()
     {
-        $this->mock->mockerSetData(array(1, 2));
+        $this->mock->shamSetData(array(1, 2));
         isset($this->mock[0]);
         $this->assertTrue($this->mock->calls('offsetExists', 0)->once());
     }
 
     public function testShouldIssetReturnValueAsCallReturnValue()
     {
-        $this->mock->mockerSetData(array(1, 2));
+        $this->mock->shamSetData(array(1, 2));
         $isset = isset($this->mock[0]);
         $this->assertTrue($isset);
         $this->assertTrue($this->mock->calls('offsetExists', 0)->calls[0]->return_value);
@@ -148,7 +148,7 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
 
     public function testShouldRecordUnset()
     {
-        $this->mock->mockerSetData(array(1, 2));
+        $this->mock->shamSetData(array(1, 2));
         unset($this->mock[0]);
         $this->assertTrue($this->mock->calls('offsetUnset', 0)->once());
     }

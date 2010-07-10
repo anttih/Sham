@@ -116,12 +116,12 @@ class Sham_Mock implements ArrayAccess
         $this->_return_value = $value;
     }
 
-    public function mockerGetData()
+    public function shamGetData()
     {
         return $this->_data;
     }
 
-    public function mockerSetData($data)
+    public function shamSetData($data)
     {
         $this->_data = $data;
     }
