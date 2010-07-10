@@ -98,6 +98,14 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->mock->calls() instanceof Sham_CallList);
     }
 
+    public function testMethodCallWithReturnValueShouldNotChangeParamsAfterSecondCall()
+    {
+        $this->mock->method->returns('return value');
+        $this->mock->method('first call');
+        $this->mock->method('second call');
+        $this->assertTrue($this->mock->calls('method', 'first call')->once());
+    }
+
     public function testOffsetSetShouldSetValue()
     {
         $this->mock[0] = 1;

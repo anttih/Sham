@@ -64,7 +64,7 @@ class Sham_Mock implements ArrayAccess, Iterator
     public function __call($method, $params)
     {
         if (array_key_exists($method, $this->_calls)) {
-            $call = $this->_calls[$method];
+            $call = clone $this->_calls[$method];
             $call->params = $params;
         } else {
             $call = new Sham_Call($method, $params, new Sham_Mock());
