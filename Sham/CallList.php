@@ -32,6 +32,8 @@ class Sham_CallList implements Countable
         $calls = array();
         foreach ($this->calls as $call) {
             $args = func_get_args();
+            // take off call name
+            array_shift($args);
             if ($call->name === $name && $this->_emptyOrEqualArgs($args, $call->params)) {
                 $calls[] = $call;
             }
@@ -49,6 +51,8 @@ class Sham_CallList implements Countable
         return count($this->calls) === $count;
     }
 
+    private function _emptyOrEqualArgs($args, $call_args)
+    {
         $arg_count = count($args);
         if ($arg_count == 0) {
             return true;
