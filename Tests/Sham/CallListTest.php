@@ -72,20 +72,20 @@ class Sham_CallListTest extends PHPUnit_Framework_TestCase
     {
         $list = new Sham_CallList();
         $list->add('call name', array('param 1'), 'return value');
-        $this->assertTrue($list->calls('call name', Sham::DONTCARE)->once());
+        $this->assertTrue($list->calls('call name', Sham::ANY)->once());
     }
 
     public function testShouldMatchFirstParamAsAnyWhenTwoParams()
     {
         $list = new Sham_CallList();
         $list->add('call name', array('param 1', 'param 2'), 'return value');
-        $this->assertTrue($list->calls('call name', Sham::DONTCARE, 'param 2')->once());
+        $this->assertTrue($list->calls('call name', Sham::ANY, 'param 2')->once());
     }
 
     public function testShouldMatchLastParamAsAny()
     {
         $list = new Sham_CallList();
         $list->add('call name', array('param 1', 'param 2', 'param 3'), 'return value');
-        $this->assertTrue($list->calls('call name', 'param 1', 'param 2', Sham::DONTCARE)->once());
+        $this->assertTrue($list->calls('call name', 'param 1', 'param 2', Sham::ANY)->once());
     }
 }

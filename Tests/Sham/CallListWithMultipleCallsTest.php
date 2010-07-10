@@ -28,13 +28,13 @@ class Sham_CallListWithMultipleCallsTest extends PHPUnit_Framework_TestCase
 
     public function testShouldIgnoreFirstArg()
     {
-        $calls = $this->list->calls('call name', Sham::DONTCARE);
+        $calls = $this->list->calls('call name', Sham::ANY);
         $this->assertEquals(1, count($calls));
     }
 
     public function testShouldIgnoreSecondArg()
     {
-        $calls = $this->list->calls('call name', 'param1', Sham::DONTCARE);
+        $calls = $this->list->calls('call name', 'param1', Sham::ANY);
         $this->assertEquals(1, count($calls));
     }
 
