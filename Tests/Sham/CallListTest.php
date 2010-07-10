@@ -30,15 +30,22 @@ class Sham_CallListTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($list->calls() instanceof Sham_CallList);
     }
 
-    public function testShouldReturnAllCallsWhenNoMethodGiven()
+    public function testShouldMatchOneCallByCallName()
+    {
+        $list = new Sham_CallList();
+        $list->add('call name', array(), 'return value');
+        $this->assertTrue($list->calls('call name')->once());
+    }
+
+    public function testEmptyCallNameMatchesAll()
     {
         $list = new Sham_CallList();
         $list->add('method 1', array(), 'return value');
-        $list->add('method 2', array(), 'return value');
+        $list->add('method 2', array('param 1'), 'return value');
         $this->assertEquals(2, count($list->calls()));
     }
 
-    public function testShouldFilterOnName()
+    public function testShouldMatchByCallName()
     {
         $list = new Sham_CallList();
         $list->add('call name', array(), 'return value');
@@ -47,18 +54,11 @@ class Sham_CallListTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($list->calls('call name')));
     }
 
-    public function testGivenAListWithOneCallWithArg_ItShouldReturnItWhithNoArgs()
+    public function testShouldMatchByCallNameWhenOneParam()
     {
         $list = new Sham_CallList();
         $list->add('call name', array('param1'), 'return value');
         $this->assertEquals(1, count($list->calls('call name')));
-    }
-
-    public function testWhenOnlyOneCall_OnceShouldReturnTrue()
-    {
-        $list = new Sham_CallList();
-        $list->add('call name', array(), 'return value');
-        $this->assertTrue($list->calls('call name')->once());
     }
 
     public function testIgnoreOptionalParamsThatWereNotPassedInWhenAdding()
