@@ -28,6 +28,12 @@ class Sham_CallTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('return value', $call->returns());
     }
 
+    public function testParamsCanBePassedInAsScalar()
+    {
+        $call = new Sham_Call('call name', 'param 1');
+        $this->assertEquals(array('param 1'), $call->params);
+    }
+
     /**
      * @expectedException Exception
      */

@@ -18,7 +18,7 @@ class Sham_Call
     public function __construct($name, $params = array(), $return_value = null)
     {
         $this->name = $name;
-        $this->params = $params;
+        $this->params = (array) $params;
         $this->return_value = $return_value;
     }
 
