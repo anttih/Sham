@@ -98,6 +98,8 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
     {
         $builder = new Sham_Builder();
         $obj = $builder->build('TestInterface');
+        $class = new ReflectionClass($obj);
+        $this->assertTrue(in_array('TestInterface', $class->getInterfaceNames()));
         $this->assertHasOwnMethod($obj, 'method');
     }
 
