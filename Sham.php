@@ -8,7 +8,7 @@ class Sham
 
     public static function create($class = null)
     {
-        if (! empty($class) && class_exists($class)) {
+        if (! empty($class)) {
             $builder = new Sham_Builder();
             return $builder->build($class);
         }
