@@ -14,14 +14,6 @@ require_once 'Sham/Call.php';
 class Sham_Mock implements ArrayAccess, Iterator
 {
     /**
-     * Internal value to distinguish falsy return
-     * values from "no return value at all"
-     * 
-     * @param string
-     */
-    const NO_RETURN_VALUE = '30f5d20d150152d4413984f71fabd7d0';
-
-    /**
      * Calls that have been recorded
      * 
      * @param Sham_CallList
@@ -84,7 +76,7 @@ class Sham_Mock implements ArrayAccess, Iterator
             return $this->_data[$name];
         }
 
-        $call = new Sham_Call($name, array(), self::NO_RETURN_VALUE);
+        $call = new Sham_Call($name, array());
         $this->_calls[$name] = $call;
         return $call;
     }
