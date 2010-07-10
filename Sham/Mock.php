@@ -74,7 +74,7 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function returns($value)
     {
-        $this->_calls['__invoke'] = new Sham_Call('__invoke', array(), $value);
+        $this->__invoke->returns($value);
     }
 
     public function __get($name)
