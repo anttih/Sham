@@ -61,6 +61,13 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($mock->calls('__invoke')->once());
     }
 
+    public function testShouldRecordInvokeParams()
+    {
+        $mock = new Sham_Mock();
+        $mock('param 1');
+        $this->assertTrue($mock->calls('__invoke', 'param 1')->once());
+    }
+
     public function testInvokeShouldReturnNewMockWhenNoReturnValue()
     {
         $mock = new Sham_Mock();
