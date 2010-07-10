@@ -16,6 +16,12 @@ class Sham_CallTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('return value', $call());
     }
 
+    public function testReturnsShouldGetReturnValueWhenNoParam()
+    {
+        $call = new Sham_Call('call name', array(), 'return value');
+        $this->assertEquals('return value', $call->returns());
+    }
+
     /**
      * @expectedException Exception
      */

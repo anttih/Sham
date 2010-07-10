@@ -1,6 +1,14 @@
 <?php
 class Sham_Call
 {
+    /**
+     * Internal value to distinguish falsy return
+     * values from "no return value at all"
+     * 
+     * @param string
+     */
+    const NO_RETURN_VALUE = '30f5d20d150152d4413984f71fabd7d0';
+
     public $name;
     public $params;
     public $return_value;
@@ -14,8 +22,11 @@ class Sham_Call
         $this->return_value = $return_value;
     }
 
-    public function returns($value)
+    public function returns($value = self::NO_RETURN_VALUE)
     {
+        if ($value === self::NO_RETURN_VALUE) {
+            return $this->return_value;
+        }
         $this->return_value = $value;
     }
 
