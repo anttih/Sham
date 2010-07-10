@@ -11,7 +11,7 @@ require_once 'Sham/Call.php';
  * @author Antti Holvikari <anttih@gmail.com>
  * @package Sham
  */
-class Sham_Mock implements ArrayAccess
+class Sham_Mock implements ArrayAccess, Iterator
 {
     /**
      * Internal value to distinguish falsy return
@@ -145,6 +145,37 @@ class Sham_Mock implements ArrayAccess
         $this->_call_list->add('offsetGet', array($offset), $this->_data[$offset]);
         return $this->_data[$offset];
     }
+
+    // Iterator
+
+    public function rewind() {
+        reset($this->_data);
+    }
+
+    public function current() {
+        $value = current($this->_data);
+        $this->_call_list->add('current', array(), $value);
+        return $value;
+    }
+
+    public function key() {
+        $key = key($this->_data);
+        $this->_call_list->add('key', array(), $key);
+        return $key;
+    }
+
+    public function next() {
+        $value = next($this->_data);
+        $this->_call_list->add('next', array(), $value);
+        return $value;
+    }
+
+    public function valid() {
+        $valid = current($this->_data) !== false;
+        $this->_call_list->add('valid', array(), $valid);
+        return $valid;
+    }
+    
 
     public function __isset($name) {}
 
