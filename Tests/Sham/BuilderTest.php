@@ -94,6 +94,13 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertHasOwnMethod($obj, 'protectedMethod');
     }
 
+    public function testShouldBuildInterface()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('TestInterface');
+        $this->assertHasOwnMethod($obj, 'method');
+    }
+
     private function _getBuiltParams($class)
     {
         $builder = new Sham_Builder();
@@ -178,5 +185,9 @@ class ClassWithNonPublicMethods {
 
 abstract class ClassWithAbstractProtected {
     abstract protected function protectedMethod($param1);
+}
+
+interface TestInterface {
+    public function method();
 }
 

@@ -21,7 +21,7 @@ class Sham_Builder
     private function _buildMockCode($class)
     {
         $lines = file(__dir__ . DIRECTORY_SEPARATOR . 'Mock.php');
-        $this->_class = $class;
+        $this->_class = new ReflectionClass($class);
         $code = $this->_buildClassDefinition($lines);
         $code = $this->_buildMethods($code);
         return $code;
@@ -36,21 +36,30 @@ class Sham_Builder
             $reflection->getEndLine() - 1
         );
 
-        $lines[0] = str_replace(
-            'class Sham_Mock',
-            "class {$this->_mock_class_name} extends $this->_class",
-            $lines[0]
-        );
-
+        $name = $this->_class->getName();
+        $def = $lines[0];
+        if ($this->_class->isInterface()) {
+            $def = str_replace(
+                'class Sham_Mock',
+                "class {$this->_mock_class_name}",
+                $def
+            );
+            $def .= ", $name";
+        } else {
+            $def = str_replace(
+                'class Sham_Mock',
+                "class {$this->_mock_class_name} extends $name",
+                $def
+            );
+        }
+        $lines[0] = $def;
         return implode("\n", $lines);
     }
 
     private function _buildMethods($code)
     {
         $methods = array();
-        $mocked = new ReflectionClass($this->_class);
-
-        foreach ($mocked->getMethods() as $method) {
+        foreach ($this->_class->getMethods() as $method) {
             $name = $method->getName();
 
             if ($this->_isDeclared($name) || $this->_isNotAbstractNonPublic($method)) {
