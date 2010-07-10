@@ -47,13 +47,6 @@ class Sham_Mock implements ArrayAccess, Iterator
      */
     private $_data = array();
 
-    /**
-     * Return value of __invoke
-     *
-     * No return value set by default
-     */
-    private $_return_value = self::NO_RETURN_VALUE;
-
     public function __construct()
     {
         $this->_call_list = new Sham_CallList();
@@ -76,13 +69,12 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function __invoke()
     {
-        $return = $this;
-        if ($this->_return_value !== self::NO_RETURN_VALUE) {
-            $return = $this->_return_value;
-        }
+        return $this->__call('__invoke', func_get_args());
+    }
 
-        $this->_call_list->add('__invoke', func_get_args(), $return);
-        return $return;
+    public function returns($value)
+    {
+        $this->_calls['__invoke'] = new Sham_Call('__invoke', array(), $value);
     }
 
     public function __get($name)
@@ -109,11 +101,6 @@ class Sham_Mock implements ArrayAccess, Iterator
             array($this->_call_list, 'calls'),
             func_get_args()
         );
-    }
-
-    public function returns($value)
-    {
-        $this->_return_value = $value;
     }
 
     public function shamGetData()
