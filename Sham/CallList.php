@@ -41,12 +41,13 @@ class Sham_CallList implements Countable
 
     public function once()
     {
-        return count($this->calls) == 1;
+        return $this->times(1);
     }
 
-    private function _emptyOrEqualArgs($args, $call_args)
+    public function times($count)
     {
-        array_shift($args);
+        return count($this->calls) === $count;
+    }
 
         $arg_count = count($args);
         if ($arg_count == 0) {

@@ -42,4 +42,9 @@ class Sham_CallListWithMultipleCallsTest extends PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->list->once());
     }
+
+    public function testShouldReturnTrueForTimesTwo()
+    {
+        $this->assertTrue($this->list->times(2));
+    }
 }
