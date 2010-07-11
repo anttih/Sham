@@ -1,4 +1,5 @@
 <?php
+require_once 'Sham/Exception.php';
 class Sham_Call
 {
     /**
@@ -13,7 +14,7 @@ class Sham_Call
     public $params;
     public $return_value;
 
-    private $_exception_class;
+    private $_exception;
 
     public function __construct($name, $params = array(), $return_value = null)
     {
@@ -30,16 +31,20 @@ class Sham_Call
         $this->return_value = $value;
     }
 
-    public function throws($class)
+    public function throws($class = 'Sham_Exception')
     {
-        $this->_exception_class = $class;
+        $this->_exception = $class;
     }
 
     public function __invoke()
     {
-        if ($this->_exception_class) {
-            $class = $this->_exception_class;
-            throw new $class();
+        if ($this->_exception) {
+            if (is_string($this->_exception)) {
+                $class = $this->_exception;
+                throw new $class();
+            } else if ($this->_exception instanceof Exception) {
+                throw $this->_exception;
+            }
         }
 
         return $this->return_value;
