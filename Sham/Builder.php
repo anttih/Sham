@@ -26,6 +26,7 @@ class Sham_Builder
         $this->_class = new ReflectionClass($class);
         $code = $this->_buildClassDefinition($lines);
         $code = $this->_buildMethods($code);
+        $code = $this->_adjustMagicMethodSignatures($code);
         return $code;
     }
 
@@ -108,6 +109,27 @@ class Sham_Builder
         }
 
         return $typehint . '$' . $param->getName() . $default;
+    }
+    
+    private function _adjustMagicMethodSignatures($code)
+    {
+        $code = $this->_preserveArrayTypehint($code, '__call', 1);
+        $code = $this->_preserveArrayTypehint($code, '__callStatic', 1);
+        $code = $this->_preserveArrayTypehint($code, '__setState', 0);
+        return $code;
+    }
+    
+    private function _preserveArrayTypehint($code, $method, $param_index)
+    {
+        if ($this->_class->hasMethod($method)) {
+            $refl = $this->_class->getMethod($method);
+            $params = $refl->getParameters();
+            if ($params[$param_index]->isArray()) {
+                $placeholder = "/*:{$method}{$param_index}_array:*/";
+                $code = str_replace($placeholder, 'array', $code);
+            }
+        }
+        return $code;
     }
 
     private function _getVisibility($method)

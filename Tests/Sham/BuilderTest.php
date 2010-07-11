@@ -77,6 +77,16 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $builder = new Sham_Builder();
         $obj = $builder->build('ClassWithMethodsDeclaredInMock');
     }
+    
+    public function testShouldPreserveArrayTypehintInInheritedMagicMethods()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('ClassWithArrayTypehintedMagicMethods');
+        
+        $this->assertParamHasArrayTypehint($obj, '__call', 1);
+        $this->assertParamHasArrayTypehint($obj, '__callStatic', 1);
+        $this->assertParamHasArrayTypehint($obj, '__setState', 0);
+    }
 
     public function testBuildAbstractClass()
     {
@@ -143,6 +153,13 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
                  . $method->getName() . '.';
         $this->assertTrue($method->getDeclaringClass()->getName() !== get_class($obj));
     }
+    
+    public function assertParamHasArrayTypehint($obj, $method, $param_index)
+    {
+        $refl = new ReflectionMethod($obj, $method);
+        $params = $refl->getParameters();
+        $this->assertTrue($params[$param_index]->isArray());
+    }
 }
 
 class TestBuilder {
@@ -184,6 +201,12 @@ class ClassWithMethodsDeclaredInMock {
     public function __toString() {}
     public static function __setState($props = array()) {}
     public function __clone() {}
+}
+
+class ClassWithArrayTypehintedMagicMethods {
+    public function __call($method, array $params) {}
+    public static function __callStatic($method, array $params) {}
+    public static function __setState(array $props = array()) {}
 }
 
 abstract class ClassWithAbstractMethod {
