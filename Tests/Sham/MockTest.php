@@ -42,6 +42,18 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("key value", $this->mock->key);
     }
 
+    public function testShouldGetValueSetWithArrayAccess()
+    {
+        $this->mock['key'] = 'value';
+        $this->assertEquals('value', $this->mock->key);
+    }
+
+    public function testShouldGetValueSetWithOverloading()
+    {
+        $this->mock->key = 'value';
+        $this->assertEquals('value', $this->mock['key']);
+    }
+
     public function testShouldRecordPropertySet()
     {
         $this->mock->key = 'value';
