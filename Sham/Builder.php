@@ -139,6 +139,6 @@ class Sham_Builder
 
     private function _generateMockClassName()
     {
-        return 'Sham_Mock_' . rand(1000, 9999);
+        return $this->_mock_class_name . rand(1000, 99999);
     }
 }
