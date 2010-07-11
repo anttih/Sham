@@ -42,11 +42,13 @@ class Sham_Mock implements ArrayAccess, Iterator
     public function __construct()
     {
         $this->_call_list = new Sham_CallList();
+        $str = get_class($this);
+        $this->_calls['__toString'] = new Sham_Call('__toString', array(), $str);
     }
 
     public function __destruct() {}
 
-    public function __call($method, $params)
+    public function __call($method, $params = array())
     {
         if (array_key_exists($method, $this->_calls)) {
             $call = clone $this->_calls[$method];
@@ -158,20 +160,20 @@ class Sham_Mock implements ArrayAccess, Iterator
     
 
     public function __isset($name) {}
-
     public function __unset($name) {}
 
-    public static function __callStatic($method, $params) {}
-
+    // serialize/unserialize
     public function __sleep() {}
-
     public function __wakeup() {}
 
-    public function __toString() {}
-
-    public static function __setState($properties = array()) {}
+    public function __toString() {
+        return $this->__call('__toString');
+    }
 
     public function __clone() {}
+
+    public static function __setState($properties = array()) {}
+    public static function __callStatic($method, $params) {}
 
     // :METHODS:
 }
