@@ -11,7 +11,7 @@ class Sham_BuilderAutoloadingTest extends PHPUnit_Framework_TestCase
         spl_autoload_unregister(array($this, 'autoload'));
     }
 
-    public function test()
+    public function testShouldUseAutoloadToLoadClass()
     {
         $builder = new Sham_Builder();
         $obj = $builder->build('Sham_Fixture');
