@@ -3,7 +3,7 @@ Sham - mocking library for PHP 5.3
 
 Sham is a mocking library for PHP 5.3 and up. The idea behind Sham is to
 allow everything to be done to a Sham instance. Sham records everything done
-to it, you can then later expect what happened. Thus, you can use Sham for
+to it, you can then later investigate what happened. Thus, you can use Sham for
 both mocking and stubbing.
 
 The goal is to record everything that is possible. This includes:
