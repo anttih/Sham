@@ -1,6 +1,8 @@
 <?php
 class Sham_Builder
 {
+    protected static $_next_mock_id = 1001;
+
     protected $_mock_class_name = 'Sham_Mock_';
 
     private $_class;
@@ -141,6 +143,6 @@ class Sham_Builder
 
     private function _generateMockClassName()
     {
-        return $this->_mock_class_name . rand(1000, 99999);
+        return $this->_mock_class_name . self::$_next_mock_id++;
     }
 }
