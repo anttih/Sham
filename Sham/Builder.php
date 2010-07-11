@@ -98,12 +98,14 @@ class Sham_Builder
             $default = ' = Sham::NO_VALUE_PASSED';
         }
 
-        $class = '';
+        $typehint = '';
         if ($param->getClass()) {
-            $class = $param->getClass()->getName() . ' ';
+            $typehint = $param->getClass()->getName() . ' ';
+        } elseif ($param->isArray()) {
+            $typehint = 'array ';
         }
 
-        return $class . '$' . $param->getName() . $default;
+        return $typehint . '$' . $param->getName() . $default;
     }
 
     private function _getVisibility($method)

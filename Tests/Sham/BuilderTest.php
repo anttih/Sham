@@ -62,6 +62,12 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $params = $this->_getBuiltParams('ClassWithClassTypeHint');
         $this->assertEquals('ClassWithParams', $params[0]->getClass()->getName());
     }
+    
+    public function testBuildMethodWithArrayTypeHint()
+    {
+        $params = $this->_getBuiltParams('ClassWithArrayTypeHint');
+        $this->assertTrue($params[0]->isArray());
+    }
 
     /**
      * This test will just die unless everything is ok
@@ -157,6 +163,10 @@ class ClassWithOptionalParam {
 
 class ClassWithClassTypeHint {
     public function method(ClassWithParams $param1) {}
+}
+
+class ClassWithArrayTypeHint {
+    public function method(array $param1) {}
 }
 
 class ClassWithMethodsDeclaredInMock {
