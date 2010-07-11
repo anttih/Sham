@@ -22,7 +22,8 @@ A Sham implements:
 * ArrayAccess
 * Iterator
 
-Create a mock either by mocking an existing class, or by instantiating Sham_Mock directly:
+Create a mock either by mocking an existing class, or by instantiating
+`Sham_Mock` directly:
     
     $mock = Sham::create('My_Class'); // $mock instanceof My_Class => true
     $mock = new Sham_Mock();
@@ -32,7 +33,7 @@ Call some methods:
     $mock->foo();
     $mock->bar('param 1');
 
-By default method calls return new Sham_Mock objects, but you can set the return value:
+By default method calls return new `Sham_Mock` objects, but you can set the return value:
 
     $mock->foo->returns('return value');
 
@@ -59,8 +60,8 @@ your code interacted with it correctly.
 
 ## Array and property access
 
-You can also use Sham_Mock as a value object. It records all ArrayAccess and
-__get/__set method calls.
+You can also use `Sham_Mock` as a value object. It records all `ArrayAccess` and
+`__get`/`__set` method calls.
 
     // first load it with some data
     $mock->shamSetData(array(1, 'key' => 2));
@@ -83,5 +84,5 @@ __get/__set method calls.
 
 ## Iteration
 
-You can also iterate over the data. All of the calls implemented by Iterator
+You can also iterate over the data. All of the calls implemented by `Iterator`
 will be recorded.
