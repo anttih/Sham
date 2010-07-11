@@ -86,6 +86,20 @@ class Sham_MockIteratorTest extends PHPUnit_Framework_TestCase
         $this->_assertReturnValues('valid');
     }
 
+    public function testShouldRecordRewind()
+    {
+        $this->assertTrue($this->mock->calls('rewind')->once());
+    }
+
+    public function testShouldResetWhenInterating()
+    {
+        $i = 0;
+        foreach ($this->mock as $key => $value) {
+            $i++;
+        }
+        $this->assertEquals(count($this->data), $i++);
+    }
+
     private function _assertReturnValues($name)
     {
         $calls = $this->mock->calls($name)->calls;

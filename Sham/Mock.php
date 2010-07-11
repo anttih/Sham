@@ -129,6 +129,7 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function rewind() {
         reset($this->_data);
+        $this->_call_list->add('rewind');
     }
 
     public function current() {
