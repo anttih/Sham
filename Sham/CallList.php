@@ -51,6 +51,14 @@ class Sham_CallList implements Countable
         return count($this->calls) === $count;
     }
 
+    public function first()
+    {
+        if (! count($this->calls)) {
+            return false;
+        }
+        return $this->calls[0];
+    }
+
     private function _matchParams($args, $call_args)
     {
         $arg_count = count($args);
