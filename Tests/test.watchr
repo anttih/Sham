@@ -1,0 +1,1 @@
+watch('Tests/.*\.php') { system("clear; phpunit --colors Tests/") }
