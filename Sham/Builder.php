@@ -55,6 +55,12 @@ class Sham_Builder
                 $def
             );
         }
+        
+        if ($this->_class->implementsInterface('IteratorAggregate')) {
+            // PHP forbids implementing both Iterator and IteratorAggregate
+            $def = preg_replace('/(implements.*)Iterator/', '${1}IteratorAggregate', $def);
+        }
+        
         $lines[0] = $def;
         return implode('', $lines);
     }

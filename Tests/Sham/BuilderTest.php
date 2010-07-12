@@ -159,6 +159,16 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('TestInterface', $class->getInterfaceNames()));
         $this->assertHasOwnMethod($obj, 'method');
     }
+    
+    public function testResultShouldNotImplementIteratorIfSuperclassImplementsIteratorAggregate()
+    {
+        // PHP (5.3.2) has a specific fatal error for this: "cannot implement both Iterator and IteratorAggregate at the same time"
+        $builder = new Sham_Builder();
+        $obj = $builder->build('ClassImplementingIteratorAggregate');
+        $class = new ReflectionClass($obj);
+        $this->assertFalse($class->implementsInterface('Iterator'));
+        $this->assertTrue($class->implementsInterface('IteratorAggregate'));
+    }
 
     private function _getBuiltParams($class)
     {
@@ -275,3 +285,5 @@ interface TestInterface {
     public function method();
 }
 
+abstract class ClassImplementingIteratorAggregate implements IteratorAggregate {
+}
