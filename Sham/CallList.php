@@ -1,5 +1,6 @@
 <?php
-require_once 'Sham.php';
+require_once 'Sham/Matcher/Any.php';
+require_once 'Sham/Matcher/Array.php';
 class Sham_CallList implements Countable
 {
     public $calls = array();
@@ -25,12 +26,17 @@ class Sham_CallList implements Countable
             return $this;
         }
 
+        $args = func_get_args();
+        array_shift($args); // take off call name
+        if (empty($args)) {
+            $argMatcher = new Sham_Matcher_Any();
+        } else {
+            $argMatcher = new Sham_Matcher_Array($args);
+        }
+
         $calls = array();
         foreach ($this->calls as $call) {
-            $args = func_get_args();
-            // take off call name
-            array_shift($args);
-            if ($call->name === $name && $this->_matchParams($args, $call->params)) {
+            if ($call->name === $name && $argMatcher->matches($call->params)) {
                 $calls[] = $call;
             }
         }
@@ -58,29 +64,6 @@ class Sham_CallList implements Countable
             return false;
         }
         return $this->calls[0];
-    }
-
-    private function _matchParams($args, $call_args)
-    {
-        $arg_count = count($args);
-        if ($arg_count == 0) {
-            return true;
-        } else if ($arg_count != count($call_args)) {
-            return false;
-        }
-
-        return $this->_equalParams($args, $call_args);
-    }
-
-    private function _equalParams($args, $call_args)
-    {
-        for ($i = 0; $i < count($args); $i++) {
-            $allowed = array($call_args[$i], Sham::any());
-            if (! in_array($args[$i], $allowed)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public function count()
