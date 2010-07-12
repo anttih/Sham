@@ -1,39 +1,73 @@
 <?php
+require_once 'Sham/Matcher/Array.php';
 require_once 'Sham/Exception.php';
 class Sham_MethodStub
 {
     public $name;
 
-    private $_return_value;
-    private $_exception;
+    private $_actions;
+    
+    private $_pending_matcher;
 
-    public function __construct($name, $return_value = null)
+    public function __construct($name)
     {
         $this->name = $name;
-        $this->_return_value = $return_value;
+        $this->_actions = array();
+    }
+
+    public function given(/*...*/)
+    {
+        $this->_pending_matcher = new Sham_Matcher_Array(func_get_args());
+        return $this;
     }
 
     public function returns($value)
     {
-        $this->_return_value = $value;
+        $this->does(function() use ($value) { return $value; });
     }
 
-    public function throws($class = 'Sham_Exception')
+    public function throws($exception = 'Sham_Exception')
     {
-        $this->_exception = $class;
+        if (!is_string($exception) && !($exception instanceof Exception)) {
+            throw new Sham_Exception("throws() expects exception object or exception class name");
+        }
+        
+        $this->does(function() use ($exception) {
+            if (is_string($exception)) {
+                throw new $exception();
+            } else {
+                throw $exception;
+            }
+        });
+    }
+    
+    public function does($callback)
+    {
+        $matcher = $this->_consumePendingMatcher();
+        array_unshift($this->_actions, array($matcher, $callback));
+    }
+    
+    private function _consumePendingMatcher()
+    {
+        if ($this->_pending_matcher) {
+            $matcher = $this->_pending_matcher;
+            $this->_pending_matcher = null;
+        } else {
+            $matcher = Sham::any();
+        }
+        return $matcher;
     }
 
     public function __invoke()
     {
-        if ($this->_exception) {
-            if (is_string($this->_exception)) {
-                $class = $this->_exception;
-                throw new $class();
-            } else if ($this->_exception instanceof Exception) {
-                throw $this->_exception;
+        $args = func_get_args();
+        foreach ($this->_actions as $pair) {
+            list($matcher, $action) = $pair;
+            if ($matcher->matches($args)) {
+                return call_user_func_array($action, $args);
             }
         }
-
-        return $this->_return_value;
+        
+        throw new Sham_Exception("Nothing stubbed for method '{$this->name}'.");
     }
 }

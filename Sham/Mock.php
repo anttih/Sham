@@ -42,8 +42,10 @@ class Sham_Mock implements ArrayAccess, Iterator
     public function __construct()
     {
         $this->_call_list = new Sham_CallList();
+        
         $str = get_class($this);
-        $this->_methodStubs['__toString'] = new Sham_MethodStub('__toString', $str);
+        $this->_methodStubs['__toString'] = new Sham_MethodStub('__toString');
+        $this->_methodStubs['__toString']->returns($str);
     }
 
     public function __destruct() {}
@@ -79,9 +81,13 @@ class Sham_Mock implements ArrayAccess, Iterator
             return $this->_data[$name];
         }
 
-        $stub = new Sham_MethodStub($name);
-        $this->_methodStubs[$name] = $stub;
-        return $stub;
+        if (!isset($this->_methodStubs[$name])) {
+            $this->_methodStubs[$name] = new Sham_MethodStub($name);
+            $this->_methodStubs[$name]->does(function() {
+                return new Sham_Mock();
+            });
+        }
+        return $this->_methodStubs[$name];
     }
 
     public function __set($key, $value)
