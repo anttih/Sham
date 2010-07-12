@@ -29,7 +29,7 @@ class Sham_Mock implements ArrayAccess, Iterator
      * 
      * @param array
      */
-    private $_calls = array();
+    private $_methodStubs = array();
 
     /**
      * The data this object will use for ArrayAccess and "struct"
@@ -43,22 +43,23 @@ class Sham_Mock implements ArrayAccess, Iterator
     {
         $this->_call_list = new Sham_CallList();
         $str = get_class($this);
-        $this->_calls['__toString'] = new Sham_Call('__toString', array(), $str);
+        $this->_methodStubs['__toString'] = new Sham_MethodStub('__toString', $str);
     }
 
     public function __destruct() {}
 
     public function __call($method, /*:__call1_array:*/ $params = array())
     {
-        if (array_key_exists($method, $this->_calls)) {
-            $call = clone $this->_calls[$method];
-            $call->params = $params;
+        if (array_key_exists($method, $this->_methodStubs)) {
+            $stub = $this->_methodStubs[$method];
+            $ret = $stub();
         } else {
-            $call = new Sham_Call($method, $params, new Sham_Mock());
+            $ret = new Sham_Mock();
         }
-
-        $this->_call_list->add($call);
-        return $call();
+        
+        $this->_call_list->add(new Sham_Call($method, $params, $ret));
+        
+        return $ret;
     }
 
     public function __invoke()
@@ -78,9 +79,9 @@ class Sham_Mock implements ArrayAccess, Iterator
             return $this->_data[$name];
         }
 
-        $call = new Sham_Call($name);
-        $this->_calls[$name] = $call;
-        return $call;
+        $stub = new Sham_MethodStub($name);
+        $this->_methodStubs[$name] = $stub;
+        return $stub;
     }
 
     public function __set($key, $value)

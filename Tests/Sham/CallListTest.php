@@ -9,7 +9,7 @@ class Sham_CallListTest extends PHPUnit_Framework_TestCase
 
     public function testCanAddCallObjects()
     {
-        $this->list->add(new Sham_Call('method'));
+        $this->list->add(new Sham_Call('method', array(), ''));
         $this->assertEquals(1, count($this->list->calls));
     }
 

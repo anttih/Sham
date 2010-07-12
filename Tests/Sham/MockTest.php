@@ -14,9 +14,9 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ret instanceof Sham_Mock);
     }
     
-    public function testGettingAPropertyWithoutSettingShouldReturnCallObject()
+    public function testGettingAPropertyWithoutSettingShouldReturnMethodStubObject()
     {
-        $this->assertTrue($this->mock->property instanceof Sham_Call);
+        $this->assertTrue($this->mock->property instanceof Sham_MethodStub);
     }
 
     public function testGettingAPropertyWithoutSettingShouldNotRecord()
@@ -99,12 +99,6 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->mock->method0();
         $this->mock->method1();
         $this->assertEquals(2, count($this->mock->calls()));
-    }
-
-    public function testShouldRecordReturnValue()
-    {
-        $this->mock->method();
-        $this->assertTrue($this->mock->calls()->calls[0]->return_value instanceof Sham_Mock);
     }
 
     public function testShouldProxyCallsToCallList()
