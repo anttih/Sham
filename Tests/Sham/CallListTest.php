@@ -88,4 +88,11 @@ class Sham_CallListTest extends PHPUnit_Framework_TestCase
         $this->list->add('second call');
         $this->assertEquals('first call', $this->list->calls()->first()->name);
     }
+    
+    public function testHasShortcutForNeverCalled()
+    {
+        $this->assertTrue($this->list->never());
+        $this->list->add('call');
+        $this->assertFalse($this->list->never());
+    }
 }

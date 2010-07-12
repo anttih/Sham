@@ -41,6 +41,11 @@ class Sham_CallList implements Countable
     {
         return $this->times(1);
     }
+    
+    public function never()
+    {
+        return $this->times(0);
+    }
 
     public function times($count)
     {
