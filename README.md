@@ -28,11 +28,6 @@ Create a mock either by mocking an existing class, or by instantiating
     $mock = Sham::create('My_Class'); // $mock instanceof My_Class => true
     $mock = new Sham_Mock();
 
-Call some methods:
-    
-    $mock->foo();
-    $mock->bar('param 1');
-
 By default method calls return new `Sham_Mock` objects, but you can set the return value:
 
     $mock->foo->returns('return value');
@@ -43,20 +38,38 @@ You can also tell methods to throw:
     $mock->foo->throws('Exception');
     $mock->foo->throws(new Exception());
 
+For exceptionally complex cases you can write a stub implementation:
+
+    $mock->foo->does(function($x, $y) { return $x + $y; });
+
+Now call some methods:
+    
+    $mock->foo();
+    $mock->bar('param 1');
+
 Once your test action has been run, you can inspect the mock to see if
 your code interacted with it correctly.
 
     // make a few calls
-    $mock->foo('param 1');
-    $mock->foo('param 1', 'param 2');
+    $mock->xoo('param 1');
+    $mock->xoo('param 1', 'param 2');
 
     // Sham_CallList::calls is an array of Call objects
-    count($mock->calls('foo')->calls); // 2
+    count($mock->calls('xoo')->calls); // 2
 
-    $mock->calls('foo', 'param 1', 'param 2')->once(); // true
+    $mock->calls('xoo', 'param 1', 'param 2')->once(); // true
 
     // use Sham::any() to match any parameter value
-    $mock->calls('foo', Sham::any(), 'param 2')->once(); // true
+    $mock->calls('xoo', Sham::any(), 'param 2')->once(); // true
+
+Methods can also be stubbed to do different things given different parameters:
+
+    $mock->foo->given('zero', Sham::any())->returns(0);
+    $mock->foo->given(Sham::any(), 0)->throws();
+
+    $mock->foo('zero', 3); // 0
+    $mock->foo('one', 0);  // exception
+    $mock->foo('zero', 0); // exception (later stubs get priority)
 
 ## Array and property access
 
