@@ -30,6 +30,25 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $obj->override('param 1');
         $this->assertTrue($obj->calls('override', 'param 1')->once());
     }
+    
+    public function testRecordOptionalParamsWhenGiven()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('ClassWithClassTypeHintOnOptionalParam');
+        $param = new ClassWithParams();
+        $obj->method(null);
+        $obj->method($param);
+        $this->assertTrue($obj->calls('method', null)->once());
+        $this->assertTrue($obj->calls('method', $param)->once());
+    }
+    
+    public function testDontRecordOptionalParamsWhenNotGiven()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('ClassWithClassTypeHintOnOptionalParam');
+        $obj->method();
+        $this->assertEquals(array(), $obj->calls('method')->first()->params);
+    }
 
     public function testBuildMethodWithOneNonOptionalParam()
     {
@@ -51,10 +70,10 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($params[0]->isOptional());
     }
 
-    public function testShouldUseUniqueDefaultParamValue()
+    public function testShouldUseSameDefaultParamValue()
     {
         $params = $this->_getBuiltParams('ClassWithOptionalParam');
-        $this->assertEquals(Sham::NO_VALUE_PASSED, $params[0]->getDefaultValue());
+        $this->assertEquals('thedefault', $params[0]->getDefaultValue());
     }
 
     public function testBuildMethodWithClassTypeHint()
@@ -67,6 +86,20 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
     {
         $params = $this->_getBuiltParams('ClassWithArrayTypeHint');
         $this->assertTrue($params[0]->isArray());
+    }
+    
+    public function testBuildMethodWithClassTypeHintOnOptionalParam()
+    {
+        $params = $this->_getBuiltParams('ClassWithClassTypeHintOnOptionalParam');
+        $this->assertEquals('ClassWithParams', $params[0]->getClass()->getName());
+        $this->assertEquals(null, $params[0]->getDefaultValue());
+    }
+    
+    public function testBuildMethodWithArrayTypeHintOnOptionalParam()
+    {
+        $params = $this->_getBuiltParams('ClassWithArrayTypeHintOnOptionalParam');
+        $this->assertTrue($params[0]->isArray());
+        $this->assertEquals(array(1, 2, 3), $params[0]->getDefaultValue());
     }
 
     /**
@@ -175,7 +208,7 @@ class ClassWithTwoParams {
 }
 
 class ClassWithOptionalParam {
-    public function method($param1 = null) {}
+    public function method($param1 = 'thedefault') {}
 }
 
 class ClassWithClassTypeHint {
@@ -184,6 +217,14 @@ class ClassWithClassTypeHint {
 
 class ClassWithArrayTypeHint {
     public function method(array $param1) {}
+}
+
+class ClassWithClassTypeHintOnOptionalParam {
+    public function method(ClassWithParams $param1 = null) {}
+}
+
+class ClassWithArrayTypeHintOnOptionalParam {
+    public function method(array $param1 = array(1, 2, 3)) {}
 }
 
 class ClassWithMethodsDeclaredInMock {

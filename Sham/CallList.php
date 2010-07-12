@@ -12,10 +12,6 @@ class Sham_CallList implements Countable
     public function add($spec, $params = array(), $return = null)
     {
         if (is_string($spec)) {
-            // ignore optional arguments that were not passed in
-            $params = array_filter($params, function ($value) {
-                return $value !== Sham::NO_VALUE_PASSED;
-            });
             $spec = new Sham_Call($spec, $params, $return);
         }
 

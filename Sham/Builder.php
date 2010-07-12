@@ -98,7 +98,7 @@ class Sham_Builder
     {
         $default = '';
         if ($param->isOptional()) {
-            $default = ' = Sham::NO_VALUE_PASSED';
+            $default = ' = ' . var_export($param->getDefaultValue(), true);
         }
 
         $typehint = '';

@@ -59,12 +59,6 @@ class Sham_CallListTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($this->list->calls('call name')));
     }
 
-    public function testIgnoreOptionalParamsThatWereNotPassedInWhenAdding()
-    {
-        $this->list->add('call name', array('param', Sham::NO_VALUE_PASSED), 'return value');
-        $this->assertTrue(count($this->list->calls[0]->params) === 1);
-    }
-
     public function testShouldMatchFirstParamAsAny()
     {
         $this->list->add('call name', array('param 1'), 'return value');
