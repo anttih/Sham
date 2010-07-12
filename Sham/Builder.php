@@ -72,7 +72,7 @@ class Sham_Builder
             $visibility = $this->_getVisibility($method);
             $call = "\$this->__call('$name', func_get_args());";
             $parameters = $this->_buildParameters($method);
-            $func = "    $visibility function $name($parameters) {\n        $call\n    }";
+            $func = "    $visibility function $name($parameters) {\n        return $call\n    }";
             $methods[] = $func;
         }
 

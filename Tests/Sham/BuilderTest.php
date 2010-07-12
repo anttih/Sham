@@ -22,6 +22,14 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $obj->override();
         $this->assertTrue($obj->calls('override')->once());
     }
+    
+    public function testShouldReturnStubbedReturnValues()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('TestBuilder');
+        $obj->override->returns('foo');
+        $this->assertEquals('foo', $obj->override());
+    }
 
     public function testRecordCallParams()
     {
