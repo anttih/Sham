@@ -39,7 +39,7 @@ By default method calls return new `Sham_Mock` objects, but you can set the retu
 
 You can also tell methods to throw:
     
-    $mock->foo->throw();
+    $mock->foo->throws();
     $mock->foo->throws('Exception');
     $mock->foo->throws(new Exception());
 
