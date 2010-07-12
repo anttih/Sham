@@ -56,7 +56,7 @@ class Sham_Builder
             );
         }
         $lines[0] = $def;
-        return implode("\n", $lines);
+        return implode('', $lines);
     }
 
     private function _buildMethods($code)
