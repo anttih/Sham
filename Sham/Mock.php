@@ -54,7 +54,7 @@ class Sham_Mock implements ArrayAccess, Iterator
     {
         if (array_key_exists($method, $this->_methodStubs)) {
             $stub = $this->_methodStubs[$method];
-            $ret = $stub();
+            $ret = call_user_func_array($stub, $params);
         } else {
             $ret = new Sham_Mock();
         }

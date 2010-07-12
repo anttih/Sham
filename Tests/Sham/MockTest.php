@@ -25,6 +25,12 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->assertNotSame($one, $two);
     }
     
+    public function testCallingMethodsShouldSendParameters()
+    {
+        $this->mock->method->given(1)->returns(2);
+        $this->assertEquals(2, $this->mock->method(1));
+    }
+    
     public function testGettingAPropertyWithoutSettingShouldReturnMethodStubObject()
     {
         $this->assertTrue($this->mock->property instanceof Sham_MethodStub);
