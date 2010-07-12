@@ -62,19 +62,19 @@ class Sham_CallListTest extends PHPUnit_Framework_TestCase
     public function testShouldMatchFirstParamAsAny()
     {
         $this->list->add('call name', array('param 1'), 'return value');
-        $this->assertTrue($this->list->calls('call name', Sham::ANY)->once());
+        $this->assertTrue($this->list->calls('call name', Sham::any())->once());
     }
 
     public function testShouldMatchFirstParamAsAnyWhenTwoParams()
     {
         $this->list->add('call name', array('param 1', 'param 2'), 'return value');
-        $this->assertTrue($this->list->calls('call name', Sham::ANY, 'param 2')->once());
+        $this->assertTrue($this->list->calls('call name', Sham::any(), 'param 2')->once());
     }
 
     public function testShouldMatchLastParamAsAny()
     {
         $this->list->add('call name', array('param 1', 'param 2', 'param 3'), 'return value');
-        $this->assertTrue($this->list->calls('call name', 'param 1', 'param 2', Sham::ANY)->once());
+        $this->assertTrue($this->list->calls('call name', 'param 1', 'param 2', Sham::any())->once());
     }
 
     public function testFirstShouldReturnFalseIfNoCalls()
@@ -96,3 +96,4 @@ class Sham_CallListTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->list->never());
     }
 }
+

@@ -55,8 +55,8 @@ your code interacted with it correctly.
 
     $mock->calls('foo', 'param 1', 'param 2')->once(); // true
 
-    // use Sham::ANY to match any parameter value
-    $mock->calls('foo', Sham::ANY, 'param 2')->once(); // true
+    // use Sham::any() to match any parameter value
+    $mock->calls('foo', Sham::any(), 'param 2')->once(); // true
 
 ## Array and property access
 

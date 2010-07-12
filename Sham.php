@@ -1,8 +1,12 @@
 <?php
 require_once 'Sham/Mock.php';
+require_once 'Sham/Matcher/Any.php';
 class Sham
 {
-    const ANY = '8e1bde3c3d303163521522cf1d62f21f';
+    public static function any()
+    {
+        return new Sham_Matcher_Any();
+    }
 
     public static function create($class = null)
     {
@@ -13,5 +17,4 @@ class Sham
 
         return new Sham_Mock();
     }
-
 }

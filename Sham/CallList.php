@@ -75,7 +75,7 @@ class Sham_CallList implements Countable
     private function _equalParams($args, $call_args)
     {
         for ($i = 0; $i < count($args); $i++) {
-            $allowed = array($call_args[$i], Sham::ANY);
+            $allowed = array($call_args[$i], Sham::any());
             if (! in_array($args[$i], $allowed)) {
                 return false;
             }
