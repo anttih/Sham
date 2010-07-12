@@ -128,6 +128,13 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertParamHasArrayTypehint($obj, '__callStatic', 1);
         $this->assertParamHasArrayTypehint($obj, '__setState', 0);
     }
+    
+    public function testShouldIgnoreStaticMethods()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('ClassWithStaticMethod');
+        // Fails with a fatal error if builder attempts to override with a non-static.
+    }
 
     public function testBuildAbstractClass()
     {
@@ -266,6 +273,10 @@ class ClassWithArrayTypehintedMagicMethods {
     public function __call($method, array $params) {}
     public static function __callStatic($method, array $params) {}
     public static function __setState(array $props = array()) {}
+}
+
+class ClassWithStaticMethod {
+    public static function method($param1) {}
 }
 
 abstract class ClassWithAbstractMethod {
