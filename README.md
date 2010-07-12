@@ -77,7 +77,6 @@ You can also use `Sham_Mock` as a value object. It records all `ArrayAccess` and
 
     $mock->calls('offsetGet', 0)->once();           // true
     $mock->calls('__get', 'key')->once();           // true
-    $mock->calls('__get')->first()->returns();      // 2
     $mock->calls('__set', 'some', 'value')->once(); // true
     $mock->calls('offsetSet', 'other', 'foo');      // true
     $mock->calls('__get', 'other')->once();         // true
