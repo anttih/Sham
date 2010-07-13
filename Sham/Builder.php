@@ -27,6 +27,7 @@ class Sham_Builder
         $code = $this->_buildClassDefinition($lines);
         $code = $this->_buildMethods($code);
         $code = $this->_adjustMagicMethodSignatures($code);
+        $code = $this->_adjustIteratorImplementation($code);
         return $code;
     }
 
@@ -56,15 +57,10 @@ class Sham_Builder
             );
         }
         
-        if ($this->_class->implementsInterface('IteratorAggregate')) {
-            // PHP forbids implementing both Iterator and IteratorAggregate
-            $def = preg_replace('/(implements.*)Iterator/', '${1}IteratorAggregate', $def);
-        }
-        
         $lines[0] = $def;
         return implode('', $lines);
     }
-
+    
     private function _buildMethods($code)
     {
         $methods = array();
@@ -136,6 +132,41 @@ class Sham_Builder
             }
         }
         return $code;
+    }
+    
+    private function _adjustIteratorImplementation($code)
+    {
+        if ($this->_class->implementsInterface('IteratorAggregate')) {
+            $code = $this->_withoutImplementedInterface($code, 'Iterator');
+        }
+        
+        if (!$this->_class->implementsInterface('Iterator') && $this->_classHasIteratorMethods()) {
+            $code = $this->_withoutImplementedInterface($code, 'Iterator');
+            $code = preg_replace('_// BEGIN ITERATOR.*// END ITERATOR_ms', '', $code);
+        }
+        
+        return $code;
+    }
+    
+    private function _withoutImplementedInterface($code, $interface)
+    {
+        $matches = array();
+        return preg_replace_callback('/(class .* implements )(.*)\n/m', function($matches) use ($interface) {
+            $interfaces = array_map('trim', explode(',', $matches[2]));
+            $interfaces = array_diff($interfaces, array($interface));
+            return $matches[1] . implode(' ', $interfaces);
+        }, $code);
+    }
+    
+    private function _classHasIteratorMethods()
+    {
+        $iteratorMethods = array('current', 'key', 'next', 'rewind', 'valid');
+        foreach ($iteratorMethods as $method) {
+            if ($this->_class->hasMethod($method)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function _getVisibility($method)

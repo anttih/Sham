@@ -167,14 +167,39 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertHasOwnMethod($obj, 'method');
     }
     
+    public function testResultShouldImplementIteratorByDefault()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('ClassWithParams');
+        $this->assertTrue($obj instanceof Iterator);
+    }
+    
     public function testResultShouldNotImplementIteratorIfSuperclassImplementsIteratorAggregate()
     {
         // PHP (5.3.2) has a specific fatal error for this: "cannot implement both Iterator and IteratorAggregate at the same time"
         $builder = new Sham_Builder();
         $obj = $builder->build('ClassImplementingIteratorAggregate');
+        $this->assertFalse($obj instanceof Iterator);
+        $this->assertTrue($obj instanceof IteratorAggregate);
+    }
+    
+    public function testResultShouldNotImplementIteratorMethodsIfSuperclassHasAnyIteratorLikeMethods()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('ClassWithIteratorLikeMethods');
         $class = new ReflectionClass($obj);
         $this->assertFalse($class->implementsInterface('Iterator'));
-        $this->assertTrue($class->implementsInterface('IteratorAggregate'));
+        $this->assertTrue($class->hasMethod('next'));
+        $this->assertFalse($class->hasMethod('current'));
+    }
+    
+    public function testResultShouldImplementIteratorIfSuperclassImplementsIterator()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('ClassImplementingIterator');
+        $class = new ReflectionClass($obj);
+        $this->assertTrue($class->implementsInterface('Iterator'));
+        $this->assertTrue($class->hasMethod('next'));
     }
 
     private function _getBuiltParams($class)
@@ -298,3 +323,11 @@ interface TestInterface {
 
 abstract class ClassImplementingIteratorAggregate implements IteratorAggregate {
 }
+
+class ClassWithIteratorLikeMethods {
+    public function next() {}
+}
+
+abstract class ClassImplementingIterator implements Iterator {
+}
+

@@ -134,7 +134,7 @@ class Sham_Mock implements ArrayAccess, Iterator
         return $this->_data[$offset];
     }
 
-    // Iterator
+    // BEGIN ITERATOR
 
     public function rewind() {
         reset($this->_data);
@@ -165,6 +165,7 @@ class Sham_Mock implements ArrayAccess, Iterator
         return $valid;
     }
     
+    // END ITERATOR
 
     public function __isset($name) {}
     public function __unset($name) {}
