@@ -172,6 +172,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $builder = new Sham_Builder();
         $obj = $builder->build('ClassWithParams');
         $this->assertTrue($obj instanceof Iterator);
+        $this->assertHasOverriddenIteratorMethods($obj);
     }
     
     public function testResultShouldNotImplementIteratorIfSuperclassImplementsIteratorAggregate()
@@ -181,6 +182,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $obj = $builder->build('ClassImplementingIteratorAggregate');
         $this->assertFalse($obj instanceof Iterator);
         $this->assertTrue($obj instanceof IteratorAggregate);
+        $this->assertHasNotOverriddenIteratorMethods($obj);
     }
     
     public function testResultShouldNotImplementIteratorMethodsIfSuperclassHasAnyIteratorLikeMethods()
@@ -191,6 +193,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($class->implementsInterface('Iterator'));
         $this->assertTrue($class->hasMethod('next'));
         $this->assertFalse($class->hasMethod('current'));
+        $this->assertTrue(strpos($class->getMethod('next')->getDeclaringClass()->getName(), 'Sham_Mock_') === 0);
     }
     
     public function testResultShouldImplementIteratorIfSuperclassImplementsIterator()
@@ -200,6 +203,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $class = new ReflectionClass($obj);
         $this->assertTrue($class->implementsInterface('Iterator'));
         $this->assertTrue($class->hasMethod('next'));
+        $this->assertHasOverriddenIteratorMethods($obj);
     }
 
     private function _getBuiltParams($class)
@@ -214,6 +218,27 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
     {
         $method = new ReflectionMethod($obj, $method);
         return $this->assertEquals($num, $method->getNumberOfParameters());
+    }
+
+    public function assertHasOverriddenIteratorMethods($obj)
+    {
+        foreach ($this->getIteratorMethods() as $method) {
+            $this->assertHasOwnMethod($obj, $method);
+        }
+    }
+    
+    public function assertHasNotOverriddenIteratorMethods($obj)
+    {
+        foreach ($this->getIteratorMethods() as $method) {
+            if (method_exists($obj, $method)) {
+                $this->assertDoesNotHaveOwnMethod($obj, $method);
+            }
+        }
+    }
+    
+    public function getIteratorMethods()
+    {
+        return array('current', 'key', 'next', 'rewind', 'valid');
     }
 
     public function assertHasOwnMethod($obj, $method)
@@ -234,7 +259,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $method = new ReflectionMethod($obj, $method);
         $message = 'Object has declared method '
                  . $method->getName() . '.';
-        $this->assertTrue($method->getDeclaringClass()->getName() !== get_class($obj));
+        $this->assertTrue($method->getDeclaringClass()->getName() !== get_class($obj), $message);
     }
     
     public function assertParamHasArrayTypehint($obj, $method, $param_index)

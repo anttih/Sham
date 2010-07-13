@@ -6,6 +6,8 @@ class Sham_Builder
     protected $_mock_class_name = 'Sham_Mock_';
 
     private $_class;
+    
+    private $_removed_declared_methods = array();
 
     public function __construct()
     {
@@ -25,9 +27,11 @@ class Sham_Builder
         $lines = file(__dir__ . DIRECTORY_SEPARATOR . 'Mock.php');
         $this->_class = new ReflectionClass($class);
         $code = $this->_buildClassDefinition($lines);
+        if ($this->_iteratorImplementationShouldBeRemoved()) {
+            $code = $this->_removeIteratorImplementation($code);
+        }
         $code = $this->_buildMethods($code);
         $code = $this->_adjustMagicMethodSignatures($code);
-        $code = $this->_adjustIteratorImplementation($code);
         return $code;
     }
 
@@ -134,17 +138,19 @@ class Sham_Builder
         return $code;
     }
     
-    private function _adjustIteratorImplementation($code)
+    private function _iteratorImplementationShouldBeRemoved()
     {
-        if ($this->_class->implementsInterface('IteratorAggregate')) {
-            $code = $this->_withoutImplementedInterface($code, 'Iterator');
+        return $this->_class->implementsInterface('IteratorAggregate') ||
+               (!$this->_class->implementsInterface('Iterator') && $this->_classHasIteratorMethods());
+    }
+    
+    private function _removeIteratorImplementation($code)
+    {
+        $code = $this->_withoutImplementedInterface($code, 'Iterator');
+        $code = preg_replace('_// BEGIN ITERATOR.*// END ITERATOR_ms', '', $code);
+        foreach ($this->_iteratorMethods() as $method) {
+            $this->_removed_declared_methods[] = $method;
         }
-        
-        if (!$this->_class->implementsInterface('Iterator') && $this->_classHasIteratorMethods()) {
-            $code = $this->_withoutImplementedInterface($code, 'Iterator');
-            $code = preg_replace('_// BEGIN ITERATOR.*// END ITERATOR_ms', '', $code);
-        }
-        
         return $code;
     }
     
@@ -160,13 +166,17 @@ class Sham_Builder
     
     private function _classHasIteratorMethods()
     {
-        $iteratorMethods = array('current', 'key', 'next', 'rewind', 'valid');
-        foreach ($iteratorMethods as $method) {
+        foreach ($this->_iteratorMethods() as $method) {
             if ($this->_class->hasMethod($method)) {
                 return true;
             }
         }
         return false;
+    }
+    
+    private function _iteratorMethods()
+    {
+        return array('current', 'key', 'next', 'rewind', 'valid');
     }
 
     private function _getVisibility($method)
@@ -197,7 +207,7 @@ class Sham_Builder
                 $methods[] = $method->getName();
             }
         }
-        return in_array($name, $methods);
+        return in_array($name, array_diff($methods, $this->_removed_declared_methods));
     }
 
     private function _generateMockClassName()
