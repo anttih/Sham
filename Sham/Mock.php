@@ -5,11 +5,10 @@ require_once 'Sham/Call.php';
 require_once 'Sham/MethodStub.php';
 
 /**
- * Mock/stub object that records everything you do on it
+ * Test Stub/Spy object that records everything you do on it
  *
  * This class is also a template for mocking existing classes.
  * 
- * @author Antti Holvikari <anttih@gmail.com>
  * @package Sham
  */
 class Sham_Mock implements ArrayAccess, Iterator
