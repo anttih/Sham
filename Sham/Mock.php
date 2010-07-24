@@ -18,7 +18,7 @@ class Sham_Mock implements ArrayAccess, Iterator
      * 
      * @param Sham_CallList
      */
-    private $_call_list;
+    private $_calls;
     
     /**
      * Calls that have not been recorded yet
@@ -41,7 +41,7 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function __construct()
     {
-        $this->_call_list = new Sham_CallList();
+        $this->_calls = new Sham_CallList();
         
         $str = get_class($this);
         $this->_method_stubs['__toString'] = new Sham_MethodStub('__toString');
@@ -59,7 +59,7 @@ class Sham_Mock implements ArrayAccess, Iterator
             $ret = new Sham_Mock();
         }
         
-        $this->_call_list->add(new Sham_Call($method, $params, $ret));
+        $this->_calls->add(new Sham_Call($method, $params, $ret));
         
         return $ret;
     }
@@ -77,7 +77,7 @@ class Sham_Mock implements ArrayAccess, Iterator
     public function __get($name)
     {
         if (array_key_exists($name, $this->_data)) {
-            $this->_call_list->add('__get', array($name), $this->_data[$name]);
+            $this->_calls->add('__get', array($name), $this->_data[$name]);
             return $this->_data[$name];
         }
         return $this->_getMethodStub($name);
@@ -98,13 +98,13 @@ class Sham_Mock implements ArrayAccess, Iterator
     public function __set($key, $value)
     {
         $this->_data[$key] = $value;
-        $this->_call_list->add('__set', array($value));
+        $this->_calls->add('__set', array($value));
     }
 
     public function calls()
     {
         return call_user_func_array(
-            array($this->_call_list, 'calls'),
+            array($this->_calls, 'calls'),
             func_get_args()
         );
     }
@@ -121,21 +121,21 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function offsetSet($offset, $value) {
         $this->_data[$offset] = $value;
-        $this->_call_list->add('offsetSet', array($offset, $value));
+        $this->_calls->add('offsetSet', array($offset, $value));
     }
 
     public function offsetExists($offset) {
         $isset = isset($this->_data[$offset]);
-        $this->_call_list->add('offsetExists', array($offset), $isset);
+        $this->_calls->add('offsetExists', array($offset), $isset);
         return $isset;
     }
 
     public function offsetUnset($offset) {
-        $this->_call_list->add('offsetUnset', array($offset));
+        $this->_calls->add('offsetUnset', array($offset));
     }
 
     public function offsetGet($offset) {
-        $this->_call_list->add('offsetGet', array($offset), $this->_data[$offset]);
+        $this->_calls->add('offsetGet', array($offset), $this->_data[$offset]);
         return $this->_data[$offset];
     }
 
@@ -143,30 +143,30 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function rewind() {
         reset($this->_data);
-        $this->_call_list->add('rewind');
+        $this->_calls->add('rewind');
     }
 
     public function current() {
         $value = current($this->_data);
-        $this->_call_list->add('current', array(), $value);
+        $this->_calls->add('current', array(), $value);
         return $value;
     }
 
     public function key() {
         $key = key($this->_data);
-        $this->_call_list->add('key', array(), $key);
+        $this->_calls->add('key', array(), $key);
         return $key;
     }
 
     public function next() {
         $value = next($this->_data);
-        $this->_call_list->add('next', array(), $value);
+        $this->_calls->add('next', array(), $value);
         return $value;
     }
 
     public function valid() {
         $valid = current($this->_data) !== false;
-        $this->_call_list->add('valid', array(), $valid);
+        $this->_calls->add('valid', array(), $valid);
         return $valid;
     }
     
