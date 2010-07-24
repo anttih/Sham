@@ -10,13 +10,6 @@ require_once 'Sham/Matcher/Any.php';
  * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
- * Copyright (c) <YEAR>, <OWNER>
- * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
  * Copyright (c) 2010, Antti Holvikari. All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
