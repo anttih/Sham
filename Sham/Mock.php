@@ -30,7 +30,7 @@ class Sham_Mock implements ArrayAccess, Iterator
      * 
      * @param array
      */
-    private $_methodStubs = array();
+    private $_method_stubs = array();
 
     /**
      * The data this object will use for ArrayAccess and "struct"
@@ -45,16 +45,16 @@ class Sham_Mock implements ArrayAccess, Iterator
         $this->_call_list = new Sham_CallList();
         
         $str = get_class($this);
-        $this->_methodStubs['__toString'] = new Sham_MethodStub('__toString');
-        $this->_methodStubs['__toString']->returns($str);
+        $this->_method_stubs['__toString'] = new Sham_MethodStub('__toString');
+        $this->_method_stubs['__toString']->returns($str);
     }
 
     public function __destruct() {}
 
     public function __call($method, /*:__call1_array:*/ $params = array())
     {
-        if (array_key_exists($method, $this->_methodStubs)) {
-            $stub = $this->_methodStubs[$method];
+        if (array_key_exists($method, $this->_method_stubs)) {
+            $stub = $this->_method_stubs[$method];
             $ret = call_user_func_array($stub, $params);
         } else {
             $ret = new Sham_Mock();
@@ -81,14 +81,19 @@ class Sham_Mock implements ArrayAccess, Iterator
             $this->_call_list->add('__get', array($name), $this->_data[$name]);
             return $this->_data[$name];
         }
+        return $this->_getMethodStub($name);
+    }
 
-        if (!isset($this->_methodStubs[$name])) {
-            $this->_methodStubs[$name] = new Sham_MethodStub($name);
-            $this->_methodStubs[$name]->does(function() {
+    private function _getMethodStub($name)
+    {
+        if (! isset($this->_method_stubs[$name])) {
+            $stub = new Sham_MethodStub($name);
+            $stub->does(function() {
                 return new Sham_Mock();
             });
+            $this->_method_stubs[$name] = $stub;
         }
-        return $this->_methodStubs[$name];
+        return $this->_method_stubs[$name];
     }
 
     public function __set($key, $value)
