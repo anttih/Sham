@@ -1,5 +1,6 @@
 <?php
 require_once 'Sham/Mock.php';
+require_once 'Sham/Builder.php';
 require_once 'Sham/Matcher/Any.php';
 class Sham
 {

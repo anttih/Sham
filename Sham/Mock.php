@@ -2,6 +2,7 @@
 
 require_once 'Sham/CallList.php';
 require_once 'Sham/Call.php';
+require_once 'Sham/MethodStub.php';
 
 /**
  * Mock/stub object that records everything you do on it
