@@ -71,7 +71,11 @@ class Sham_Builder
         foreach ($this->_class->getMethods() as $method) {
             $name = $method->getName();
 
-            if ($this->_isDeclared($name) || $this->_isNotAbstractNonPublic($method) || $method->isStatic()) {
+            // don't implement these
+            if ($this->_isDeclared($name)
+            || $this->_isNotAbstractNonPublic($method)
+            || $method->isStatic()
+            || $method->isFinal()) {
                 continue;
             }
 

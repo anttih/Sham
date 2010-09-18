@@ -166,6 +166,12 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('TestInterface', $class->getInterfaceNames()));
         $this->assertHasOwnMethod($obj, 'method');
     }
+
+    public function testShouldNotBuildFinalMethods()
+    {
+        $builder = new Sham_Builder();
+        $obj = $builder->build('ClassWithFinal');
+    }
     
     public function testResultShouldImplementIteratorByDefault()
     {
@@ -336,6 +342,10 @@ abstract class ClassWithAbstractMethod {
 class ClassWithNonPublicMethods {
     protected function protectedMethod($param1) {}
     private   function privateMethod($param1) {}
+}
+
+class ClassWithFinal {
+    public final function method() {}
 }
 
 abstract class ClassWithAbstractProtected {
