@@ -72,10 +72,10 @@ class Sham_Builder
             $name = $method->getName();
 
             // don't implement these
-            if ($this->_isDeclared($name)
-            || $this->_isNotAbstractNonPublic($method)
-            || $method->isStatic()
-            || $method->isFinal()) {
+            if ($method->isStatic()
+            || $method->isFinal()
+            || $this->_isDeclared($name)
+            || $this->_isNotAbstractNonPublic($method)) {
                 continue;
             }
 
