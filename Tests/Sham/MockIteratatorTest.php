@@ -100,19 +100,6 @@ class Sham_MockIteratorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(count($this->data), $i++);
     }
 
-    public function testToStringShouldReturnClassNameByDefault()
-    {
-        $mock = new Sham_Mock();
-        $this->assertEquals(get_class($mock), (string) $mock);
-    }
-
-    public function testCanSetToStringReturnValue()
-    {
-        $mock = new Sham_Mock();
-        $mock->__toString->returns('to string');
-        $this->assertEquals('to string', (string) $mock);
-    }
-
     private function _assertReturnValues($name)
     {
         $calls = $this->mock->calls($name)->calls;

@@ -193,5 +193,19 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         unset($this->mock[0]);
         $this->assertTrue($this->mock->calls('offsetUnset', 0)->once());
     }
+
+    public function testToStringShouldReturnClassNameByDefault()
+    {
+        $mock = new Sham_Mock();
+        $this->assertEquals(get_class($mock), (string) $mock);
+    }
+
+    public function testCanSetToStringReturnValue()
+    {
+        $mock = new Sham_Mock();
+        $mock->__toString->returns('to string');
+        $this->assertEquals('to string', (string) $mock);
+    }
+
 }
 
