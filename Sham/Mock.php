@@ -37,7 +37,7 @@ class Sham_Mock implements ArrayAccess, Iterator
      * 
      * @param array
      */
-    private $_data = array();
+    private $_sham_data = array();
 
     public function __construct()
     {
@@ -76,9 +76,9 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function __get($name)
     {
-        if (array_key_exists($name, $this->_data)) {
-            $this->_calls->add('__get', array($name), $this->_data[$name]);
-            return $this->_data[$name];
+        if (array_key_exists($name, $this->_sham_data)) {
+            $this->_calls->add('__get', array($name), $this->_sham_data[$name]);
+            return $this->_sham_data[$name];
         }
         return $this->_getMethodStub($name);
     }
@@ -97,7 +97,7 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function __set($key, $value)
     {
-        $this->_data[$key] = $value;
+        $this->_sham_data[$key] = $value;
         $this->_calls->add('__set', array($value));
     }
 
@@ -111,21 +111,21 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function shamGetData()
     {
-        return $this->_data;
+        return $this->_sham_data;
     }
 
     public function shamSetData($data)
     {
-        $this->_data = $data;
+        $this->_sham_data = $data;
     }
 
     public function offsetSet($offset, $value) {
-        $this->_data[$offset] = $value;
+        $this->_sham_data[$offset] = $value;
         $this->_calls->add('offsetSet', array($offset, $value));
     }
 
     public function offsetExists($offset) {
-        $isset = isset($this->_data[$offset]);
+        $isset = isset($this->_sham_data[$offset]);
         $this->_calls->add('offsetExists', array($offset), $isset);
         return $isset;
     }
@@ -135,37 +135,37 @@ class Sham_Mock implements ArrayAccess, Iterator
     }
 
     public function offsetGet($offset) {
-        $this->_calls->add('offsetGet', array($offset), $this->_data[$offset]);
-        return $this->_data[$offset];
+        $this->_calls->add('offsetGet', array($offset), $this->_sham_data[$offset]);
+        return $this->_sham_data[$offset];
     }
 
     // BEGIN ITERATOR
 
     public function rewind() {
-        reset($this->_data);
+        reset($this->_sham_data);
         $this->_calls->add('rewind');
     }
 
     public function current() {
-        $value = current($this->_data);
+        $value = current($this->_sham_data);
         $this->_calls->add('current', array(), $value);
         return $value;
     }
 
     public function key() {
-        $key = key($this->_data);
+        $key = key($this->_sham_data);
         $this->_calls->add('key', array(), $key);
         return $key;
     }
 
     public function next() {
-        $value = next($this->_data);
+        $value = next($this->_sham_data);
         $this->_calls->add('next', array(), $value);
         return $value;
     }
 
     public function valid() {
-        $valid = current($this->_data) !== false;
+        $valid = current($this->_sham_data) !== false;
         $this->_calls->add('valid', array(), $valid);
         return $valid;
     }
