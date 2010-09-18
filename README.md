@@ -2,10 +2,10 @@ Sham - test stub and spy for PHP 5.3
 ====================================
 
 Sham is test stub and spy (test double) for PHP 5.3 and up. The idea
-behind Sham is to allow everything to be done to a Sham instance. Sham
-records everything done to it, you can then later investigate what
-happened. Sham does not self-verify, use your testing framework for
-asserting.
+behind Sham is to allow everything to be done to a Sham instance.
+Sham records every interaction you have with it, you can then later
+investigate what happened. It does not self-verify, use your testing
+framework for asserting.
 
 The goal is to record everything that is possible. This includes:
 
