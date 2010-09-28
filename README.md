@@ -33,7 +33,7 @@ and the tests themselves only assert. Sham does not self-verify how the SUT
 yourself. This makes Sham a very small and simple library since it does not
 have to integrate with different testing libraries.
 
-This is the basic workflow with using Sham:
+This is the basic stubbing workflow with Sham:
 
 1. Create a stub by either passing a class name to the static method
    `Sham::create()` or by instantiating `Sham_Mock` directly.
@@ -122,8 +122,8 @@ return value:
 To make a call throw an exception on invokation, use the `throws()` method.
 The first parameter tells it which exception to throw. You can give it a name
 of an exception as a string, or an instance of an exception class. If not given
-anything, it will throw a `Sham_Exception`. All of the below examples will
-set `method` to throw a `Sham_Exception` once invoked:
+anything, it will throw a `Sham_Exception`. All of the examples below will
+set `method()` to throw a `Sham_Exception` when invoked:
 
     $stub->method->throws('Sham_Exception');
     $stub->method->throws(new Sham_Exception());
