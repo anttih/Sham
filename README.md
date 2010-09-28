@@ -111,11 +111,14 @@ implementation:
 
 ## Return values
 
-Every call returns a `Sham_Mock` instance by default. You can however set a
+Every call returns a `Sham_Mock` instance by default. You can, however, set a
 return value:
 
     $stub->method->returns('foo');
     $stub->method(); // 'foo'
+
+Calls will keep returning the same value. Any subsequent calls to `method()`
+will now return 'foo'.
 
 ## Throwing exceptions
 
