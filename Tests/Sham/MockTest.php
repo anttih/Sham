@@ -37,6 +37,12 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
             $this->mock->method()
         );
     }
+
+    public function testShouldReturnDefaultValueWhenSetSpecificReturnValueForSomeParams()
+    {
+        $this->mock->method->given('foo')->returns('bar');
+        $this->assertTrue($this->mock->method() instanceof Sham_Mock);
+    }
     
     public function testCallingMethodsShouldSendParameters()
     {
