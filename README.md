@@ -120,6 +120,30 @@ return value:
 Calls will keep returning the same value. Any subsequent calls to `method()`
 will now return 'foo'.
 
+## Stubbing based on parameters
+
+You can also stub a method to return a certain value given specific parameters.
+
+    $stub->method->given('foo')->returns('bar');
+    $stub->method('foo'); // 'bar'
+    
+    // fallback to default return value when params don't match
+    $stub->method(); // Sham_Mock
+
+You can call `given()` multiple times. These will be added to a stack where the
+top most calls get priority:
+
+    $stub->method->given('zero', Sham::any())->returns('first');
+    $stub->method->given(Sham::any(), 0)->returns('second');
+
+    $stub->method('zero', 3); // 'first'
+    $stub->method('one', 0);  // 'second'
+    $stub->method('zero', 0); // 'second' (later stubs get priority)
+
+The `given()->...` pattern also applies to exceptions and side effects. That
+is, you can replace the `returns()` call with `throws()` or `does()`. More on
+these next.
+
 ## Throwing exceptions
 
 To make a call throw an exception on invokation, use the `throws()` method.
@@ -131,6 +155,7 @@ set `method()` to throw a `Sham_Exception` when invoked:
     $stub->method->throws('Sham_Exception');
     $stub->method->throws(new Sham_Exception());
     $stub->method->throws();
+
 
 ## Side effects
 
@@ -179,93 +204,44 @@ array access and iteration is recorded. The data it operates on is set using
         'key' => 'value',
     ));
 
-    $stub->key   // 'value'
-    $stub['key'] // 'value'
+    $stub->key // 'value'
 
 ## Property access and property overloading
 
+Properties can be set and retrieved, and it works just like you'd expect.
+Under the hood all the calls get recorded. This behavior can be used when
+testing code that uses the Entity or Active Record pattern:
+
+    $record = new Sham_Mock();
+
+    $record->name = 'Antti';
+    $record->save();
+
+    $record->calls('__set', 'name', 'Antti')->once(); // true
+    $record->calls('save')->once();                   // true
+
+    // ditto.
+    $record->name // 'Antti'
+    $stub->calls('__get', 'name')->once(); // true
+
 ## ArrayAccess
 
-## Iteration
+Sham implements the `ArrayAccess` interface and records all of those calls.
 
+    // retrieve with array access
+    $stub['key'] // 'value'
+    $stub->calls('offsetGet', 'key')->once(); // true
 
-# Filtering
-
-# API
-
-Create a stub either by stubbing an existing class, or by instantiating
-`Sham_Mock` directly:
-    
-    $stub = Sham::create('My_Class'); // $stub instanceof My_Class => true
-    $stub = new Sham_Mock();
-
-By default method calls return new `Sham_Mock` objects, but you can set the return value:
-
-    $stub->foo->returns('return value');
-
-You can also tell methods to throw:
-    
-    $stub->foo->throws();
-    $stub->foo->throws('Exception');
-    $stub->foo->throws(new Exception());
-
-For exceptionally complex cases you can write a stub implementation:
-
-    $stub->foo->does(function($x, $y) { return $x + $y; });
-
-Now call some methods:
-    
-    $stub->foo();
-    $stub->bar('param 1');
-
-Once your test act has been run, you can inspect your test double to see if
-your code interacted with it correctly.
-
-    // make a few calls
-    $stub->xoo('param 1');
-    $stub->xoo('param 1', 'param 2');
-
-    // Sham_CallList::calls is an array of Call objects
-    count($stub->calls('xoo')->calls); // 2
-
-    $stub->calls('xoo', 'param 1', 'param 2')->once(); // true
-
-    // use Sham::any() to match any parameter value
-    $stub->calls('xoo', Sham::any(), 'param 2')->once(); // true
-
-Methods can also be stubbed to do different things given different parameters:
-
-    $stub->foo->given('zero', Sham::any())->returns(0);
-    $stub->foo->given(Sham::any(), 0)->throws();
-
-    $stub->foo('zero', 3); // 0
-    $stub->foo('one', 0);  // exception
-    $stub->foo('zero', 0); // exception (later stubs get priority)
-
-## Array and property access
-
-You can also use `Sham_Mock` as a value object. It records all `ArrayAccess` and
-`__get`/`__set` method calls.
-
-    // first load it with some data
-    $stub->shamSetData(array(1, 'key' => 2));
-
-    $stub[0]; // 1
-    $stub->key; // 2
-
-    $stub->some = 'value';
-    $stub['some']; // value
-    
-    $stub['other'] = 'foo';
-    $stub->other; // 'foo'
-
-    $stub->calls('offsetGet', 0)->once();           // true
-    $stub->calls('__get', 'key')->once();           // true
-    $stub->calls('__set', 'some', 'value')->once(); // true
-    $stub->calls('offsetSet', 'other', 'foo');      // true
-    $stub->calls('__get', 'other')->once();         // true
+    // set offset
+    $stub['other'] = 'value';
+    $stub->calls('offsetSet', 'other', 'value')->once(); // true
 
 ## Iteration
 
 You can also iterate over the data set with Sham_Mock::shamSetData().
 All of the calls implemented by `Iterator` will be recorded.
+
+# Filtering
+
+# API
+
