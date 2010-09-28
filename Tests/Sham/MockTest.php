@@ -11,18 +11,31 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
     public function testCallingMethodsShouldReturnNewSham_MockByDefault()
     {
         $one = $this->mock->method();
-        $two = $this->mock->method();
         $this->assertTrue($one instanceof Sham_Mock);
-        $this->assertNotSame($one, $two);
     }
     
     public function testCallingMethodsAfterGetShouldReturnNewSham_MockByDefault()
     {
         $this->mock->method;
         $one = $this->mock->method();
-        $two = $this->mock->method();
         $this->assertTrue($one instanceof Sham_Mock);
-        $this->assertNotSame($one, $two);
+    }
+
+    public function testCallsShouldReturnSameValue()
+    {
+        $this->assertSame(
+            $this->mock->method(),
+            $this->mock->method()
+        );
+    }
+
+    public function testShouldKeepReturningSameValueWhenReturnValueSet()
+    {
+        $this->mock->method->returns('return value');
+        $this->assertSame(
+            $this->mock->method(),
+            $this->mock->method()
+        );
     }
     
     public function testCallingMethodsShouldSendParameters()
@@ -172,14 +185,14 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $list->calls[0]->return_value);
     }
 
-    public function testShouldRecordIsset()
+    public function testShouldRecordOffsetExists()
     {
         $this->mock->shamSetData(array(1, 2));
         isset($this->mock[0]);
         $this->assertTrue($this->mock->calls('offsetExists', 0)->once());
     }
 
-    public function testShouldIssetReturnValueAsCallReturnValue()
+    public function testIssetShouldReturnValueAsCallReturnValue()
     {
         $this->mock->shamSetData(array(1, 2));
         $isset = isset($this->mock[0]);

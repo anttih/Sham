@@ -52,12 +52,8 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function __call($method, /*:__call1_array:*/ $params = array())
     {
-        if (array_key_exists($method, $this->_method_stubs)) {
-            $stub = $this->_method_stubs[$method];
-            $ret = call_user_func_array($stub, $params);
-        } else {
-            $ret = new Sham_Mock();
-        }
+        $stub = $this->_getMethodStub($method);
+        $ret = call_user_func_array($stub, $params);
         
         $this->_calls->add(new Sham_Call($method, $params, $ret));
         
@@ -87,9 +83,7 @@ class Sham_Mock implements ArrayAccess, Iterator
     {
         if (! isset($this->_method_stubs[$name])) {
             $stub = new Sham_MethodStub($name);
-            $stub->does(function() {
-                return new Sham_Mock();
-            });
+            $stub->returns(new Sham_Mock());
             $this->_method_stubs[$name] = $stub;
         }
         return $this->_method_stubs[$name];
