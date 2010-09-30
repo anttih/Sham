@@ -1,7 +1,7 @@
 
 body {
     font-family: Verdana, serif;
-    background-color: #fff;
+    background-color: #E4F0F5;
 }
 
 #page {
@@ -10,8 +10,8 @@ body {
 }
 
 pre, code {
-    font-family: Menlo, monaco, serif;
-    font-size: 12px;
+    font-family: monaco, serif;
+    font-size: 13px;
 }
 
 code {
