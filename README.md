@@ -183,12 +183,13 @@ A Sham instance can be invoked. A call with name `__invoke` is recorded:
     $stub('foo');
     $stub->calls('__invoke', 'foo')->once(); // true
 
-Return values can be set just like for method calls. Either:
+Return values for `__invoke` calls can be set just like for method calls.
+Either:
 
     $stub->__invoke->returns('return value');
     $stub(); // 'return value'
 
-or simply just:
+or using a convenience method `returns()` on the stub itself:
 
     $stub->returns('return value');
     $stub(); // 'return value'
@@ -198,13 +199,15 @@ or simply just:
 
 Sham objects can act as value or entity objects. All property access,
 array access and iteration is recorded. The data it operates on is set using
-`shamSetData()`.
+`shamSetData()` or by setting the properties and array indexes directly.
+Property access, array access and iteration all operate on the same data.
 
     $stub->shamSetData(array(
         'key' => 'value',
     ));
 
-    $stub->key // 'value'
+    $stub->key   // 'value'
+    $stub['key'] // 'value'
 
 ## Property access and property overloading
 
@@ -238,6 +241,7 @@ Sham implements the `ArrayAccess` interface and records all of those calls.
 
 ## Iteration
 
+You can iterate over the data
 You can also iterate over the data set with Sham_Mock::shamSetData().
 All of the calls implemented by `Iterator` will be recorded.
 
