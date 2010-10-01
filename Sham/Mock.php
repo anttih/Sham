@@ -166,7 +166,13 @@ class Sham_Mock implements ArrayAccess, Iterator
     
     // END ITERATOR
 
-    public function __isset($name) {}
+    public function __isset($name)
+    {
+        $ret = isset($this->_sham_data[$name]);
+        $this->_calls->add('__isset', array($name), $ret);
+        return $ret;
+    }
+
     public function __unset($name) {}
 
     // serialize/unserialize

@@ -226,5 +226,31 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('to string', (string) $mock);
     }
 
+    public function test__issetShouldReturnTrueForSetProperty()
+    {
+        $this->mock->prop = false;
+        $this->assertTrue(isset($this->mock->prop));
+    }
+
+    public function test__issetShouldRecordCallWhenSetProperty()
+    {
+        $this->mock->prop = false;
+        isset($this->mock->prop);
+        $this->assertTrue($this->mock->calls('__isset', 'prop')->once());
+    }
+
+    public function test__issetShouldRecordReturnValue()
+    {
+        $this->mock->prop = false;
+        isset($this->mock->prop);
+        $ret = $this->mock->calls('__isset', 'prop')->calls[0]->return_value;
+        $this->assertTrue($ret);
+    }
+
+    public function test__issetShouldRecordWhenPropertyNotSet()
+    {
+        isset($this->mock->prop);
+        $this->assertTrue($this->mock->calls('__isset', 'prop')->once());
+    }
 }
 
