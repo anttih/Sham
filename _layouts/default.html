@@ -17,8 +17,16 @@
         <a href="http://github.com/anttih/Sham"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
         <div id="page">
             <div id="header">
+                <pre><code>// stub
+$obj = Sham::create('My_Obj');
+
+// record
+$obj->whatevs();
+
+// assert
+$obj->calls('whatevs')->once();</code></pre>
                 <h1>Sham</h1>
-                <span id="tagline">Write fast tests</span>
+                <p id="tagline">Write fast tests</p>
             </div>
             <div id="main">
             {{ content }}
