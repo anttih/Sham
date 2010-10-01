@@ -11,24 +11,34 @@ Sham records every interaction you have with it, you can then later
 investigate what happened. It does not self-verify, use your testing
 framework for asserting.
 
-The goal is to record everything that is possible. This includes:
+## Manual
 
-* Method calls
-* __invoke calls
-* property access
-* array access
-* method call overloading
-* property access overloading
-* iteration
-* serialization
+<ul>
+    <li><a href="#intro">Introduction</a></li>
+    <li><a href="#stub">Stubbing</a></li>
+    <li><a href="#assert">Filter and assert</a></li>
+    <li>
+        <ul>
+            <li><a href="#calls">Method calls</a></li>
+            <li><a href="#return">Return values</a></li>
+            <li><a href="#params">Stubbing by parameters</a></li>
+            <li><a href="#exceptions">Exceptions</a></li>
+            <li><a href="#sidefx">Side effects</a></li>
+        </ul>
+    </li>
+    <li><a href="#assert">__invoke</a></li>
+    <li><a href="#assert">Data objects</a></li>
+    <li>
+        <ul>
+            <li><a href="#properties">Property access calls</a></li>
+            <li><a href="#arrayaccess">ArrayAccess</a></li>
+            <li><a href="#iteration">Iteration</a></li>
+        </ul>
+    </li>
+    <li><a href="#api">API</a></li>
+</ul>
 
-A Sham stub object implements:
-
-* ArrayAccess
-* Iterator
-
-
-# Introduction
+# <a name="intro" href="#intro">Introduction</a>
 
 Sham is a mocking library, but to use a more correct term, it's a test stub or
 a test spy. It uses the record then assert paradigm, which is more suitable for
@@ -232,7 +242,7 @@ testing code that uses the Entity or Active Record pattern:
     $record->name // 'Antti'
     $stub->calls('__get', 'name')->once(); // true
 
-## ArrayAccess
+## <a name="arrayaccess" href="#arrayaccess">ArrayAccess</a>
 
 Sham implements the `ArrayAccess` interface and records all of those calls.
 
@@ -244,13 +254,12 @@ Sham implements the `ArrayAccess` interface and records all of those calls.
     $stub['other'] = 'value';
     $stub->calls('offsetSet', 'other', 'value')->once(); // true
 
-## Iteration
+
+## <a name="iteration" href="#iteration">Iteration</a>
 
 You can iterate over the data
 You can also iterate over the data set with Sham_Mock::shamSetData().
 All of the calls implemented by `Iterator` will be recorded.
 
-# Filtering
-
-# API
+# <a name="api" href="#api">API</a>
 
