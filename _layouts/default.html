@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Sham - write fast tests</title>
+        <title>Sham – write fast tests</title>
         <link rel="stylesheet" href="css/main.css" type="text/css"/>
+        <link rel="stylesheet" href="js/prettify/prettify.css" type="text/css"/>
+        <script type="text/javascript" src="js/prettify/prettify.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script>
+            $(function () {
+                $('pre > code').addClass('prettyprint');
+                prettyPrint();
+            });
+        </script>
     </head>
     <body>
         <a href="http://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
