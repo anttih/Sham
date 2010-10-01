@@ -111,7 +111,7 @@ implementation:
     $stub->overload();
 
     $stub->calls('overload')->once(); // true
-    $stub->calls('__call')->never();  // true, no __call is ever recorded
+    $stub->calls('__call')->never();  // true, no __call call is ever recorded
 
 
 ## Return values
