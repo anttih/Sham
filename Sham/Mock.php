@@ -173,7 +173,11 @@ class Sham_Mock implements ArrayAccess, Iterator
         return $ret;
     }
 
-    public function __unset($name) {}
+    public function __unset($name)
+    {
+        unset($this->_sham_data[$name]);
+        $this->_calls->add('__unset', array($name));
+    }
 
     // serialize/unserialize
     public function __sleep() {}

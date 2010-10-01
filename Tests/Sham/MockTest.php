@@ -252,5 +252,18 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         isset($this->mock->prop);
         $this->assertTrue($this->mock->calls('__isset', 'prop')->once());
     }
+    
+    public function test__unsetShouldRecord()
+    {
+        unset($this->mock->prop);
+        $this->assertTrue($this->mock->calls('__unset', 'prop')->once());
+    }
+
+    public function test__unsetShouldUnsetProp()
+    {
+        $this->mock->prop = 'value';
+        unset($this->mock->prop);
+        $this->assertFalse(isset($this->mock->prop));
+    }
 }
 
