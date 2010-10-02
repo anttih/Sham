@@ -1,7 +1,7 @@
 <?php
 require_once 'Sham/Matcher/Array.php';
 require_once 'Sham/Exception.php';
-class Sham_MethodStub
+class Sham_Method
 {
     public $name;
 
