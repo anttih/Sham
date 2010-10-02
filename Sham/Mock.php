@@ -180,8 +180,16 @@ class Sham_Mock implements ArrayAccess, Iterator
     }
 
     // serialize/unserialize
-    public function __sleep() {}
-    public function __wakeup() {}
+    public function __sleep()
+    {
+        $this->_calls->add('__sleep', array());
+        return array('_calls', '_sham_data');
+    }
+
+    public function __wakeup()
+    {
+        $this->_calls->add('__wakeup');
+    }
 
     public function __toString() {
         return $this->__call('__toString');

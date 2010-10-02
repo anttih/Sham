@@ -1,0 +1,37 @@
+<?php
+require_once 'Sham/Mock.php';
+
+class Sham_MockSerializeTest extends PHPUnit_Framework_TestCase
+{
+    public function setup()
+    {
+        $stub = new Sham_Mock();
+        $stub->shamSetData(array('prop' => 'value'));
+        $stub->method->given('param')->returns('return value');
+
+        $serialized = serialize($stub);
+        $this->zombie = unserialize($serialized);
+    }
+
+    public function testShouldRecord__sleep()
+    {
+        $this->assertTrue($this->zombie->calls('__sleep')->once());
+    }
+
+    public function testShouldPreserveShamData()
+    {
+        $this->assertEquals('value', $this->zombie->prop);
+    }
+
+    // This probably won't be possible
+    //public function testShouldPreserveStubs()
+    //{
+    //    $this->assertEquals('return value', $this->zombie->method('param'));
+    //}
+
+    public function testShouldRecord__wakeup()
+    {
+        $this->assertTrue($this->zombie->calls('__wakeup')->once());
+    }
+
+}
