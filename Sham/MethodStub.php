@@ -28,12 +28,6 @@ class Sham_MethodStub
 
     public function throws($exception = 'Sham_Exception')
     {
-        if (! is_string($exception) && ! ($exception instanceof Exception)) {
-            throw new Sham_Exception(
-                "throws() expects exception object or exception class name"
-            );
-        }
-        
         $this->does(function() use ($exception) {
             if (is_string($exception)) {
                 throw new $exception();
