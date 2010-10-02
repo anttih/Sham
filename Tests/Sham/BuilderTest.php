@@ -1,4 +1,5 @@
 <?php
+require_once 'Sham.php';
 require_once 'Sham/Builder.php';
 class Sham_BuilderTest extends PHPUnit_Framework_TestCase
 {

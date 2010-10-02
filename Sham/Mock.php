@@ -183,7 +183,7 @@ class Sham_Mock implements ArrayAccess, Iterator
     public function __sleep()
     {
         $this->_calls->add('__sleep', array());
-        return array('_calls', '_sham_data');
+        return array('_calls', '_sham_data', '_method_stubs');
     }
 
     public function __wakeup()
