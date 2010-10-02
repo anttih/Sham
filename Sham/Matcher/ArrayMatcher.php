@@ -5,7 +5,7 @@ require_once 'Sham/Matcher.php';
 
 use Sham\Matcher;
 
-class Array implements Matcher
+class ArrayMatcher implements Matcher
 {
     private $_expected;
 
