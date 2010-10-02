@@ -23,11 +23,10 @@ class Sham_MockSerializeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('value', $this->zombie->prop);
     }
 
-    // This probably won't be possible
-    //public function testShouldPreserveStubs()
-    //{
-    //    $this->assertEquals('return value', $this->zombie->method('param'));
-    //}
+    public function testShouldPreserveStubReturnValues()
+    {
+        $this->assertEquals('return value', $this->zombie->method('param'));
+    }
 
     public function testShouldRecord__wakeup()
     {

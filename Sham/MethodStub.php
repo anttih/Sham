@@ -23,7 +23,18 @@ class Sham_MethodStub
 
     public function returns($value)
     {
-        $this->does(function() use ($value) { return $value; });
+        $this->_implementation($value);
+    }
+
+    public function does($callback)
+    {
+        $this->_implementation(null, $callback);
+    }
+    
+    private function _implementation($return_value, $callback = null)
+    {
+        $matcher = $this->_consumePendingMatcher();
+        array_unshift($this->_actions, array($matcher, $return_value, $callback));
     }
 
     public function throws($exception = 'Sham_Exception')
@@ -35,12 +46,6 @@ class Sham_MethodStub
                 throw $exception;
             }
         });
-    }
-    
-    public function does($callback)
-    {
-        $matcher = $this->_consumePendingMatcher();
-        array_unshift($this->_actions, array($matcher, $callback));
     }
     
     private function _consumePendingMatcher()
@@ -58,9 +63,13 @@ class Sham_MethodStub
     {
         $args = func_get_args();
         foreach ($this->_actions as $pair) {
-            list($matcher, $action) = $pair;
+            list($matcher, $ret, $callback) = $pair;
             if ($matcher->matches($args)) {
-                return call_user_func_array($action, $args);
+                if (is_callable($callback)) {
+                    return call_user_func_array($callback, $args);
+                } else {
+                    return $ret;
+                }
             }
         }
         

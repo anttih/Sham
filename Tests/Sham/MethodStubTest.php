@@ -57,6 +57,13 @@ class Sham_MethodStubTest extends PHPUnit_Framework_TestCase
         }
     }
     
+    public function testShouldAllowClosureAsReturnValue()
+    {
+        $stub = new Sham_MethodStub('method name');
+        $stub->returns(function () {});
+        $this->assertTrue($stub() instanceof Closure);
+    }
+
     public function testShouldAllowArbitraryActions()
     {
         $func = function($a, $b) use (&$args) {
