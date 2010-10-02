@@ -1,15 +1,19 @@
 <?php
 require_once 'Sham/CallList.php';
+
+use Sham\CallList,
+    Sham\Call;
+
 class Sham_CallListTest extends PHPUnit_Framework_TestCase
 {
     public function setup()
     {
-        $this->list = new Sham_CallList();
+        $this->list = new CallList();
     }
 
     public function testCanAddCallObjects()
     {
-        $this->list->add(new Sham_Call('method', array(), ''));
+        $this->list->add(new Call('method', array(), ''));
         $this->assertEquals(1, count($this->list->calls));
     }
 
@@ -24,12 +28,12 @@ class Sham_CallListTest extends PHPUnit_Framework_TestCase
 
     public function testEmptyCallListHasZeroCalls()
     {
-        $this->assertEquals(0, count(new Sham_CallList()));
+        $this->assertEquals(0, count(new CallList()));
     }
 
     public function testShouldReturnCallListFromCalls()
     {
-        $this->assertTrue($this->list->calls() instanceof Sham_CallList);
+        $this->assertTrue($this->list->calls() instanceof CallList);
     }
 
     public function testShouldMatchOneCallByCallName()

@@ -1,6 +1,11 @@
 <?php
+namespace Sham\Matcher;
+
 require_once 'Sham/Matcher.php';
-class Sham_Matcher_Array implements Sham_Matcher
+
+use Sham\Matcher;
+
+class Array implements Matcher
 {
     private $_expected;
 
@@ -23,7 +28,7 @@ class Sham_Matcher_Array implements Sham_Matcher
         foreach ($this->_expected as $k => $v) {
             if (!array_key_exists($k, $target)) {
                 return false;
-            } elseif ($v instanceof Sham_Matcher) {
+            } elseif ($v instanceof Matcher) {
                 if (!$v->matches($target[$k])) {
                     return false;
                 }

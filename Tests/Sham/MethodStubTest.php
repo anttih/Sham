@@ -1,42 +1,45 @@
 <?php
 require_once 'Sham.php';
 require_once 'Sham/Method.php';
+
+use Sham\Method;
+
 class Sham_MethodTest extends PHPUnit_Framework_TestCase
 {
 
     public function testShouldThrowExceptionIfCalledWithoutStubbing()
     {
-        $stub = new Sham_Method('method name');
-        $this->setExpectedException('Sham_Exception', 'Nothing stubbed');
+        $stub = new Method('method name');
+        $this->setExpectedException('Sham\Exception', 'Nothing stubbed');
         $stub();
     }
 
     public function testShouldBeAbleToSetReturnValue()
     {
-        $stub = new Sham_Method('method name');
+        $stub = new Method('method name');
         $stub->returns('return value');
         $this->assertEquals('return value', $stub());
     }
 
     public function testShouldAllowFalsyReturnValues()
     {
-        $stub = new Sham_Method('method name');
+        $stub = new Method('method name');
         $stub->returns(false);
         $this->assertEquals(false, $stub());
     }
 
     public function testShouldThrowIfSet()
     {
-        $this->setExpectedException('Sham_Exception');
-        $stub = new Sham_Method('method name');
-        $stub->throws('Sham_Exception');
+        $this->setExpectedException('Sham\Exception');
+        $stub = new Method('method name');
+        $stub->throws('Sham\Exception');
         $stub();
     }
 
     public function testShouldThrowExceptionWhenCalledWithNoParam()
     {
-        $this->setExpectedException('Sham_Exception');
-        $stub = new Sham_Method('method name');
+        $this->setExpectedException('Sham\Exception');
+        $stub = new Method('method name');
         $stub->throws();
         $stub();
     }
@@ -45,7 +48,7 @@ class Sham_MethodTest extends PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('GoodException');
 
-        $stub = new Sham_Method('method name');
+        $stub = new Method('method name');
         $exception = new GoodException();
         $stub->throws($exception);
 
@@ -59,7 +62,7 @@ class Sham_MethodTest extends PHPUnit_Framework_TestCase
     
     public function testShouldAllowClosureAsReturnValue()
     {
-        $stub = new Sham_Method('method name');
+        $stub = new Method('method name');
         $stub->returns(function () {});
         $this->assertTrue($stub() instanceof Closure);
     }
@@ -70,7 +73,7 @@ class Sham_MethodTest extends PHPUnit_Framework_TestCase
             return $a + $b;
         };
         
-        $stub = new Sham_Method('method name');
+        $stub = new Method('method name');
         $stub->does($func);
         
         $this->assertEquals(4, $stub(2, 2));
@@ -78,7 +81,7 @@ class Sham_MethodTest extends PHPUnit_Framework_TestCase
     
     public function testShouldAllowDifferentReturnValuesForSpecificParameters()
     {
-        $stub = new Sham_Method('method name');
+        $stub = new Method('method name');
         $stub->returns('default return');
         $stub->given(1, 2, 3)->returns('one-two-three');
         $stub->given(3, Sham::any())->returns('three-something');
@@ -91,7 +94,7 @@ class Sham_MethodTest extends PHPUnit_Framework_TestCase
     
     public function testShouldAllowThrowingForSpecificParameters()
     {
-        $stub = new Sham_Method('method name');
+        $stub = new Method('method name');
         $stub->throws('BadException');
         $stub->given(Sham::any(), 'good')->throws('GoodException');
         $stub->given(Sham::any(), 'bad')->throws('BadException');
@@ -102,7 +105,7 @@ class Sham_MethodTest extends PHPUnit_Framework_TestCase
     
     public function testShouldAllowArbitraryActionsForSpecificParameters()
     {
-        $stub = new Sham_Method('method name');
+        $stub = new Method('method name');
         $stub->returns('default return');
         $stub->given(Sham::any(), 10)->does(function() { return func_get_args(); });
         
@@ -113,7 +116,7 @@ class Sham_MethodTest extends PHPUnit_Framework_TestCase
     
     public function testLaterStubbingsShouldOverrideEarlierOverlappingOnes()
     {
-        $stub = new Sham_Method('method name');
+        $stub = new Method('method name');
         
         $stub->given(Sham::any(), 1)->returns(2);
         $stub->given(5, 1)->returns(3);

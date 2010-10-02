@@ -1,24 +1,28 @@
 <?php
 require_once 'Sham.php';
 require_once 'Sham/Builder.php';
-class Sham_BuilderTest extends PHPUnit_Framework_TestCase
+
+use Sham\Builder,
+    \ReflectionClass;
+
+class BuilderTest extends PHPUnit_Framework_TestCase
 {
     public function testMockingAClassShouldReturnInstanceOfSameClass()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $this->assertTrue($builder->build('TestBuilder') instanceof TestBuilder);
     }
 
     public function testOverrideParentMethods()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('TestBuilder');
         $this->assertHasOwnMethod($obj, 'override');
     }
 
     public function testRecordOverridenMethodCalls()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('TestBuilder');
         $obj->override();
         $this->assertTrue($obj->calls('override')->once());
@@ -26,7 +30,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
     
     public function testShouldReturnStubbedReturnValues()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('TestBuilder');
         $obj->override->returns('foo');
         $this->assertEquals('foo', $obj->override());
@@ -34,7 +38,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testRecordCallParams()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('TestBuilder');
         $obj->override('param 1');
         $this->assertTrue($obj->calls('override', 'param 1')->once());
@@ -42,7 +46,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
     
     public function testRecordOptionalParamsWhenGiven()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithClassTypeHintOnOptionalParam');
         $param = new ClassWithParams();
         $obj->method(null);
@@ -53,7 +57,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
     
     public function testDontRecordOptionalParamsWhenNotGiven()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithClassTypeHintOnOptionalParam');
         $obj->method();
         $this->assertEquals(array(), $obj->calls('method')->first()->params);
@@ -61,14 +65,14 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testBuildMethodWithOneNonOptionalParam()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithParams');
         $this->assertNumberOfParameters(1, $obj, 'method');
     }
 
     public function testBuildMethodWithTwoNonOptionalParams()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithTwoParams');
         $this->assertNumberOfParameters(2, $obj, 'method');
     }
@@ -116,13 +120,13 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
      */
     public function testDontAdd__call()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithMethodsDeclaredInMock');
     }
     
     public function testShouldPreserveArrayTypehintInInheritedMagicMethods()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithArrayTypehintedMagicMethods');
         
         $this->assertParamHasArrayTypehint($obj, '__call', 1);
@@ -132,21 +136,21 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
     
     public function testShouldIgnoreStaticMethods()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithStaticMethod');
         // Fails with a fatal error if builder attempts to override with a non-static.
     }
 
     public function testBuildAbstractClass()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithAbstractMethod');
         $this->assertHasOwnMethod($obj, 'method');
     }
 
     public function testShouldNotBuildProtectedAndPrivate()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithNonPublicMethods');
         $this->assertDoesNotHaveOwnMethod($obj, 'privateMethod');
         $this->assertDoesNotHaveOwnMethod($obj, 'protectedMethod');
@@ -154,14 +158,14 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testShouldBuildAbstractProtected()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithAbstractProtected');
         $this->assertHasOwnMethod($obj, 'protectedMethod');
     }
 
     public function testShouldBuildInterface()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('TestInterface');
         $class = new ReflectionClass($obj);
         $this->assertTrue(in_array('TestInterface', $class->getInterfaceNames()));
@@ -170,13 +174,13 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
 
     public function testShouldNotBuildFinalMethods()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithFinal');
     }
     
     public function testResultShouldImplementIteratorByDefault()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithParams');
         $this->assertTrue($obj instanceof Iterator);
         $this->assertHasOverriddenIteratorMethods($obj);
@@ -185,7 +189,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
     public function testResultShouldNotImplementIteratorIfSuperclassImplementsIteratorAggregate()
     {
         // PHP (5.3.2) has a specific fatal error for this: "cannot implement both Iterator and IteratorAggregate at the same time"
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassImplementingIteratorAggregate');
         $this->assertFalse($obj instanceof Iterator);
         $this->assertTrue($obj instanceof IteratorAggregate);
@@ -194,18 +198,18 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
     
     public function testResultShouldNotImplementIteratorMethodsIfSuperclassHasAnyIteratorLikeMethods()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassWithIteratorLikeMethods');
         $class = new ReflectionClass($obj);
         $this->assertFalse($class->implementsInterface('Iterator'));
         $this->assertTrue($class->hasMethod('next'));
         $this->assertFalse($class->hasMethod('current'));
-        $this->assertTrue(strpos($class->getMethod('next')->getDeclaringClass()->getName(), 'Sham_Mock_') === 0);
+        $this->assertTrue(strpos($class->getMethod('next')->getDeclaringClass()->getName(), 'Mock_') === 0);
     }
     
     public function testResultShouldImplementIteratorIfSuperclassImplementsIterator()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('ClassImplementingIterator');
         $class = new ReflectionClass($obj);
         $this->assertTrue($class->implementsInterface('Iterator'));
@@ -215,7 +219,7 @@ class Sham_BuilderTest extends PHPUnit_Framework_TestCase
 
     private function _getBuiltParams($class)
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build($class);
         $method = new ReflectionMethod($obj, 'method');
         return $method->getParameters();

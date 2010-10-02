@@ -1,3 +1,4 @@
 <?php
-class Sham_Exception extends Exception {}
+namespace Sham;
+class Exception extends \Exception {}
 

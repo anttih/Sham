@@ -1,6 +1,11 @@
 <?php
+namespace Sham\Matcher;
+
 require_once 'Sham/Matcher.php';
-class Sham_Matcher_Constant implements Sham_Matcher
+
+use Sham\Matcher;
+
+class Constant implements Matcher
 {
     private $_value;
 

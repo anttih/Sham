@@ -1,4 +1,5 @@
 <?php
+namespace Sham;
 
 require_once 'Sham/CallList.php';
 require_once 'Sham/Call.php';
@@ -11,12 +12,12 @@ require_once 'Sham/Method.php';
  * 
  * @package Sham
  */
-class Sham_Mock implements ArrayAccess, Iterator
+class Mock implements \ArrayAccess, \Iterator
 {
     /**
      * Calls that have been recorded
      * 
-     * @param Sham_CallList
+     * @param Sham\CallList
      */
     private $_calls;
     
@@ -41,10 +42,10 @@ class Sham_Mock implements ArrayAccess, Iterator
 
     public function __construct()
     {
-        $this->_calls = new Sham_CallList();
+        $this->_calls = new \Sham\CallList();
         
         $str = get_class($this);
-        $this->_method_stubs['__toString'] = new Sham_Method('__toString');
+        $this->_method_stubs['__toString'] = new \Sham\Method('__toString');
         $this->_method_stubs['__toString']->returns($str);
     }
 
@@ -55,7 +56,7 @@ class Sham_Mock implements ArrayAccess, Iterator
         $stub = $this->_getMethod($method);
         $ret = call_user_func_array($stub, $params);
         
-        $this->_calls->add(new Sham_Call($method, $params, $ret));
+        $this->_calls->add(new \Sham\Call($method, $params, $ret));
         
         return $ret;
     }
@@ -82,8 +83,8 @@ class Sham_Mock implements ArrayAccess, Iterator
     private function _getMethod($name)
     {
         if (! isset($this->_method_stubs[$name])) {
-            $stub = new Sham_Method($name);
-            $stub->returns(new Sham_Mock());
+            $stub = new \Sham\Method($name);
+            $stub->returns(new \Sham\Mock());
             $this->_method_stubs[$name] = $stub;
         }
         return $this->_method_stubs[$name];

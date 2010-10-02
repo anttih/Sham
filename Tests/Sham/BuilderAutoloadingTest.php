@@ -1,4 +1,8 @@
 <?php
+require_once 'Sham/Builder.php';
+
+use Sham\Builder;
+
 class Sham_BuilderAutoloadingTest extends PHPUnit_Framework_TestCase
 {
     public function setup()
@@ -13,7 +17,7 @@ class Sham_BuilderAutoloadingTest extends PHPUnit_Framework_TestCase
 
     public function testShouldUseAutoloadToLoadClass()
     {
-        $builder = new Sham_Builder();
+        $builder = new Builder();
         $obj = $builder->build('Sham_Fixture');
         $this->assertTrue($obj instanceof Sham_Fixture);
     }

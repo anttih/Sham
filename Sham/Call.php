@@ -1,6 +1,8 @@
 <?php
+namespace Sham;
+
 require_once 'Sham/Exception.php';
-class Sham_Call
+class Call
 {
     public $name;
     public $params;

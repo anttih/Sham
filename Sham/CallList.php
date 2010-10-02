@@ -1,7 +1,14 @@
 <?php
+namespace Sham;
+
 require_once 'Sham/Matcher/Any.php';
-require_once 'Sham/Matcher/Array.php';
-class Sham_CallList implements Countable
+require_once 'Sham/Matcher/ArrayMatcher.php';
+
+use Sham\Call,
+    Sham\Matcher\ArrayMatcher,
+    Sham\Matcher\Any;
+
+class CallList implements \Countable
 {
     public $calls = array();
 
@@ -13,7 +20,7 @@ class Sham_CallList implements Countable
     public function add($spec, $params = array(), $return = null)
     {
         if (is_string($spec)) {
-            $spec = new Sham_Call($spec, $params, $return);
+            $spec = new Call($spec, $params, $return);
         }
 
         $this->calls[] = $spec;
@@ -29,9 +36,9 @@ class Sham_CallList implements Countable
         $args = func_get_args();
         array_shift($args); // take off call name
         if (empty($args)) {
-            $argMatcher = new Sham_Matcher_Any();
+            $argMatcher = new Any();
         } else {
-            $argMatcher = new Sham_Matcher_Array($args);
+            $argMatcher = new ArrayMatcher($args);
         }
 
         $calls = array();
@@ -40,7 +47,7 @@ class Sham_CallList implements Countable
                 $calls[] = $call;
             }
         }
-        return new Sham_CallList($calls);
+        return new CallList($calls);
     }
 
     public function once()

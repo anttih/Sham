@@ -1,6 +1,9 @@
 <?php
 require_once 'Sham/Mock.php';
-class Sham_MockIteratorTest extends PHPUnit_Framework_TestCase
+
+use Sham\Mock;
+
+class Sham_MockIteratorTest extends \PHPUnit_Framework_TestCase
 {
     public $iteration_count;
     public $mock;
@@ -17,7 +20,7 @@ class Sham_MockIteratorTest extends PHPUnit_Framework_TestCase
             2     => 'value 3'
         );
 
-        $mock = new Sham_Mock();
+        $mock = new Mock();
         $mock->shamSetData($this->data);
 
         $i = 0;

@@ -1,10 +1,13 @@
 <?php
 require_once 'Sham/CallList.php';
+
+use Sham\CallList;
+
 class Sham_CallListWithMultipleCallsTest extends PHPUnit_Framework_TestCase
 {
     public function setup()
     {
-        $list = new Sham_CallList();
+        $list = new CallList();
         $list->add('call name', array('param1'), 'return value');
         $list->add('call name', array('param1', 'param2'), 'return value');
         $this->list = $list;

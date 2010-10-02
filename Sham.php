@@ -3,6 +3,10 @@ require_once 'Sham/Mock.php';
 require_once 'Sham/Builder.php';
 require_once 'Sham/Matcher/Any.php';
 
+use Sham\Builder,
+    Sham\Matcher\Any,
+    Sham\Mock;
+
 /**
  * Sham – test stub and spy for PHP 5.3
  * 
@@ -46,16 +50,16 @@ class Sham
 {
     public static function any()
     {
-        return new Sham_Matcher_Any();
+        return new Any();
     }
 
     public static function create($class = null)
     {
         if (! empty($class)) {
-            $builder = new Sham_Builder();
+            $builder = new Builder();
             return $builder->build($class);
         }
 
-        return new Sham_Mock();
+        return new Mock();
     }
 }

@@ -1,9 +1,13 @@
 <?php
-class Sham_Builder
+namespace Sham;
+
+use \ReflectionClass;
+
+class Builder
 {
     protected static $_next_mock_id = 1001;
 
-    protected $_mock_class_name = 'Sham_Mock_';
+    protected $_mock_class_name = 'Mock_';
 
     private $_class;
     
@@ -37,7 +41,7 @@ class Sham_Builder
 
     private function _buildClassDefinition($lines)
     {
-        $reflection = new ReflectionClass('Sham_Mock');
+        $reflection = new ReflectionClass('Sham\Mock');
         $lines = array_slice(
             $lines,
             $reflection->getStartLine() - 1,
@@ -48,14 +52,14 @@ class Sham_Builder
         $def = $lines[0];
         if ($this->_class->isInterface()) {
             $def = str_replace(
-                'class Sham_Mock',
+                'class Mock',
                 "class {$this->_mock_class_name}",
                 $def
             );
             $def .= ", $name";
         } else {
             $def = str_replace(
-                'class Sham_Mock',
+                'class Mock',
                 "class {$this->_mock_class_name} extends $name",
                 $def
             );
@@ -161,11 +165,15 @@ class Sham_Builder
     private function _withoutImplementedInterface($code, $interface)
     {
         $matches = array();
-        return preg_replace_callback('/(class .* implements )(.*)\n/m', function($matches) use ($interface) {
-            $interfaces = array_map('trim', explode(',', $matches[2]));
-            $interfaces = array_diff($interfaces, array($interface));
-            return $matches[1] . implode(' ', $interfaces);
-        }, $code);
+        return preg_replace_callback(
+            '/(class .* implements )(.*)\n/m',
+            function($matches) use ($interface) {
+                $interfaces = array_map('trim', explode(',', $matches[2]));
+                $interfaces = array_diff($interfaces, array('\\' . $interface));
+                return $matches[1] . implode(', ', $interfaces);
+            },
+            $code
+        );
     }
     
     private function _classHasIteratorMethods()
@@ -205,7 +213,7 @@ class Sham_Builder
     {
         static $methods = array();
         if (empty($methods)) {
-            $class = new ReflectionClass('Sham_Mock');
+            $class = new ReflectionClass('Sham\Mock');
             $methods = array();
             foreach ($class->getMethods() as $method) {
                 $methods[] = $method->getName();

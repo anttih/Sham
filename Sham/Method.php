@@ -1,7 +1,12 @@
 <?php
-require_once 'Sham/Matcher/Array.php';
+namespace Sham;
+
+require_once 'Sham/Matcher/ArrayMatcher.php';
 require_once 'Sham/Exception.php';
-class Sham_Method
+
+use Sham\Matcher\ArrayMatcher;
+
+class Method
 {
     public $name;
 
@@ -17,7 +22,7 @@ class Sham_Method
 
     public function given(/*...*/)
     {
-        $this->_pending_matcher = new Sham_Matcher_Array(func_get_args());
+        $this->_pending_matcher = new ArrayMatcher(func_get_args());
         return $this;
     }
 
@@ -37,7 +42,7 @@ class Sham_Method
         array_unshift($this->_actions, array($matcher, $return_value, $callback));
     }
 
-    public function throws($exception = 'Sham_Exception')
+    public function throws($exception = 'Sham\Exception')
     {
         $this->does(function() use ($exception) {
             if (is_string($exception)) {
@@ -54,7 +59,7 @@ class Sham_Method
             $matcher = $this->_pending_matcher;
             $this->_pending_matcher = null;
         } else {
-            $matcher = Sham::any();
+            $matcher = \Sham::any();
         }
         return $matcher;
     }
@@ -73,6 +78,6 @@ class Sham_Method
             }
         }
         
-        throw new Sham_Exception("Nothing stubbed for method '{$this->name}'.");
+        throw new \Sham\Exception("Nothing stubbed for method '{$this->name}'.");
     }
 }
