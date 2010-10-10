@@ -11,8 +11,16 @@ Sham records every interaction you have with it, you can then later
 investigate what happened. It does not self-verify, use your testing
 framework for asserting.
 
+## Download and Install
+
+1. Download the latest version [here](http://github.com/anttih/Sham/dowload).
+
+2. Extract and add the extracted directory to your `include_path`. Even better,
+   add Sham as a submodule or svn:externals.
+
 ## Manual
 
+<div id="toc">
 <ul>
     <li><a href="#intro">Introduction</a></li>
     <li><a href="#stubbing">Stubbing</a></li>
@@ -42,7 +50,9 @@ framework for asserting.
         </ul>
     </li>
     <li><a href="#api">API</a></li>
+    <li><a href="#license">License</a></li>
 </ul>
+</div>
 
 # <a name="intro" href="#intro">Introduction</a>
 
@@ -289,21 +299,49 @@ All of the calls implemented by `Iterator` will be recorded.
 
 # <a name="api" href="#api">API</a>
 
-`Sham_Mock`
+** `Sham`**
 
-* `shamSetData()`
+Methods:
 
-* `calls()` - a proxy for `Sham\CallList::calls()`
+* `any()` - Returns a matcher which matches any value. Used to indicate a
+  parameter that we don't want to test right now. Shorthand for `new
+  \Sham\Any()`.
+
+* `create(string $spec)` - Build a new stub based on the `$spec` class. Returns
+  an object which is an instance of the spec.
+
+**`Sham\Mock`**:
+
+Methods:
+
+* `shamSetData()` - set the data for `__get`/`__set` and `ArrayAccess`.
+
+* `calls()` - a proxy for `Sham\CallList::calls()`.
 
 
-`Sham\CallList`:
+**`Sham\CallList`**:
 
-* `calls([...])` - Filters calls by parameters and returns a new call list with
-  those calls
+Methods:
 
-* `times($count)` - Is there `$count` amount of calls in the call list.
+* `calls([$name [, $... ]])` - Filters calls by name and parameters. Returns a
+new call list with the matched calls.
 
-* `once()` - Is there exactly one call in the list. Returns a boolean.
+* `first()` - Returns the first `Sham\Call` object in the list.
 
-* `never()` - Are there no calls in the list. Returns a boolean.
+* `times($count)` - Checks if there are exactly `$count` amount of calls in the
+  list. Returns a boolean.
+
+* `once()` - Checks if there is exactly one call in the list. Returns a boolean.
+
+* `never()` - Checks if there are no calls in the list. Returns a boolean.
+  `true` if there are no calls.
+
+
+**`Sham\Call`**:
+
+Properties:
+
+* `return_value` - The value the call returned.
+
+* `params` - An array of parameters the call was made with.
 
