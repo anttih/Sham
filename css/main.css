@@ -5,6 +5,10 @@ body {
 }
 
 a {
+    color: #108FC4;
+}
+
+h1 a, h2 a, h3 a {
     color: #3199C4;
 }
 
@@ -43,13 +47,13 @@ pre code {
     padding: 0;
 }
 
-ul {
+#toc ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-li > ul {
+#toc li > ul {
     padding: 0 0 0 20px;
 }
 
