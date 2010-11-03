@@ -13,10 +13,7 @@ framework for asserting.
 
 ## Download and Install
 
-1. Download the latest version [here](http://github.com/anttih/Sham/dowload).
-
-2. Extract and add the extracted directory to your `include_path`. Even better,
-   add Sham as a submodule or svn:externals.
+Download the latest version [here](http://github.com/anttih/Sham/dowload).
 
 ## Manual
 
