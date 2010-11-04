@@ -7,7 +7,7 @@ Sham records every interaction you have with it, you can then later
 investigate what happened. It does not self-verify, use your testing
 framework for asserting.
 
-Sham is alpha quality, expect things to change.
+It works well, but expect things to change.
 
 ## Documentation
 
