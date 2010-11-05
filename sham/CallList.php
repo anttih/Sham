@@ -26,7 +26,7 @@ class CallList implements \Countable
         $this->calls[] = $spec;
     }
 
-    public function calls($name = null)
+    public function filter($name = null)
     {
         // don't filter at all?
         if (empty($name)) {

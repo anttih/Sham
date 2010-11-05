@@ -99,7 +99,7 @@ class Stub implements \ArrayAccess, \Iterator
     public function got()
     {
         return call_user_func_array(
-            array($this->_calls, 'calls'),
+            array($this->_calls, 'filter'),
             func_get_args()
         );
     }
