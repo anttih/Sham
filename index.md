@@ -62,9 +62,9 @@ a real object and let it record.
 
 # <a name="stubbing" href="#stubbing">Stubbing</a>
 
-You can create a stub by instantiating the `sham\Mock` class directly:
+You can create a stub by instantiating the `sham\Stub` class directly:
 
-    $stub = new \sham\Mock();
+    $stub = new \sham\Stub();
 
 However, if the object you are trying to stub must be an instance of a certain
 class, use the static method `sham\Sham::create()`:
@@ -73,7 +73,7 @@ class, use the static method `sham\Sham::create()`:
 
 `$stub` is now an instance of `My\Class` and will pass any `instanceof` or
 typhint checks. What the `create` method does is, it takes the source of the
-`sham\Mock` class as string, augments it to be an instance of `My\Class` and
+`sham\Stub` class as string, augments it to be an instance of `My\Class` and
 `eval()`s that code. It implements all the neccessary methods to adhere to any
 abstract classes in the class hierarchy.
 
@@ -83,7 +83,7 @@ an object which implements that interface.
 
 ## <a name="return" href="#return">Return values</a>
 
-Every call returns a `\sham\Mock` instance by default. You can, however, set a
+Every call returns a `\sham\Stub` instance by default. You can, however, set a
 return value:
 
     $stub->method->returns('foo');
@@ -100,7 +100,7 @@ You can also stub a method to return a certain value given specific parameters.
     $stub->method('foo'); // 'bar'
     
     // fallback to default return value when params don't match
-    $stub->method(); // \sham\Mock
+    $stub->method(); // \sham\Stub
 
 You can call `given()` multiple times. These will be added to a stack where the
 top most calls get priority:
@@ -184,7 +184,7 @@ or using a convenience method `returns()` on the stub itself:
 Stubs can be serialized and unserialized. Sham records both `__sleep` and
 `__wakeup`.
 
-    $stub = new \sham\Mock();
+    $stub = new \sham\Stub();
     $waken = unserialize(serialize($stub));
 
     $waken->calls('__sleep')->once(); // true
@@ -208,7 +208,7 @@ methods don't throw exceptions. Use your test runner for actual asserting.
 
 To check if `foo()` was called on `$stub` you would do this:
 
-    $stub = new \sham\Mock();
+    $stub = new \sham\Stub();
     $stub->foo();
 
     $stub->calls('foo')->once(); // true
@@ -247,7 +247,7 @@ Properties can be set and retrieved, and it works just like you'd expect.
 Under the hood all the calls get recorded. This is useful when you are
 stubbing out an entity or an Active Record object:
 
-    $record = new \sham\Mock();
+    $record = new \sham\Stub();
 
     $record->name = 'Antti';
     $record->save();
@@ -288,7 +288,7 @@ Sham implements the `ArrayAccess` interface and records all of those calls.
 ## <a name="iteration" href="#iteration">Iteration</a>
 
 You can iterate over the data
-You can also iterate over the data set with `\sham\Mock::shamSetData()`. 
+You can also iterate over the data set with `\sham\Stub::shamSetData()`. 
 All of the calls implemented by `Iterator` will be recorded.
 
 # <a name="api" href="#api">API</a>
@@ -304,7 +304,7 @@ Methods:
 * `create(string $spec)` - Build a new stub based on the `$spec` class. Returns
   an object which is an instance of the spec.
 
-**`sham\Mock`**:
+**`sham\Stub`**:
 
 Methods:
 
