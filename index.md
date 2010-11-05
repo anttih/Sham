@@ -62,18 +62,18 @@ a real object and let it record.
 
 # <a name="stubbing" href="#stubbing">Stubbing</a>
 
-You can create a stub by instantiating the `Sham\Mock` class directly:
+You can create a stub by instantiating the `sham\Mock` class directly:
 
-    $stub = new \Sham\Mock();
+    $stub = new \sham\Mock();
 
 However, if the object you are trying to stub must be an instance of a certain
-class, use the static method `Sham::create()`:
+class, use the static method `sham\Sham::create()`:
 
-    $stub = \Sham::create('My\Class');
+    $stub = \sham\Sham::create('My\Class');
 
 `$stub` is now an instance of `My\Class` and will pass any `instanceof` or
 typhint checks. What the `create` method does is, it takes the source of the
-`Sham\Mock` class as string, augments it to be an instance of `My\Class` and
+`sham\Mock` class as string, augments it to be an instance of `My\Class` and
 `eval()`s that code. It implements all the neccessary methods to adhere to any
 abstract classes in the class hierarchy.
 
@@ -83,7 +83,7 @@ an object which implements that interface.
 
 ## <a name="return" href="#return">Return values</a>
 
-Every call returns a `\Sham\Mock` instance by default. You can, however, set a
+Every call returns a `\sham\Mock` instance by default. You can, however, set a
 return value:
 
     $stub->method->returns('foo');
@@ -100,13 +100,13 @@ You can also stub a method to return a certain value given specific parameters.
     $stub->method('foo'); // 'bar'
     
     // fallback to default return value when params don't match
-    $stub->method(); // \Sham\Mock
+    $stub->method(); // \sham\Mock
 
 You can call `given()` multiple times. These will be added to a stack where the
 top most calls get priority:
 
-    $stub->method->given('zero', Sham::any())->returns('first');
-    $stub->method->given(Sham::any(), 0)->returns('second');
+    $stub->method->given('zero', sham\Sham::any())->returns('first');
+    $stub->method->given(sham\Sham::any(), 0)->returns('second');
 
     $stub->method('zero', 3); // 'first'
     $stub->method('one', 0);  // 'second'
@@ -121,11 +121,11 @@ these next.
 To make a call throw an exception on invokation, use the `throws()` method.
 The first parameter tells it which exception to throw. You can give it a name
 of an exception as a string, or an instance of an exception class. If not given
-anything, it will throw a `Sham\Exception`. All of the examples below will
-set `method()` to throw a `Sham\Exception` when invoked:
+anything, it will throw a `sham\Exception`. All of the examples below will
+set `method()` to throw a `sham\Exception` when invoked:
 
-    $stub->method->throws('Sham\Exception');
-    $stub->method->throws(new \Sham\Exception());
+    $stub->method->throws('sham\Exception');
+    $stub->method->throws(new \sham\Exception());
     $stub->method->throws();
 
 ## <a name="sidefx" href="#sidefx">Side effects</a>
@@ -184,7 +184,7 @@ or using a convenience method `returns()` on the stub itself:
 Stubs can be serialized and unserialized. Sham records both `__sleep` and
 `__wakeup`.
 
-    $stub = new \Sham\Mock();
+    $stub = new \sham\Mock();
     $waken = unserialize(serialize($stub));
 
     $waken->calls('__sleep')->once(); // true
@@ -202,13 +202,13 @@ can't serialize those.
 # <a name="filter" href="#filter">Filtering calls (asserting)</a>
 
 To investigate your stub objects you use the `calls()` method. It filters the
-calls by given criteria and returns a call list object (`Sham\CallList`). The
+calls by given criteria and returns a call list object (`sham\CallList`). The
 call list object has some helpful methods you can use when asserting. These
 methods don't throw exceptions. Use your test runner for actual asserting.
 
 To check if `foo()` was called on `$stub` you would do this:
 
-    $stub = new \Sham\Mock();
+    $stub = new \sham\Mock();
     $stub->foo();
 
     $stub->calls('foo')->once(); // true
@@ -220,9 +220,9 @@ To check if `foo()` was called once with 'first' as the only parameter:
 To check if `foo()` was called with anything as the first param and `bar` as
 the second param:
 
-    $stub->calls('foo', Sham::any(), 'bar')->once();
+    $stub->calls('foo', sham\Sham::any(), 'bar')->once();
 
-The special `Sham::any()` call returns a matcher object which matches anything.
+The special `sham\Sham::any()` call returns a matcher object which matches anything.
 This is useful when you are writing a test which only needs to test a certain
 parameter and ignore the others.
 
@@ -247,7 +247,7 @@ Properties can be set and retrieved, and it works just like you'd expect.
 Under the hood all the calls get recorded. This is useful when you are
 stubbing out an entity or an Active Record object:
 
-    $record = new \Sham\Mock();
+    $record = new \sham\Mock();
 
     $record->name = 'Antti';
     $record->save();
@@ -288,7 +288,7 @@ Sham implements the `ArrayAccess` interface and records all of those calls.
 ## <a name="iteration" href="#iteration">Iteration</a>
 
 You can iterate over the data
-You can also iterate over the data set with `\Sham\Mock::shamSetData()`. 
+You can also iterate over the data set with `\sham\Mock::shamSetData()`. 
 All of the calls implemented by `Iterator` will be recorded.
 
 # <a name="api" href="#api">API</a>
@@ -299,28 +299,28 @@ Methods:
 
 * `any()` - Returns a matcher which matches any value. Used to indicate a
   parameter that we don't want to test right now. Shorthand for `new
-  \Sham\Any()`.
+  \sham\Any()`.
 
 * `create(string $spec)` - Build a new stub based on the `$spec` class. Returns
   an object which is an instance of the spec.
 
-**`Sham\Mock`**:
+**`sham\Mock`**:
 
 Methods:
 
 * `shamSetData()` - set the data for `__get`/`__set` and `ArrayAccess`.
 
-* `calls()` - a proxy for `Sham\CallList::calls()`.
+* `calls()` - a proxy for `sham\CallList::calls()`.
 
 
-**`Sham\CallList`**:
+**`sham\CallList`**:
 
 Methods:
 
 * `calls([$name [, $... ]])` - Filters calls by name and parameters. Returns a
 new call list with the matched calls.
 
-* `first()` - Returns the first `Sham\Call` object in the list.
+* `first()` - Returns the first `sham\Call` object in the list.
 
 * `times($count)` - Checks if there are exactly `$count` amount of calls in the
   list. Returns a boolean.
@@ -331,7 +331,7 @@ new call list with the matched calls.
   `true` if there are no calls.
 
 
-**`Sham\Call`**:
+**`sham\Call`**:
 
 Properties:
 
