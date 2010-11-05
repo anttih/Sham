@@ -155,18 +155,18 @@ implementation:
 
     $stub->overload();
 
-    $stub->calls('overload')->once(); // true
-    $stub->calls('__call')->never();  // true, no __call call is ever recorded
+    $stub->got('overload')->once(); // true
+    $stub->got('__call')->never();  // true, no __call call is ever recorded
 
 ## <a name="invoke" href="#invoke">__invoke</a>
 
 A Sham instance can be invoked. A call with name `__invoke` is recorded:
 
     $stub();
-    $stub->calls('__invoke')->once(); // true
+    $stub->got('__invoke')->once(); // true
 
     $stub('foo');
-    $stub->calls('__invoke', 'foo')->once(); // true
+    $stub->got('__invoke', 'foo')->once(); // true
 
 Return values for `__invoke` calls can be set just like for method calls.
 Either:
@@ -187,8 +187,8 @@ Stubs can be serialized and unserialized. Sham records both `__sleep` and
     $stub = new \sham\Stub();
     $waken = unserialize(serialize($stub));
 
-    $waken->calls('__sleep')->once(); // true
-    $waken->calls('__wakeup')->once(); // true
+    $waken->got('__sleep')->once(); // true
+    $waken->got('__wakeup')->once(); // true
 
 Stubbed method return values are preserved, but side effects and exceptions are
 not. This is because they are implemented with anonymous functions and PHP
@@ -201,7 +201,7 @@ can't serialize those.
 
 # <a name="filter" href="#filter">Filtering calls (asserting)</a>
 
-To investigate your stub objects you use the `calls()` method. It filters the
+To investigate your stub objects you use the `got()` method. It filters the
 calls by given criteria and returns a call list object (`sham\CallList`). The
 call list object has some helpful methods you can use when asserting. These
 methods don't throw exceptions. Use your test runner for actual asserting.
@@ -211,16 +211,16 @@ To check if `foo()` was called on `$stub` you would do this:
     $stub = new \sham\Stub();
     $stub->foo();
 
-    $stub->calls('foo')->once(); // true
+    $stub->got('foo')->once(); // true
 
 To check if `foo()` was called once with 'first' as the only parameter:
 
-    $stub->calls('foo', 'first')->once();
+    $stub->got('foo', 'first')->once();
 
 To check if `foo()` was called with anything as the first param and `bar` as
 the second param:
 
-    $stub->calls('foo', sham\Sham::any(), 'bar')->once();
+    $stub->got('foo', sham\Sham::any(), 'bar')->once();
 
 The special `sham\Sham::any()` call returns a matcher object which matches anything.
 This is useful when you are writing a test which only needs to test a certain
@@ -252,25 +252,25 @@ stubbing out an entity or an Active Record object:
     $record->name = 'Antti';
     $record->save();
 
-    $record->calls('__set', 'name', 'Antti')->once(); // true
-    $record->calls('save')->once();                   // true
+    $record->got('__set', 'name', 'Antti')->once(); // true
+    $record->got('save')->once();                   // true
 
     // ditto.
     $record->name // 'Antti'
-    $stub->calls('__get', 'name')->once(); // true
+    $stub->got('__get', 'name')->once(); // true
 
 If you call `isset()` on a non-existent property, and `__isset()` call will be
 recorded.
 
     isset($stub->invalid); // false
-    $stub->calls('__isset', 'invalid')->once(); // true
+    $stub->got('__isset', 'invalid')->once(); // true
 
 If you unset a property, the property will be unset and a `__unset` call will
 be recorded.
 
     $stub->prop = 'value';
     unset($stub->prop);
-    $stub->calls('__unset', 'prop')->once(); // true
+    $stub->got('__unset', 'prop')->once(); // true
 
 ## <a name="arrayaccess" href="#arrayaccess">ArrayAccess</a>
 
@@ -278,11 +278,11 @@ Sham implements the `ArrayAccess` interface and records all of those calls.
 
     // retrieve with array access
     $stub['key'] // 'value'
-    $stub->calls('offsetGet', 'key')->once(); // true
+    $stub->got('offsetGet', 'key')->once(); // true
 
     // set offset
     $stub['other'] = 'value';
-    $stub->calls('offsetSet', 'other', 'value')->once(); // true
+    $stub->got('offsetSet', 'other', 'value')->once(); // true
 
 
 ## <a name="iteration" href="#iteration">Iteration</a>
@@ -310,14 +310,14 @@ Methods:
 
 * `shamSetData()` - set the data for `__get`/`__set` and `ArrayAccess`.
 
-* `calls()` - a proxy for `sham\CallList::calls()`.
+* `got()` - a proxy for `sham\CallList::filter()`.
 
 
 **`sham\CallList`**:
 
 Methods:
 
-* `calls([$name [, $... ]])` - Filters calls by name and parameters. Returns a
+* `filter([$name [, $... ]])` - Filters calls by name and parameters. Returns a
 new call list with the matched calls.
 
 * `first()` - Returns the first `sham\Call` object in the list.
