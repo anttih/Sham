@@ -8,7 +8,7 @@ require_once 'sham/Method.php';
 /**
  * Test Stub/Spy object that records everything you do on it
  *
- * This class is also a template for mocking existing classes.
+ * This class is also a template for stubing existing classes.
  * 
  * @package Sham
  */

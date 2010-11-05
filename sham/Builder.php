@@ -5,9 +5,9 @@ use \ReflectionClass;
 
 class Builder
 {
-    protected static $_next_mock_id = 1001;
+    protected static $_next_stub_id = 1001;
 
-    protected $_mock_class_name = 'Stub_';
+    protected $_stub_class_name = 'Stub_';
 
     private $_class;
     
@@ -15,14 +15,14 @@ class Builder
 
     public function __construct()
     {
-        $this->_mock_class_name = $this->_generateStubClassName();
+        $this->_stub_class_name = $this->_generateStubClassName();
     }
 
     public function build($class)
     {
         $code = $this->_buildStubCode($class);
         eval($code);
-        $class = $this->_mock_class_name;
+        $class = $this->_stub_class_name;
         return new $class();
     }
 
@@ -53,14 +53,14 @@ class Builder
         if ($this->_class->isInterface()) {
             $def = str_replace(
                 'class Stub',
-                "class {$this->_mock_class_name}",
+                "class {$this->_stub_class_name}",
                 $def
             );
             $def .= ", $name";
         } else {
             $def = str_replace(
                 'class Stub',
-                "class {$this->_mock_class_name} extends $name",
+                "class {$this->_stub_class_name} extends $name",
                 $def
             );
         }
@@ -224,6 +224,6 @@ class Builder
 
     private function _generateStubClassName()
     {
-        return $this->_mock_class_name . self::$_next_mock_id++;
+        return $this->_stub_class_name . self::$_next_stub_id++;
     }
 }

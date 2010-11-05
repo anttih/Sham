@@ -6,7 +6,7 @@ use sham\Stub;
 class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
 {
     public $iteration_count;
-    public $mock;
+    public $stub;
     public $next = array();
     public $current = array();
     public $valid = array();
@@ -20,11 +20,11 @@ class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
             2     => 'value 3'
         );
 
-        $mock = new Stub();
-        $mock->shamSetData($this->data);
+        $stub = new Stub();
+        $stub->shamSetData($this->data);
 
         $i = 0;
-        foreach ($mock as $key => $value) {
+        foreach ($stub as $key => $value) {
             $this->current[] = current($this->data);
             $this->valid[]   = current($this->data) !== false;
             $this->key[]     = key($this->data);
@@ -36,7 +36,7 @@ class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
         $this->valid[] = current($this->data) !== false;
         
         $this->iteration_count = $i;
-        $this->mock = $mock;
+        $this->stub = $stub;
     }
 
     public function testShouldIterateAllValues()
@@ -51,7 +51,7 @@ class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldRecordKey()
     {
-        $this->assertTrue($this->mock->calls('key')->times(3));
+        $this->assertTrue($this->stub->calls('key')->times(3));
     }
 
     public function testShouldRecordKeyReturnValue()
@@ -61,7 +61,7 @@ class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldRecordCurrent()
     {
-        $this->assertTrue($this->mock->calls('current')->times(3));
+        $this->assertTrue($this->stub->calls('current')->times(3));
     }
 
     public function testShouldRecordCurrentReturnValue()
@@ -71,7 +71,7 @@ class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldRecordNext()
     {
-        $this->assertTrue($this->mock->calls('next')->times(3));
+        $this->assertTrue($this->stub->calls('next')->times(3));
     }
 
     public function testShouldRecordNextReturnValue()
@@ -81,7 +81,7 @@ class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldRecordValid()
     {
-        $this->assertTrue($this->mock->calls('valid')->times(4));
+        $this->assertTrue($this->stub->calls('valid')->times(4));
     }
 
     public function testShouldRecordValidReturnValue()
@@ -91,13 +91,13 @@ class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldRecordRewind()
     {
-        $this->assertTrue($this->mock->calls('rewind')->once());
+        $this->assertTrue($this->stub->calls('rewind')->once());
     }
 
     public function testShouldResetWhenInterating()
     {
         $i = 0;
-        foreach ($this->mock as $key => $value) {
+        foreach ($this->stub as $key => $value) {
             $i++;
         }
         $this->assertEquals(count($this->data), $i++);
@@ -105,7 +105,7 @@ class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
 
     private function _assertReturnValues($name)
     {
-        $calls = $this->mock->calls($name)->calls;
+        $calls = $this->stub->calls($name)->calls;
         foreach ($this->$name as $key => $value) {
             $this->assertEquals($value, $calls[$key]->return_value);
         }

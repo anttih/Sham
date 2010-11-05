@@ -9,186 +9,186 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
 {
     public function setup()
     {
-        $this->mock = new Stub();
+        $this->stub = new Stub();
     }
 
     public function testCallingMethodsShouldReturnNewStubByDefault()
     {
-        $one = $this->mock->method();
+        $one = $this->stub->method();
         $this->assertTrue($one instanceof Stub);
     }
     
     public function testCallingMethodsAfterGetShouldReturnNewStubByDefault()
     {
-        $this->mock->method;
-        $one = $this->mock->method();
+        $this->stub->method;
+        $one = $this->stub->method();
         $this->assertTrue($one instanceof Stub);
     }
 
     public function testCallsShouldReturnSameValue()
     {
         $this->assertSame(
-            $this->mock->method(),
-            $this->mock->method()
+            $this->stub->method(),
+            $this->stub->method()
         );
     }
 
     public function testShouldKeepReturningSameValueWhenReturnValueSet()
     {
-        $this->mock->method->returns('return value');
+        $this->stub->method->returns('return value');
         $this->assertSame(
-            $this->mock->method(),
-            $this->mock->method()
+            $this->stub->method(),
+            $this->stub->method()
         );
     }
 
     public function testShouldReturnDefaultValueWhenSetSpecificReturnValueForSomeParams()
     {
-        $this->mock->method->given('foo')->returns('bar');
-        $this->assertTrue($this->mock->method() instanceof Stub);
+        $this->stub->method->given('foo')->returns('bar');
+        $this->assertTrue($this->stub->method() instanceof Stub);
     }
     
     public function testCallingMethodsShouldSendParameters()
     {
-        $this->mock->method->given(1)->returns(2);
-        $this->assertEquals(2, $this->mock->method(1));
+        $this->stub->method->given(1)->returns(2);
+        $this->assertEquals(2, $this->stub->method(1));
     }
     
     public function testGettingAPropertyWithoutSettingShouldReturnMethodObject()
     {
-        $this->assertTrue($this->mock->property instanceof Method);
+        $this->assertTrue($this->stub->property instanceof Method);
     }
 
     public function testGettingAPropertyWithoutSettingShouldNotRecord()
     {
-        $value = $this->mock->key;
-        $this->assertFalse($this->mock->calls('__get', 'key')->once());
+        $value = $this->stub->key;
+        $this->assertFalse($this->stub->calls('__get', 'key')->once());
     }
 
     public function testShouldRecordPropertyGetWhenSet()
     {
-        $this->mock->key = 'value';
-        $value = $this->mock->key;
+        $this->stub->key = 'value';
+        $value = $this->stub->key;
 
-        $this->assertTrue($this->mock->calls('__get', 'key')->once());
+        $this->assertTrue($this->stub->calls('__get', 'key')->once());
 
-        $call = $this->mock->calls('__get', 'key')->calls[0];
+        $call = $this->stub->calls('__get', 'key')->calls[0];
         $this->assertEquals('value', $call->return_value);
     }
 
     public function testShouldReturnSetPropertyValue()
     {
-        $this->mock->key = "key value";
-        $this->assertEquals("key value", $this->mock->key);
+        $this->stub->key = "key value";
+        $this->assertEquals("key value", $this->stub->key);
     }
 
     public function testShouldGetValueSetWithArrayAccess()
     {
-        $this->mock['key'] = 'value';
-        $this->assertEquals('value', $this->mock->key);
+        $this->stub['key'] = 'value';
+        $this->assertEquals('value', $this->stub->key);
     }
 
     public function testShouldGetValueSetWithOverloading()
     {
-        $this->mock->key = 'value';
-        $this->assertEquals('value', $this->mock['key']);
+        $this->stub->key = 'value';
+        $this->assertEquals('value', $this->stub['key']);
     }
 
     public function testShouldRecordPropertySet()
     {
-        $this->mock->key = 'value';
-        $this->assertTrue($this->mock->calls('__set', 'value')->once());
+        $this->stub->key = 'value';
+        $this->assertTrue($this->stub->calls('__set', 'value')->once());
     }
 
     public function testShouldReturnFromChildStub()
     {
-        $this->mock->method->returns("return value");
-        $this->assertEquals("return value", $this->mock->method());
+        $this->stub->method->returns("return value");
+        $this->assertEquals("return value", $this->stub->method());
     }
 
     public function testShouldRecordInvoke()
     {
-        $mock = new Stub();
-        $mock();
-        $this->assertTrue($mock->calls('__invoke')->once());
+        $stub = new Stub();
+        $stub();
+        $this->assertTrue($stub->calls('__invoke')->once());
     }
 
     public function testShouldRecordInvokeParams()
     {
-        $mock = new Stub();
-        $mock('param 1');
-        $this->assertTrue($mock->calls('__invoke', 'param 1')->once());
+        $stub = new Stub();
+        $stub('param 1');
+        $this->assertTrue($stub->calls('__invoke', 'param 1')->once());
     }
 
     public function testInvokeShouldReturnNewStubWhenNoReturnValue()
     {
-        $mock = new Stub();
-        $this->assertTrue($mock() instanceof Stub);
-        $this->assertTrue($mock() !== $mock);
+        $stub = new Stub();
+        $this->assertTrue($stub() instanceof Stub);
+        $this->assertTrue($stub() !== $stub);
     }
 
     public function testShouldUseReturnValueWhenInvoked()
     {
-        $mock = new Stub();
-        $mock->returns('return value');
-        $this->assertSame('return value', $mock());
+        $stub = new Stub();
+        $stub->returns('return value');
+        $this->assertSame('return value', $stub());
     }
     
     public function testShouldReturnSameMethodOnEachRequest()
     {
-        $mock = new Stub();
-        $one = $mock->foo;
-        $two = $mock->foo;
+        $stub = new Stub();
+        $one = $stub->foo;
+        $two = $stub->foo;
         $this->assertSame($one, $two);
     }
 
     public function testShouldRecordCalls()
     {
-        $this->mock->method0();
-        $this->mock->method1();
-        $this->assertEquals(2, count($this->mock->calls()));
+        $this->stub->method0();
+        $this->stub->method1();
+        $this->assertEquals(2, count($this->stub->calls()));
     }
 
     public function testShouldProxyCallsToCallList()
     {
-        $this->assertTrue($this->mock->calls() instanceof CallList);
+        $this->assertTrue($this->stub->calls() instanceof CallList);
     }
 
     public function testMethodCallWithReturnValueShouldNotChangeParamsAfterSecondCall()
     {
-        $this->mock->method->returns('return value');
-        $this->mock->method('first call');
-        $this->mock->method('second call');
-        $this->assertTrue($this->mock->calls('method', 'first call')->once());
+        $this->stub->method->returns('return value');
+        $this->stub->method('first call');
+        $this->stub->method('second call');
+        $this->assertTrue($this->stub->calls('method', 'first call')->once());
     }
 
     public function testOffsetSetShouldSetValue()
     {
-        $this->mock[0] = 1;
-        $data = $this->mock->shamGetData();
+        $this->stub[0] = 1;
+        $data = $this->stub->shamGetData();
         $this->assertEquals(1, $data[0]);
     }
 
     public function testShouldRecordOffsetSet()
     {
-        $this->mock[0] = 1;
-        $this->assertTrue($this->mock->calls('offsetSet', 0, 1)->once());
+        $this->stub[0] = 1;
+        $this->assertTrue($this->stub->calls('offsetSet', 0, 1)->once());
     }
 
     public function testOffsetGetShouldGetValue()
     {
-        $this->mock->shamSetData(array(1));
-        $this->assertEquals(1, $this->mock[0]);
+        $this->stub->shamSetData(array(1));
+        $this->assertEquals(1, $this->stub[0]);
     }
 
     public function testShouldRecordOffsetGet()
     {
-        $this->mock->shamSetData(array(1));
+        $this->stub->shamSetData(array(1));
 
         // action
-        $this->mock[0];
+        $this->stub[0];
 
-        $list = $this->mock->calls('offsetGet', 0);
+        $list = $this->stub->calls('offsetGet', 0);
         $this->assertTrue($list->once());
 
         // records return value
@@ -197,77 +197,77 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
 
     public function testShouldRecordOffsetExists()
     {
-        $this->mock->shamSetData(array(1, 2));
-        isset($this->mock[0]);
-        $this->assertTrue($this->mock->calls('offsetExists', 0)->once());
+        $this->stub->shamSetData(array(1, 2));
+        isset($this->stub[0]);
+        $this->assertTrue($this->stub->calls('offsetExists', 0)->once());
     }
 
     public function testIssetShouldReturnValueAsCallReturnValue()
     {
-        $this->mock->shamSetData(array(1, 2));
-        $isset = isset($this->mock[0]);
+        $this->stub->shamSetData(array(1, 2));
+        $isset = isset($this->stub[0]);
         $this->assertTrue($isset);
-        $this->assertTrue($this->mock->calls('offsetExists', 0)->calls[0]->return_value);
+        $this->assertTrue($this->stub->calls('offsetExists', 0)->calls[0]->return_value);
     }
 
     public function testShouldRecordUnset()
     {
-        $this->mock->shamSetData(array(1, 2));
-        unset($this->mock[0]);
-        $this->assertTrue($this->mock->calls('offsetUnset', 0)->once());
+        $this->stub->shamSetData(array(1, 2));
+        unset($this->stub[0]);
+        $this->assertTrue($this->stub->calls('offsetUnset', 0)->once());
     }
 
     public function testToStringShouldReturnClassNameByDefault()
     {
-        $mock = new Stub();
-        $this->assertEquals(get_class($mock), (string) $mock);
+        $stub = new Stub();
+        $this->assertEquals(get_class($stub), (string) $stub);
     }
 
     public function testCanSetToStringReturnValue()
     {
-        $mock = new Stub();
-        $mock->__toString->returns('to string');
-        $this->assertEquals('to string', (string) $mock);
+        $stub = new Stub();
+        $stub->__toString->returns('to string');
+        $this->assertEquals('to string', (string) $stub);
     }
 
     public function test__issetShouldReturnTrueForSetProperty()
     {
-        $this->mock->prop = false;
-        $this->assertTrue(isset($this->mock->prop));
+        $this->stub->prop = false;
+        $this->assertTrue(isset($this->stub->prop));
     }
 
     public function test__issetShouldRecordCallWhenSetProperty()
     {
-        $this->mock->prop = false;
-        isset($this->mock->prop);
-        $this->assertTrue($this->mock->calls('__isset', 'prop')->once());
+        $this->stub->prop = false;
+        isset($this->stub->prop);
+        $this->assertTrue($this->stub->calls('__isset', 'prop')->once());
     }
 
     public function test__issetShouldRecordReturnValue()
     {
-        $this->mock->prop = false;
-        isset($this->mock->prop);
-        $ret = $this->mock->calls('__isset', 'prop')->calls[0]->return_value;
+        $this->stub->prop = false;
+        isset($this->stub->prop);
+        $ret = $this->stub->calls('__isset', 'prop')->calls[0]->return_value;
         $this->assertTrue($ret);
     }
 
     public function test__issetShouldRecordWhenPropertyNotSet()
     {
-        isset($this->mock->prop);
-        $this->assertTrue($this->mock->calls('__isset', 'prop')->once());
+        isset($this->stub->prop);
+        $this->assertTrue($this->stub->calls('__isset', 'prop')->once());
     }
     
     public function test__unsetShouldRecord()
     {
-        unset($this->mock->prop);
-        $this->assertTrue($this->mock->calls('__unset', 'prop')->once());
+        unset($this->stub->prop);
+        $this->assertTrue($this->stub->calls('__unset', 'prop')->once());
     }
 
     public function test__unsetShouldUnsetProp()
     {
-        $this->mock->prop = 'value';
-        unset($this->mock->prop);
-        $this->assertFalse(isset($this->mock->prop));
+        $this->stub->prop = 'value';
+        unset($this->stub->prop);
+        $this->assertFalse(isset($this->stub->prop));
     }
 }
 
