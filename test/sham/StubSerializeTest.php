@@ -1,13 +1,13 @@
 <?php
-require_once 'sham/Mock.php';
+require_once 'sham/Stub.php';
 
-use sham\Mock;
+use sham\Stub;
 
-class Sham_MockSerializeTest extends PHPUnit_Framework_TestCase
+class Sham_StubSerializeTest extends PHPUnit_Framework_TestCase
 {
     public function setup()
     {
-        $stub = new Mock();
+        $stub = new Stub();
         $stub->shamSetData(array('prop' => 'value'));
         $stub->method->given('param')->returns('return value');
 

@@ -7,7 +7,7 @@ class Builder
 {
     protected static $_next_mock_id = 1001;
 
-    protected $_mock_class_name = 'Mock_';
+    protected $_mock_class_name = 'Stub_';
 
     private $_class;
     
@@ -15,20 +15,20 @@ class Builder
 
     public function __construct()
     {
-        $this->_mock_class_name = $this->_generateMockClassName();
+        $this->_mock_class_name = $this->_generateStubClassName();
     }
 
     public function build($class)
     {
-        $code = $this->_buildMockCode($class);
+        $code = $this->_buildStubCode($class);
         eval($code);
         $class = $this->_mock_class_name;
         return new $class();
     }
 
-    private function _buildMockCode($class)
+    private function _buildStubCode($class)
     {
-        $lines = file(__dir__ . DIRECTORY_SEPARATOR . 'Mock.php');
+        $lines = file(__dir__ . DIRECTORY_SEPARATOR . 'Stub.php');
         $this->_class = new ReflectionClass($class);
         $code = $this->_buildClassDefinition($lines);
         if ($this->_iteratorImplementationShouldBeRemoved()) {
@@ -41,7 +41,7 @@ class Builder
 
     private function _buildClassDefinition($lines)
     {
-        $reflection = new ReflectionClass('sham\Mock');
+        $reflection = new ReflectionClass('sham\Stub');
         $lines = array_slice(
             $lines,
             $reflection->getStartLine() - 1,
@@ -52,14 +52,14 @@ class Builder
         $def = $lines[0];
         if ($this->_class->isInterface()) {
             $def = str_replace(
-                'class Mock',
+                'class Stub',
                 "class {$this->_mock_class_name}",
                 $def
             );
             $def .= ", $name";
         } else {
             $def = str_replace(
-                'class Mock',
+                'class Stub',
                 "class {$this->_mock_class_name} extends $name",
                 $def
             );
@@ -213,7 +213,7 @@ class Builder
     {
         static $methods = array();
         if (empty($methods)) {
-            $class = new ReflectionClass('sham\Mock');
+            $class = new ReflectionClass('sham\Stub');
             $methods = array();
             foreach ($class->getMethods() as $method) {
                 $methods[] = $method->getName();
@@ -222,7 +222,7 @@ class Builder
         return in_array($name, array_diff($methods, $this->_removed_declared_methods));
     }
 
-    private function _generateMockClassName()
+    private function _generateStubClassName()
     {
         return $this->_mock_class_name . self::$_next_mock_id++;
     }

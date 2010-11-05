@@ -1,11 +1,11 @@
 <?php
-require_once 'sham/Mock.php';
+require_once 'sham/Stub.php';
 require_once 'sham/Builder.php';
 require_once 'sham/matcher/Any.php';
 
 use sham\Builder,
     sham\Matcher\Any,
-    sham\Mock;
+    sham\Stub;
 
 /**
  * Sham – test stub and spy for PHP 5.3
@@ -60,6 +60,6 @@ class Sham
             return $builder->build($class);
         }
 
-        return new Mock();
+        return new Stub();
     }
 }

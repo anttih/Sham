@@ -1,13 +1,13 @@
 <?php
 require_once 'sham/Sham.php';
 
-use sham\Mock;
+use sham\Stub;
 
 class ShamTest extends PHPUnit_Framework_TestCase
 {
-    public function testCreateShouldReturnAMock()
+    public function testCreateShouldReturnAStub()
     {
-        $this->assertTrue(Sham::create() instanceof Mock);
+        $this->assertTrue(Sham::create() instanceof Stub);
     }
 }
 

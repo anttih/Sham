@@ -7,7 +7,7 @@ use sham\Builder,
 
 class BuilderTest extends PHPUnit_Framework_TestCase
 {
-    public function testMockingAClassShouldReturnInstanceOfSameClass()
+    public function testStubingAClassShouldReturnInstanceOfSameClass()
     {
         $builder = new Builder();
         $this->assertTrue($builder->build('TestBuilder') instanceof TestBuilder);
@@ -121,7 +121,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
     public function testDontAdd__call()
     {
         $builder = new Builder();
-        $obj = $builder->build('ClassWithMethodsDeclaredInMock');
+        $obj = $builder->build('ClassWithMethodsDeclaredInStub');
     }
     
     public function testShouldPreserveArrayTypehintInInheritedMagicMethods()
@@ -204,7 +204,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($class->implementsInterface('Iterator'));
         $this->assertTrue($class->hasMethod('next'));
         $this->assertFalse($class->hasMethod('current'));
-        $this->assertTrue(strpos($class->getMethod('next')->getDeclaringClass()->getName(), 'Mock_') === 0);
+        $this->assertTrue(strpos($class->getMethod('next')->getDeclaringClass()->getName(), 'Stub_') === 0);
     }
     
     public function testResultShouldImplementIteratorIfSuperclassImplementsIterator()
@@ -313,7 +313,7 @@ class ClassWithArrayTypeHintOnOptionalParam {
     public function method(array $param1 = array(1, 2, 3)) {}
 }
 
-class ClassWithMethodsDeclaredInMock {
+class ClassWithMethodsDeclaredInStub {
     public function __construct($param) {}
     public function __destruct() {}
     public function __isset($name) {}

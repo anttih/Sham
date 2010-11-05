@@ -1,9 +1,9 @@
 <?php
-require_once 'sham/Mock.php';
+require_once 'sham/Stub.php';
 
-use sham\Mock;
+use sham\Stub;
 
-class Sham_MockIteratorTest extends \PHPUnit_Framework_TestCase
+class Sham_StubIteratorTest extends \PHPUnit_Framework_TestCase
 {
     public $iteration_count;
     public $mock;
@@ -20,7 +20,7 @@ class Sham_MockIteratorTest extends \PHPUnit_Framework_TestCase
             2     => 'value 3'
         );
 
-        $mock = new Mock();
+        $mock = new Stub();
         $mock->shamSetData($this->data);
 
         $i = 0;

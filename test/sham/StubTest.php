@@ -1,28 +1,28 @@
 <?php
-require_once 'sham/Mock.php';
+require_once 'sham/Stub.php';
 
 use sham\CallList,
-    sham\Mock,
+    sham\Stub,
     sham\Method;
 
-class Sham_MockTest extends PHPUnit_Framework_TestCase
+class Sham_StubTest extends PHPUnit_Framework_TestCase
 {
     public function setup()
     {
-        $this->mock = new Mock();
+        $this->mock = new Stub();
     }
 
     public function testCallingMethodsShouldReturnNewStubByDefault()
     {
         $one = $this->mock->method();
-        $this->assertTrue($one instanceof Mock);
+        $this->assertTrue($one instanceof Stub);
     }
     
     public function testCallingMethodsAfterGetShouldReturnNewStubByDefault()
     {
         $this->mock->method;
         $one = $this->mock->method();
-        $this->assertTrue($one instanceof Mock);
+        $this->assertTrue($one instanceof Stub);
     }
 
     public function testCallsShouldReturnSameValue()
@@ -45,7 +45,7 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
     public function testShouldReturnDefaultValueWhenSetSpecificReturnValueForSomeParams()
     {
         $this->mock->method->given('foo')->returns('bar');
-        $this->assertTrue($this->mock->method() instanceof Mock);
+        $this->assertTrue($this->mock->method() instanceof Stub);
     }
     
     public function testCallingMethodsShouldSendParameters()
@@ -100,7 +100,7 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->mock->calls('__set', 'value')->once());
     }
 
-    public function testShouldReturnFromChildMock()
+    public function testShouldReturnFromChildStub()
     {
         $this->mock->method->returns("return value");
         $this->assertEquals("return value", $this->mock->method());
@@ -108,35 +108,35 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
 
     public function testShouldRecordInvoke()
     {
-        $mock = new Mock();
+        $mock = new Stub();
         $mock();
         $this->assertTrue($mock->calls('__invoke')->once());
     }
 
     public function testShouldRecordInvokeParams()
     {
-        $mock = new Mock();
+        $mock = new Stub();
         $mock('param 1');
         $this->assertTrue($mock->calls('__invoke', 'param 1')->once());
     }
 
-    public function testInvokeShouldReturnNewMockWhenNoReturnValue()
+    public function testInvokeShouldReturnNewStubWhenNoReturnValue()
     {
-        $mock = new Mock();
-        $this->assertTrue($mock() instanceof Mock);
+        $mock = new Stub();
+        $this->assertTrue($mock() instanceof Stub);
         $this->assertTrue($mock() !== $mock);
     }
 
     public function testShouldUseReturnValueWhenInvoked()
     {
-        $mock = new Mock();
+        $mock = new Stub();
         $mock->returns('return value');
         $this->assertSame('return value', $mock());
     }
     
     public function testShouldReturnSameMethodOnEachRequest()
     {
-        $mock = new Mock();
+        $mock = new Stub();
         $one = $mock->foo;
         $two = $mock->foo;
         $this->assertSame($one, $two);
@@ -219,13 +219,13 @@ class Sham_MockTest extends PHPUnit_Framework_TestCase
 
     public function testToStringShouldReturnClassNameByDefault()
     {
-        $mock = new Mock();
+        $mock = new Stub();
         $this->assertEquals(get_class($mock), (string) $mock);
     }
 
     public function testCanSetToStringReturnValue()
     {
-        $mock = new Mock();
+        $mock = new Stub();
         $mock->__toString->returns('to string');
         $this->assertEquals('to string', (string) $mock);
     }

@@ -12,7 +12,7 @@ require_once 'sham/Method.php';
  * 
  * @package Sham
  */
-class Mock implements \ArrayAccess, \Iterator
+class Stub implements \ArrayAccess, \Iterator
 {
     /**
      * Calls that have been recorded
@@ -84,7 +84,7 @@ class Mock implements \ArrayAccess, \Iterator
     {
         if (! isset($this->_method_stubs[$name])) {
             $stub = new \sham\Method($name);
-            $stub->returns(new \sham\Mock());
+            $stub->returns(new \sham\Stub());
             $this->_method_stubs[$name] = $stub;
         }
         return $this->_method_stubs[$name];
