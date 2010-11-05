@@ -1,9 +1,9 @@
 <?php
-namespace Sham;
+namespace sham;
 
-require_once 'Sham/CallList.php';
-require_once 'Sham/Call.php';
-require_once 'Sham/Method.php';
+require_once 'sham/CallList.php';
+require_once 'sham/Call.php';
+require_once 'sham/Method.php';
 
 /**
  * Test Stub/Spy object that records everything you do on it
@@ -17,7 +17,7 @@ class Mock implements \ArrayAccess, \Iterator
     /**
      * Calls that have been recorded
      * 
-     * @param Sham\CallList
+     * @param sham\CallList
      */
     private $_calls;
     
@@ -42,10 +42,10 @@ class Mock implements \ArrayAccess, \Iterator
 
     public function __construct()
     {
-        $this->_calls = new \Sham\CallList();
+        $this->_calls = new \sham\CallList();
         
         $str = get_class($this);
-        $this->_method_stubs['__toString'] = new \Sham\Method('__toString');
+        $this->_method_stubs['__toString'] = new \sham\Method('__toString');
         $this->_method_stubs['__toString']->returns($str);
     }
 
@@ -56,7 +56,7 @@ class Mock implements \ArrayAccess, \Iterator
         $stub = $this->_getMethod($method);
         $ret = call_user_func_array($stub, $params);
         
-        $this->_calls->add(new \Sham\Call($method, $params, $ret));
+        $this->_calls->add(new \sham\Call($method, $params, $ret));
         
         return $ret;
     }
@@ -83,8 +83,8 @@ class Mock implements \ArrayAccess, \Iterator
     private function _getMethod($name)
     {
         if (! isset($this->_method_stubs[$name])) {
-            $stub = new \Sham\Method($name);
-            $stub->returns(new \Sham\Mock());
+            $stub = new \sham\Method($name);
+            $stub->returns(new \sham\Mock());
             $this->_method_stubs[$name] = $stub;
         }
         return $this->_method_stubs[$name];

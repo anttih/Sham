@@ -1,5 +1,5 @@
 <?php
-namespace Sham;
+namespace sham;
 
 use \ReflectionClass;
 
@@ -41,7 +41,7 @@ class Builder
 
     private function _buildClassDefinition($lines)
     {
-        $reflection = new ReflectionClass('Sham\Mock');
+        $reflection = new ReflectionClass('sham\Mock');
         $lines = array_slice(
             $lines,
             $reflection->getStartLine() - 1,
@@ -213,7 +213,7 @@ class Builder
     {
         static $methods = array();
         if (empty($methods)) {
-            $class = new ReflectionClass('Sham\Mock');
+            $class = new ReflectionClass('sham\Mock');
             $methods = array();
             foreach ($class->getMethods() as $method) {
                 $methods[] = $method->getName();

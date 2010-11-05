@@ -1,9 +1,9 @@
 <?php
-namespace Sham\Matcher;
+namespace sham\Matcher;
 
-require_once 'Sham/Matcher.php';
+require_once 'sham/Matcher.php';
 
-use Sham\Matcher;
+use sham\Matcher;
 
 class ArrayMatcher implements Matcher
 {

@@ -1,10 +1,10 @@
 <?php
-namespace Sham;
+namespace sham;
 
-require_once 'Sham/Matcher/ArrayMatcher.php';
-require_once 'Sham/Exception.php';
+require_once 'sham/Matcher/ArrayMatcher.php';
+require_once 'sham/Exception.php';
 
-use Sham\Matcher\ArrayMatcher;
+use sham\Matcher\ArrayMatcher;
 
 class Method
 {
@@ -42,7 +42,7 @@ class Method
         array_unshift($this->_actions, array($matcher, $return_value, $callback));
     }
 
-    public function throws($exception = 'Sham\Exception')
+    public function throws($exception = 'sham\Exception')
     {
         $this->does(function() use ($exception) {
             if (is_string($exception)) {
@@ -78,6 +78,6 @@ class Method
             }
         }
         
-        throw new \Sham\Exception("Nothing stubbed for method '{$this->name}'.");
+        throw new \sham\Exception("Nothing stubbed for method '{$this->name}'.");
     }
 }

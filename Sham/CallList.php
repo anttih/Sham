@@ -1,12 +1,12 @@
 <?php
-namespace Sham;
+namespace sham;
 
-require_once 'Sham/Matcher/Any.php';
-require_once 'Sham/Matcher/ArrayMatcher.php';
+require_once 'sham/Matcher/Any.php';
+require_once 'sham/Matcher/ArrayMatcher.php';
 
-use Sham\Call,
-    Sham\Matcher\ArrayMatcher,
-    Sham\Matcher\Any;
+use sham\Call,
+    sham\Matcher\ArrayMatcher,
+    sham\Matcher\Any;
 
 class CallList implements \Countable
 {

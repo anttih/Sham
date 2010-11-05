@@ -1,7 +1,7 @@
 <?php
-namespace Sham;
+namespace sham;
 
-require_once 'Sham/Exception.php';
+require_once 'sham/Exception.php';
 class Call
 {
     public $name;

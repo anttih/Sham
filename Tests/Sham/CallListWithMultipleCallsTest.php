@@ -1,7 +1,7 @@
 <?php
-require_once 'Sham/CallList.php';
+require_once 'sham/CallList.php';
 
-use Sham\CallList;
+use sham\CallList;
 
 class Sham_CallListWithMultipleCallsTest extends PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
-require_once 'Sham/Mock.php';
+require_once 'sham/Mock.php';
 
-use Sham\CallList,
-    Sham\Mock,
-    Sham\Method;
+use sham\CallList,
+    sham\Mock,
+    sham\Method;
 
 class Sham_MockTest extends PHPUnit_Framework_TestCase
 {

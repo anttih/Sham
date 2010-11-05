@@ -1,8 +1,8 @@
 <?php
-require_once 'Sham.php';
-require_once 'Sham/Method.php';
+require_once 'sham/Sham.php';
+require_once 'sham/Method.php';
 
-use Sham\Method;
+use sham\Method;
 
 class Sham_MethodTest extends PHPUnit_Framework_TestCase
 {
@@ -10,7 +10,7 @@ class Sham_MethodTest extends PHPUnit_Framework_TestCase
     public function testShouldThrowExceptionIfCalledWithoutStubbing()
     {
         $stub = new Method('method name');
-        $this->setExpectedException('Sham\Exception', 'Nothing stubbed');
+        $this->setExpectedException('sham\Exception', 'Nothing stubbed');
         $stub();
     }
 
@@ -30,15 +30,15 @@ class Sham_MethodTest extends PHPUnit_Framework_TestCase
 
     public function testShouldThrowIfSet()
     {
-        $this->setExpectedException('Sham\Exception');
+        $this->setExpectedException('sham\Exception');
         $stub = new Method('method name');
-        $stub->throws('Sham\Exception');
+        $stub->throws('sham\Exception');
         $stub();
     }
 
     public function testShouldThrowExceptionWhenCalledWithNoParam()
     {
-        $this->setExpectedException('Sham\Exception');
+        $this->setExpectedException('sham\Exception');
         $stub = new Method('method name');
         $stub->throws();
         $stub();

@@ -1,7 +1,7 @@
 <?php
-require_once 'Sham/Builder.php';
+require_once 'sham/Builder.php';
 
-use Sham\Builder;
+use sham\Builder;
 
 class Sham_BuilderAutoloadingTest extends PHPUnit_Framework_TestCase
 {

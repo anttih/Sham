@@ -1,7 +1,7 @@
 <?php
-require_once 'Sham/Mock.php';
+require_once 'sham/Mock.php';
 
-use Sham\Mock;
+use sham\Mock;
 
 class Sham_MockSerializeTest extends PHPUnit_Framework_TestCase
 {

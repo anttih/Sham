@@ -1,7 +1,7 @@
 <?php
-require_once 'Sham.php';
+require_once 'sham/Sham.php';
 
-use Sham\Mock;
+use sham\Mock;
 
 class ShamTest extends PHPUnit_Framework_TestCase
 {

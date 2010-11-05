@@ -1,11 +1,11 @@
 <?php
-require_once 'Sham/Mock.php';
-require_once 'Sham/Builder.php';
-require_once 'Sham/Matcher/Any.php';
+require_once 'sham/Mock.php';
+require_once 'sham/Builder.php';
+require_once 'sham/Matcher/Any.php';
 
-use Sham\Builder,
-    Sham\Matcher\Any,
-    Sham\Mock;
+use sham\Builder,
+    sham\Matcher\Any,
+    sham\Mock;
 
 /**
  * Sham – test stub and spy for PHP 5.3

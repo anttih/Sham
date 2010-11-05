@@ -1,8 +1,8 @@
 <?php
-require_once 'Sham/Call.php';
-require_once 'Sham/Exception.php';
+require_once 'sham/Call.php';
+require_once 'sham/Exception.php';
 
-use Sham\Call;
+use sham\Call;
 
 class Sham_CallTest extends PHPUnit_Framework_TestCase
 {

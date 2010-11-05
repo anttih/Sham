@@ -1,8 +1,8 @@
 <?php
-require_once 'Sham.php';
-require_once 'Sham/Builder.php';
+require_once 'sham/Sham.php';
+require_once 'sham/Builder.php';
 
-use Sham\Builder,
+use sham\Builder,
     \ReflectionClass;
 
 class BuilderTest extends PHPUnit_Framework_TestCase

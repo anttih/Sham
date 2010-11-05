@@ -1,4 +1,4 @@
 <?php
-namespace Sham;
+namespace sham;
 class Exception extends \Exception {}
 
