@@ -299,7 +299,7 @@ Methods:
 
 * `any()` - Returns a matcher which matches any value. Used to indicate a
   parameter that we don't want to test right now. Shorthand for `new
-  \sham\Any()`.
+  \sham\matcher\Any()`.
 
 * `create(string $spec)` - Build a new stub based on the `$spec` class. Returns
   an object which is an instance of the spec.
