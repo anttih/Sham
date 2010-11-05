@@ -1,9 +1,9 @@
 <?php
-namespace sham\Matcher;
+namespace sham\matcher;
 
-require_once 'sham/Matcher/Matcher.php';
+require_once 'sham/matcher/Matcher.php';
 
-use sham\Matcher\Matcher;
+use sham\matcher\Matcher;
 
 class Constant implements Matcher
 {

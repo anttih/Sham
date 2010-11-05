@@ -1,7 +1,7 @@
 <?php
-require_once 'sham/Matcher/Constant.php';
+require_once 'sham/matcher/Constant.php';
 
-use sham\Matcher\Constant;
+use sham\matcher\Constant;
 
 class Sham_Matcher_ConstantTest extends PHPUnit_Framework_TestCase
 {

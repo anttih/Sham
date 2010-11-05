@@ -1,5 +1,5 @@
 <?php
-namespace sham\Matcher;
+namespace sham\matcher;
 
 interface Matcher
 {

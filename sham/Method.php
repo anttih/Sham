@@ -1,7 +1,7 @@
 <?php
 namespace sham;
 
-require_once 'sham/Matcher/ArrayMatcher.php';
+require_once 'sham/matcher/ArrayMatcher.php';
 require_once 'sham/Exception.php';
 
 use sham\Matcher\ArrayMatcher;

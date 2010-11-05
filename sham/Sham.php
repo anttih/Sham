@@ -1,7 +1,7 @@
 <?php
 require_once 'sham/Mock.php';
 require_once 'sham/Builder.php';
-require_once 'sham/Matcher/Any.php';
+require_once 'sham/matcher/Any.php';
 
 use sham\Builder,
     sham\Matcher\Any,

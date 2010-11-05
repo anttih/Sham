@@ -1,9 +1,9 @@
 <?php
-require_once 'sham/Matcher/ArrayMatcher.php';
-require_once 'sham/Matcher/Any.php';
+require_once 'sham/matcher/ArrayMatcher.php';
+require_once 'sham/matcher/Any.php';
 
-use sham\Matcher\ArrayMatcher,
-    sham\Matcher\Any;
+use sham\matcher\ArrayMatcher,
+    sham\matcher\Any;
 
 class Sham_Matcher_ArrayTest extends PHPUnit_Framework_TestCase
 {
