@@ -96,7 +96,7 @@ class Stub implements \ArrayAccess, \Iterator
         $this->_calls->add('__set', array($value));
     }
 
-    public function calls()
+    public function got()
     {
         return call_user_func_array(
             array($this->_calls, 'calls'),

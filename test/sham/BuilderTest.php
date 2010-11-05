@@ -25,7 +25,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $builder = new Builder();
         $obj = $builder->build('TestBuilder');
         $obj->override();
-        $this->assertTrue($obj->calls('override')->once());
+        $this->assertTrue($obj->got('override')->once());
     }
     
     public function testShouldReturnStubbedReturnValues()
@@ -41,7 +41,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $builder = new Builder();
         $obj = $builder->build('TestBuilder');
         $obj->override('param 1');
-        $this->assertTrue($obj->calls('override', 'param 1')->once());
+        $this->assertTrue($obj->got('override', 'param 1')->once());
     }
     
     public function testRecordOptionalParamsWhenGiven()
@@ -51,8 +51,8 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $param = new ClassWithParams();
         $obj->method(null);
         $obj->method($param);
-        $this->assertTrue($obj->calls('method', null)->once());
-        $this->assertTrue($obj->calls('method', $param)->once());
+        $this->assertTrue($obj->got('method', null)->once());
+        $this->assertTrue($obj->got('method', $param)->once());
     }
     
     public function testDontRecordOptionalParamsWhenNotGiven()
@@ -60,7 +60,7 @@ class BuilderTest extends PHPUnit_Framework_TestCase
         $builder = new Builder();
         $obj = $builder->build('ClassWithClassTypeHintOnOptionalParam');
         $obj->method();
-        $this->assertEquals(array(), $obj->calls('method')->first()->params);
+        $this->assertEquals(array(), $obj->got('method')->first()->params);
     }
 
     public function testBuildMethodWithOneNonOptionalParam()

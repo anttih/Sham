@@ -62,7 +62,7 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
     public function testGettingAPropertyWithoutSettingShouldNotRecord()
     {
         $value = $this->stub->key;
-        $this->assertFalse($this->stub->calls('__get', 'key')->once());
+        $this->assertFalse($this->stub->got('__get', 'key')->once());
     }
 
     public function testShouldRecordPropertyGetWhenSet()
@@ -70,9 +70,9 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
         $this->stub->key = 'value';
         $value = $this->stub->key;
 
-        $this->assertTrue($this->stub->calls('__get', 'key')->once());
+        $this->assertTrue($this->stub->got('__get', 'key')->once());
 
-        $call = $this->stub->calls('__get', 'key')->calls[0];
+        $call = $this->stub->got('__get', 'key')->calls[0];
         $this->assertEquals('value', $call->return_value);
     }
 
@@ -97,7 +97,7 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
     public function testShouldRecordPropertySet()
     {
         $this->stub->key = 'value';
-        $this->assertTrue($this->stub->calls('__set', 'value')->once());
+        $this->assertTrue($this->stub->got('__set', 'value')->once());
     }
 
     public function testShouldReturnFromChildStub()
@@ -110,14 +110,14 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
     {
         $stub = new Stub();
         $stub();
-        $this->assertTrue($stub->calls('__invoke')->once());
+        $this->assertTrue($stub->got('__invoke')->once());
     }
 
     public function testShouldRecordInvokeParams()
     {
         $stub = new Stub();
         $stub('param 1');
-        $this->assertTrue($stub->calls('__invoke', 'param 1')->once());
+        $this->assertTrue($stub->got('__invoke', 'param 1')->once());
     }
 
     public function testInvokeShouldReturnNewStubWhenNoReturnValue()
@@ -146,12 +146,12 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
     {
         $this->stub->method0();
         $this->stub->method1();
-        $this->assertEquals(2, count($this->stub->calls()));
+        $this->assertEquals(2, count($this->stub->got()));
     }
 
     public function testShouldProxyCallsToCallList()
     {
-        $this->assertTrue($this->stub->calls() instanceof CallList);
+        $this->assertTrue($this->stub->got() instanceof CallList);
     }
 
     public function testMethodCallWithReturnValueShouldNotChangeParamsAfterSecondCall()
@@ -159,7 +159,7 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
         $this->stub->method->returns('return value');
         $this->stub->method('first call');
         $this->stub->method('second call');
-        $this->assertTrue($this->stub->calls('method', 'first call')->once());
+        $this->assertTrue($this->stub->got('method', 'first call')->once());
     }
 
     public function testOffsetSetShouldSetValue()
@@ -172,7 +172,7 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
     public function testShouldRecordOffsetSet()
     {
         $this->stub[0] = 1;
-        $this->assertTrue($this->stub->calls('offsetSet', 0, 1)->once());
+        $this->assertTrue($this->stub->got('offsetSet', 0, 1)->once());
     }
 
     public function testOffsetGetShouldGetValue()
@@ -188,7 +188,7 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
         // action
         $this->stub[0];
 
-        $list = $this->stub->calls('offsetGet', 0);
+        $list = $this->stub->got('offsetGet', 0);
         $this->assertTrue($list->once());
 
         // records return value
@@ -199,7 +199,7 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
     {
         $this->stub->shamSetData(array(1, 2));
         isset($this->stub[0]);
-        $this->assertTrue($this->stub->calls('offsetExists', 0)->once());
+        $this->assertTrue($this->stub->got('offsetExists', 0)->once());
     }
 
     public function testIssetShouldReturnValueAsCallReturnValue()
@@ -207,14 +207,14 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
         $this->stub->shamSetData(array(1, 2));
         $isset = isset($this->stub[0]);
         $this->assertTrue($isset);
-        $this->assertTrue($this->stub->calls('offsetExists', 0)->calls[0]->return_value);
+        $this->assertTrue($this->stub->got('offsetExists', 0)->calls[0]->return_value);
     }
 
     public function testShouldRecordUnset()
     {
         $this->stub->shamSetData(array(1, 2));
         unset($this->stub[0]);
-        $this->assertTrue($this->stub->calls('offsetUnset', 0)->once());
+        $this->assertTrue($this->stub->got('offsetUnset', 0)->once());
     }
 
     public function testToStringShouldReturnClassNameByDefault()
@@ -240,27 +240,27 @@ class Sham_StubTest extends PHPUnit_Framework_TestCase
     {
         $this->stub->prop = false;
         isset($this->stub->prop);
-        $this->assertTrue($this->stub->calls('__isset', 'prop')->once());
+        $this->assertTrue($this->stub->got('__isset', 'prop')->once());
     }
 
     public function test__issetShouldRecordReturnValue()
     {
         $this->stub->prop = false;
         isset($this->stub->prop);
-        $ret = $this->stub->calls('__isset', 'prop')->calls[0]->return_value;
+        $ret = $this->stub->got('__isset', 'prop')->calls[0]->return_value;
         $this->assertTrue($ret);
     }
 
     public function test__issetShouldRecordWhenPropertyNotSet()
     {
         isset($this->stub->prop);
-        $this->assertTrue($this->stub->calls('__isset', 'prop')->once());
+        $this->assertTrue($this->stub->got('__isset', 'prop')->once());
     }
     
     public function test__unsetShouldRecord()
     {
         unset($this->stub->prop);
-        $this->assertTrue($this->stub->calls('__unset', 'prop')->once());
+        $this->assertTrue($this->stub->got('__unset', 'prop')->once());
     }
 
     public function test__unsetShouldUnsetProp()

@@ -17,7 +17,7 @@ class Sham_StubSerializeTest extends PHPUnit_Framework_TestCase
 
     public function testShouldRecord__sleep()
     {
-        $this->assertTrue($this->zombie->calls('__sleep')->once());
+        $this->assertTrue($this->zombie->got('__sleep')->once());
     }
 
     public function testShouldPreserveShamData()
@@ -32,7 +32,7 @@ class Sham_StubSerializeTest extends PHPUnit_Framework_TestCase
 
     public function testShouldRecord__wakeup()
     {
-        $this->assertTrue($this->zombie->calls('__wakeup')->once());
+        $this->assertTrue($this->zombie->got('__wakeup')->once());
     }
 
 }
