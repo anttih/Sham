@@ -1,5 +1,6 @@
 <?php
-namespace sham;
+namespace sham\Matcher;
+
 interface Matcher
 {
     public function matches($value);
