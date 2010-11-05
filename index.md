@@ -160,7 +160,7 @@ implementation:
 
 ## <a name="invoke" href="#invoke">__invoke</a>
 
-A Sham instance can be invoked. A call with name `__invoke` is recorded:
+A `sham\Stub` instance can be invoked. A call with name `__invoke` is recorded:
 
     $stub();
     $stub->got('__invoke')->once(); // true
@@ -293,7 +293,7 @@ All of the calls implemented by `Iterator` will be recorded.
 
 # <a name="api" href="#api">API</a>
 
-** `Sham`**
+** `sham\Sham`**
 
 Methods:
 
