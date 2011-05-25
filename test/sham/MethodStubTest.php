@@ -2,7 +2,8 @@
 require_once 'sham/Sham.php';
 require_once 'sham/Method.php';
 
-use sham\Method;
+use sham\Sham,
+    sham\Method;
 
 class Sham_MethodTest extends PHPUnit_Framework_TestCase
 {

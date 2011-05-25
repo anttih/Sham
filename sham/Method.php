@@ -4,7 +4,8 @@ namespace sham;
 require_once 'sham/matcher/ArrayMatcher.php';
 require_once 'sham/Exception.php';
 
-use sham\Matcher\ArrayMatcher;
+use sham\Sham,
+    sham\Matcher\ArrayMatcher;
 
 class Method
 {
@@ -59,7 +60,7 @@ class Method
             $matcher = $this->_pending_matcher;
             $this->_pending_matcher = null;
         } else {
-            $matcher = \Sham::any();
+            $matcher = Sham::any();
         }
         return $matcher;
     }

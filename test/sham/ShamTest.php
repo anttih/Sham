@@ -1,7 +1,8 @@
 <?php
 require_once 'sham/Sham.php';
 
-use sham\Stub;
+use sham\Sham,
+    sham\Stub;
 
 class ShamTest extends PHPUnit_Framework_TestCase
 {
