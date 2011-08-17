@@ -1,5 +1,5 @@
 <?php
-require_once 'sham/Sham.php';
+require_once 'Sham.php';
 
 use sham\Stub;
 
