@@ -67,9 +67,9 @@ You can create a stub by instantiating the `sham\Stub` class directly:
     $stub = new \sham\Stub();
 
 However, if the object you are trying to stub must be an instance of a certain
-class, use the static method `sham\Sham::create()`:
+class, use the static method `Sham::create()`:
 
-    $stub = \sham\Sham::create('My\Class');
+    $stub = Sham::create('My\Class');
 
 `$stub` is now an instance of `My\Class` and will pass any `instanceof` or
 typhint checks. What the `create` method does is, it takes the source of the
@@ -105,8 +105,8 @@ You can also stub a method to return a certain value given specific parameters.
 You can call `given()` multiple times. These will be added to a stack where the
 top most calls get priority:
 
-    $stub->method->given('zero', sham\Sham::any())->returns('first');
-    $stub->method->given(sham\Sham::any(), 0)->returns('second');
+    $stub->method->given('zero', Sham::any())->returns('first');
+    $stub->method->given(Sham::any(), 0)->returns('second');
 
     $stub->method('zero', 3); // 'first'
     $stub->method('one', 0);  // 'second'
@@ -220,9 +220,9 @@ To check if `foo()` was called once with 'first' as the only parameter:
 To check if `foo()` was called with anything as the first param and `bar` as
 the second param:
 
-    $stub->got('foo', sham\Sham::any(), 'bar')->once();
+    $stub->got('foo', Sham::any(), 'bar')->once();
 
-The special `sham\Sham::any()` call returns a matcher object which matches anything.
+The special `Sham::any()` call returns a matcher object which matches anything.
 This is useful when you are writing a test which only needs to test a certain
 parameter and ignore the others.
 
@@ -292,7 +292,7 @@ All of the calls implemented by `Iterator` will be recorded.
 
 # <a name="api" href="#api">API</a>
 
-** `sham\Sham`**
+** `Sham`**
 
 Methods:
 
