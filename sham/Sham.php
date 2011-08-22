@@ -1,5 +1,4 @@
 <?php
-namespace sham;
 require_once 'sham/Stub.php';
 require_once 'sham/Builder.php';
 require_once 'sham/matcher/Any.php';
